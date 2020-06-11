@@ -9,6 +9,6 @@ int kek() {
 void _start() {
     clear_screen();
     for (int i = 0; i < 2099; ++i) {
-        print_char_color('a', LOW_GREEN, WHITE);
+        print_char_color('a', YELLOW, LOW_BLUE);
     }
 }

@@ -21,7 +21,7 @@ create:
 	objcopy -O binary $< $@
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(OBJ))}
+	ld -m elf_i386 -o $@ -Ttext 0x100000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(OBJ))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@

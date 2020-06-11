@@ -1,5 +1,5 @@
 [bits 32]
-[extern gate]
+[extern _start]
 
-call gate
+call _start
 jmp $

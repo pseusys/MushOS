@@ -1,10 +1,10 @@
 [bits 32]
-global low_port_byte_in
-global low_port_byte_out
-global low_port_word_in
-global low_port_word_out
+global port_byte_in
+global port_byte_out
+global port_word_in
+global port_word_out
 
-low_port_byte_in:
+port_byte_in:
     push ebp
     mov ebp, esp
 
@@ -17,7 +17,7 @@ low_port_byte_in:
     pop ebp
     ret
 
-low_port_byte_out:
+port_byte_out:
     push ebp
     mov ebp, esp
 
@@ -33,7 +33,7 @@ low_port_byte_out:
     pop ebp
     ret
 
-low_port_word_in:
+port_word_in:
     push ebp
     mov ebp, esp
 
@@ -46,7 +46,7 @@ low_port_word_in:
     pop ebp
     ret
 
-low_port_word_out:
+port_word_out:
     push ebp
     mov ebp, esp
 
@@ -61,4 +61,3 @@ low_port_word_out:
     mov esp, ebp
     pop ebp
     ret
-

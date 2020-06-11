@@ -4,7 +4,7 @@ HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 run: all
-	qemu-system-i386 ./images/floppy.img
+	qemu-system-i386 -vga std -drive format=raw,file=./images/floppy.img
 
 all: create ./images/floppy.img
 

@@ -52,7 +52,7 @@ read_disk:
     mov dh, 0x00
     mov cl, 0x02
 
-    int 0x13
+    int 13h
 
     jc .disk_error
 
@@ -79,7 +79,7 @@ write_string:
     lodsb
     cmp al, 0x00
     je .done
-    int 0x10
+    int 10h
     jmp .repeat
 
 .done:
@@ -101,10 +101,14 @@ kernel_start:
     mov ds, ax
     mov es, ax
 
+    mov ah, 0x00
+    mov al, 0x03
+    int 10h
+
     mov si, BOOT_MSG
     call write_string
 
-    mov dh, 15
+    mov dh, 0x09
     mov dl, [BOOT_DRIVE]
     mov bx, KERNEL_OFFSET
     call read_disk

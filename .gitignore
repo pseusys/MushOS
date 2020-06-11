@@ -2,3 +2,5 @@
 ./build
 ./images
 ./.idea
+./CMakeLists.txt
+./cmake-build-debug

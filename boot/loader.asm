@@ -141,7 +141,7 @@ kernel_launch:
 
 variables:
     BOOT_DRIVE db 0
-    BOOT_MSG   db "Booted in real mode...", 0x0d, 0x0a, 0
+    BOOT_MSG   db "MUSHOS booted in real mode...", 0x0d, 0x0a, 0
     ERROR_MSG  db "Could not load second boot loader!", 0x0d, 0x0a, 0
 
 magic_numbers:

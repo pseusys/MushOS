@@ -1,11 +1,12 @@
 C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c)
+ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm)
 HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h)
-OBJ = ${C_SOURCES:.c=.o}
+OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 run: all
 	qemu-system-i386 ./images/floppy.img
 
-all: create ./images/floppy.img collect
+all: create ./images/floppy.img
 
 create:
 	echo ${OBJ}
@@ -20,17 +21,18 @@ create:
 	objcopy -O binary $< $@
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $^
+	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(OBJ))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@
 
 %.o: %.c ${HEADERS}
-	cc -m32 -ffreestanding -c $^ -o $@
+	gcc -m32 -ffreestanding -c $< -o ./build/$(@F)
 
-collect:
-	find -name "*.o" -exec mv -i {} -t ./build \;
+%.obj: %.asm
+	nasm $< -f elf -o ./build/$(@F)
 
 clean:
 	rm ./build/*; rm ./images/*
+
 

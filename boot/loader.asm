@@ -7,8 +7,8 @@
 start:
     jmp kernel_start ; Jumping to actual code to avoid executing GDT-table.
 
-KERNEL_OFFSET equ 0x100000 ; Offset in RAM, where kernel will be loaded, it is also defined in linker.
-                           ; I've been said all big kernels are loaded there. Haven't proved.
+KERNEL_OFFSET equ 0x1000 ; Offset in RAM, where kernel will be loaded, it is also defined in linker.
+                           ; I've been said all big kernels are loaded there. Haven't proved. TODO set to 10000
 
 
 gdt_start: ; Beginning of GDT-table. The table itself contains information about RAM segments.

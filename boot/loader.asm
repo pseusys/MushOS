@@ -126,9 +126,9 @@ kernel_start: ; Start of booting code.
     mov es, ax ; My boot loader contains code and variables all together.
 
                  ; Setting default output video mode to color VGA 80x25.
-    mov ah, 0x00 ; int 10h : 00 - setting video mode BIOS function.
-    mov al, 0x03 ; Color, 80x25, text, memory at 0xb8000 preset.
-    int 10h
+    ;mov ah, 0x00 ; int 10h : 00 - setting video mode BIOS function.
+    ;mov al, 0x03 ; Color, 80x25, text, memory at 0xb8000 preset.
+    ;int 10h
 
     mov si, BOOT_MSG ; Setting and printing boot message.
     call write_string
@@ -168,8 +168,6 @@ kernel_launch: ; Long jump sets CS to CODE_SEG automatically at this point.
     mov esp, start
 
     call KERNEL_OFFSET ; Calling pre-loaded C kernel (kernel_gate).
-
-    jmp $ ; Hanging CPU up. TODO replace with hlt.
 
 
 

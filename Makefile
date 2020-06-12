@@ -3,6 +3,8 @@ ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ./mushlib/*.asm)
 HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./mushlib/*.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
+rebuild_n_run: clean run
+
 run: all
 	qemu-system-i386 -vga std -drive format=raw,file=./images/floppy.img
 

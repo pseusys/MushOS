@@ -69,7 +69,8 @@ void print_char_color_at (char c, screen_coords coords, byte text_color, byte ba
     else mem_offset = coords.row * coords.column;
 
     if (c == '\n') {
-
+        u_dword rows = (mem_offset / 2) / COLS_NUM + 1;
+        mem_offset = 2 * COLS_NUM * rows - 2;
     } else {
         vm[mem_offset] = c;
         vm[mem_offset + 1] = attributes;

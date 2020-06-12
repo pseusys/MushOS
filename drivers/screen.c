@@ -1,8 +1,8 @@
 #include "screen.h"
 #include "ports_io.h"
-#include "../kernel/utils.h"
+#include "../mushlib/memory.h"
 
-u_dword get_cursor_offset() {
+static u_dword get_cursor_offset() {
     port_byte_out(REG_SCREEN_CTRL, 14);
     u_dword offset = (u_dword) ((port_byte_in(REG_SCREEN_DATA) << 8) & 0xff00);
     port_byte_out(REG_SCREEN_CTRL, 15);
@@ -10,8 +10,8 @@ u_dword get_cursor_offset() {
     return offset;
 }
 
-void set_cursor_offset(u_dword offset) {
-    //if (offset > COLS_NUM * ROWS_NUM) return;
+static void set_cursor_offset(u_dword offset) {
+    //if (offset > COLS_NUM * ROWS_NUM) return; FIXME simple check not working.
     port_byte_out(REG_SCREEN_CTRL, 14);
     port_byte_out(REG_SCREEN_DATA, (byte) ((offset & 0xff00) >> 8));
     port_byte_out(REG_SCREEN_CTRL, 15);
@@ -29,7 +29,7 @@ void set_cursor(screen_coords coords) {
 
 
 
-u_dword scroll (u_dword cursor_offset) {
+static u_dword scroll (u_dword cursor_offset) {
     if (cursor_offset < COLS_NUM * ROWS_NUM * 2) return cursor_offset;
 
     for (int i = 1; i < ROWS_NUM; ++i) {

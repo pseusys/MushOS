@@ -1,0 +1,4 @@
+#ifndef MUSHOS_STRING_H
+#define MUSHOS_STRING_H
+
+#endif //MUSHOS_STRING_H

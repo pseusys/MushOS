@@ -1,6 +1,6 @@
-C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c)
-ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm)
-HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h)
+C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c ./mushlib/*.c)
+ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ./mushlib/*.asm)
+HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./mushlib/*.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 run: all
@@ -21,7 +21,7 @@ create:
 	objcopy -O binary $< $@
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(OBJ))}
+	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ./mushlib/,./build/,$(OBJ)))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@

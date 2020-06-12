@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "memory.h"
 
 void memory_copy (byte* source, byte* dest, u_dword num_bytes) {
     for (int i = 0; i < num_bytes; ++i) {
@@ -18,4 +18,12 @@ void memory_fill (byte* dest, byte* source, u_dword source_bytes, u_dword times)
             *(dest + (i * source_bytes + j)) = *(source + j);
         }
     }
+}
+
+byte* allocate_memory (u_dword structs_number, u_dword struct_len) {
+    return nullptr;
+}
+
+void free_memory (byte* pos) {
+
 }

@@ -1,0 +1,4 @@
+#ifndef MUSHOS_PAGES_H
+#define MUSHOS_PAGES_H
+
+#endif //MUSHOS_PAGES_H

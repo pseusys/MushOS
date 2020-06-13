@@ -1,8 +1,8 @@
 #include "timer.h"
-#include "../kernel/interruption_tables.h"
-#include "../kernel/interruptions.h"
-#include "screen.h"
-#include "ports_io.h"
+#include "interruption_tables.h"
+#include "interruptions.h"
+#include "../drivers/screen.h"
+#include "../drivers/ports_io.h"
 
 static u_dword tick = 0;
 

@@ -20,6 +20,16 @@ void memory_fill (byte* dest, byte* source, u_dword source_bytes, u_dword times)
     }
 }
 
+boolean memory_compare (byte* comp1, byte* comp2, u_dword length) {
+    boolean equal = true;
+    for (int i = 0; i < length; ++i) {
+        equal &= (*(comp1 + i) == *(comp2 + i));
+    }
+    return equal;
+}
+
+
+
 byte* allocate_memory (u_dword structs_number, u_dword struct_len) {
     return nullptr;
 }

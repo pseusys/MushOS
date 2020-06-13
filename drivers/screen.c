@@ -71,6 +71,17 @@ void print_char_color_at (char c, screen_coords coords, byte text_color, byte ba
     if (c == '\n') {
         u_dword rows = (mem_offset / 2) / COLS_NUM + 1;
         mem_offset = 2 * COLS_NUM * rows - 2;
+    } else if (c == '\b') {
+        mem_offset -= 2;
+        vm[mem_offset] = ' ';
+        vm[mem_offset + 1] = attributes;
+        mem_offset -= 2;
+    } else if (c == '\t') {
+        for (int i = 0; i < 4; ++i) {
+            vm[mem_offset + (2 * i)] = ' ';
+            vm[mem_offset + (2 * i) + 1] = attributes;
+        }
+        mem_offset += 6;
     } else {
         vm[mem_offset] = c;
         vm[mem_offset + 1] = attributes;

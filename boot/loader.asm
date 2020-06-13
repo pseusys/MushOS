@@ -118,8 +118,8 @@ kernel_start: ; Start of booting code.
     cli ; Clearing interruptions before SP and SP modifying.
     mov ax, cs ; CS points to 7c00 at the boot time, the current segment. TODO: check!!
     mov ss, ax ; Placing stack to the same segment.
-    mov sp, start ; Stack grows downwards in memory, while the code - upwards. TODO: check!!
-    mov bp, start ; So stack starts right in the entry point, but grows to another direction.
+    mov bp, start ; Stack grows downwards in memory, while the code - upwards. TODO: check!!
+    mov sp, bp ; So stack starts right in the entry point, but grows to another direction.
     sti ; Setting interruptions back.
 
     mov ds, ax ; Setting DS and ES to the same segment.
@@ -133,7 +133,7 @@ kernel_start: ; Start of booting code.
     mov si, BOOT_MSG ; Setting and printing boot message.
     call write_string
 
-    mov dh, 0x09 ; Loading 15 sectors from disk into memory. It's enough for our kernel. TODO: compile-time setting.
+    mov dh, 0x19 ; Loading 15 sectors from disk into memory. It's enough for our kernel. TODO: compile-time setting.
     mov dl, [BOOT_DRIVE] ; Setting current boot drive.
     mov bx, KERNEL_OFFSET ; Setting kernel position to one defined above.
     call read_disk
@@ -165,9 +165,10 @@ kernel_launch: ; Long jump sets CS to CODE_SEG automatically at this point.
     mov gs, ax
 
     mov ebp, start ; Resetting stack back where it was.
-    mov esp, start
+    mov esp, ebp
 
     call KERNEL_OFFSET ; Calling pre-loaded C kernel (kernel_gate).
+    ; jmp $
 
 
 

@@ -21,6 +21,7 @@ create:
 
 ./build/kernel.bin: ./build/kernel.elf
 	objcopy -O binary $< $@
+	du -b ./build/kernel.bin > ./build/kernel_size.sot #Read segments and write into bootloader.
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
 	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ./mushlib/,./build/,$(OBJ)))}
@@ -36,5 +37,3 @@ create:
 
 clean:
 	rm ./build/*; rm ./images/*
-
-

@@ -17,16 +17,15 @@ typedef struct {
 } __attribute__((packed)) IDT_descriptor;
 
 void init_interruptions();
-void set_idt(IDT_entry* entries);
-IDT_entry create_idt_entry(u_dword base, u_word selector, u_byte flags);
-
-
 
 typedef struct {
     u_dword ds;                  // Data segment selector
-    u_dword edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+    u_dword edi, esi, ebp, useless, ebx, edx, ecx, eax; // Pushed by pusha.
     u_dword int_no, err_code;    // Interrupt number and error code (if applicable)
-    u_dword eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
+    u_dword eip, cs, eflags, esp, ss; // Pushed by the processor automatically.
 } registers;
+
+typedef void (*interruption_handler)(registers* regs);
+void set_interrupt_handler(u_byte n, interruption_handler handler);
 
 #endif //MUSHOS_DESCRIPTOR_TABLES_H

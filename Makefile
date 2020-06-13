@@ -5,13 +5,16 @@ OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 rebuild_n_run: clean run
 
+rebuild: clean all
+
 run: all
 	qemu-system-i386 -vga std -drive format=raw,file=./images/floppy.img
 
 all: create ./images/floppy.img
 
 create:
-	echo ${OBJ}
+	if [ ! -e ./images ]; then mkdir ./images; fi;
+	if [ ! -e ./build ]; then mkdir ./build; fi;
 
 ./images/floppy.img: ./build/loader.bin ./build/kernel.bin
 	cat $^ > ./images/floppy.img
@@ -36,4 +39,6 @@ create:
 	nasm $< -f elf -o ./build/$(@F)
 
 clean:
-	rm ./build/*; rm ./images/*
+	if [ -e ./images ]; then rm -r ./images; fi;
+	if [ -e ./build ]; then rm -r ./build; fi;
+

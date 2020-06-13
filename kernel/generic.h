@@ -8,7 +8,7 @@ typedef short word;
 typedef unsigned int u_dword;
 typedef int dword;
 
-typedef char* c_string;
+typedef char* c_string; // NB: it is constant and unmodifiable!
 
 typedef int boolean;
 #define true 1

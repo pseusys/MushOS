@@ -1,5 +1,5 @@
-#ifndef MUSHOS_DESCRIPTOR_TABLES_H
-#define MUSHOS_DESCRIPTOR_TABLES_H
+#ifndef MUSHOS_INTERRUPTION_TABLES_H
+#define MUSHOS_INTERRUPTION_TABLES_H
 
 #include "generic.h"
 
@@ -28,4 +28,4 @@ typedef struct {
 typedef void (*interruption_handler)(registers* regs);
 void set_interrupt_handler(u_byte n, interruption_handler handler);
 
-#endif //MUSHOS_DESCRIPTOR_TABLES_H
+#endif //MUSHOS_INTERRUPTION_TABLES_H

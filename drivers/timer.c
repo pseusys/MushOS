@@ -1,6 +1,6 @@
 #include "timer.h"
-#include "../kernel/descriptor_tables.h"
-#include "../kernel/descriptors.h"
+#include "../kernel/interruption_tables.h"
+#include "../kernel/interruptions.h"
 #include "screen.h"
 #include "ports_io.h"
 

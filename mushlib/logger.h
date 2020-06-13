@@ -1,0 +1,6 @@
+#ifndef MUSHOS_LOGGER_H
+#define MUSHOS_LOGGER_H
+
+
+
+#endif //MUSHOS_LOGGER_H

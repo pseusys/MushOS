@@ -1,8 +1,8 @@
-#include "descriptor_tables.h"
+#include "interruption_tables.h"
 #include "../mushlib/memory.h"
 #include "../drivers/screen.h"
 #include "../drivers/ports_io.h"
-#include "descriptors.h"
+#include "interruptions.h"
 
 IDT_entry idt [256];
 IDT_descriptor idt_descriptor_pointer;
@@ -93,7 +93,6 @@ void init_interruptions() {
     idt_descriptor_pointer.size = 256 * sizeof(IDT_entry) - 1;
     idt_descriptor_pointer.pos = (u_dword) &idt;
 
-    print("Interruptions loaded.\n");
     idt_flush((u_dword) &idt_descriptor_pointer);
 }
 

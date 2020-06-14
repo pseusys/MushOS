@@ -2,4 +2,4 @@ language: C
 compiler: gcc
 before_install:
   - sudo apt-get -y install nasm
-script: make rebuild
+script: make build

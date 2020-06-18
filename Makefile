@@ -3,10 +3,15 @@ ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ./mushlib/*.asm)
 HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./mushlib/*.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
-build: clean ./images/floppy.img
+build: clean create ./images/floppy.img
 
-run: ./images/floppy.img
+debug: clean run
+
+run: create ./images/floppy.img
 	qemu-system-i386 -vga std -drive format=raw,file=./images/floppy.img
+
+test: clean create ./images/floppy.img
+	qemu-system-i386 -curses -drive format=raw,file=./images/floppy.img
 
 ./images/floppy.img: ./build/loader.bin ./build/kernel.bin
 	cat $^ > ./images/floppy.img
@@ -30,8 +35,10 @@ run: ./images/floppy.img
 %.obj: %.asm
 	nasm $< -f elf -o ./build/$(@F)
 
+create:
+	if [ ! -e ./images ]; then mkdir ./images; fi;
+	if [ ! -e ./build ]; then mkdir ./build; fi;
+
 clean:
 	if [ -e ./images ]; then rm -r ./images; fi;
 	if [ -e ./build ]; then rm -r ./build; fi;
-	if [ ! -e ./images ]; then mkdir ./images; fi;
-	if [ ! -e ./build ]; then mkdir ./build; fi;

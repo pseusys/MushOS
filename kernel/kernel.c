@@ -25,6 +25,7 @@
  * 8. Video mode.
  * 9. Sample apps.
  * 10. Und so weiter...
+ * Extra! Add testing in Travis CI with special QUEMU target in console mode.
  */
 
 int kek() {

@@ -1,7 +1,8 @@
-#include "../drivers/screen.h"
+#include "../mushlib/logger.h"
 #include "interruption_tables.h"
 #include "timer.h"
 #include "../drivers/keyboard.h"
+#include "pages.h"
 
 /**
  * Make kernel constants:
@@ -36,8 +37,12 @@ int kek() {
 
 void _start() {
     clear_screen();
-    print_color("Kernel started!\n", YELLOW, BLACK);
+    gm("Kernel started at ")gm(__DATE__)gm(" - ")gm(__TIME__)endl()
     init_interruptions();
     init_keyboard();
     init_timer(100);
+    initialise_paging();
+
+    //u_dword *ptr = (u_dword*) 0xA0000000;
+    //u_dword do_page_fault = *ptr;
 }

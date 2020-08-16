@@ -8,22 +8,11 @@
 #define ROWS_NUM 25
 #define COLS_NUM 80
 
-#define BLACK         0
-#define LOW_BLUE      1
-#define LOW_GREEN     2
-#define LOW_CYAN      3
-#define LOW_RED       4
-#define LOW_MAGENTA   5
-#define BROWN         6
-#define LIGHT_GRAY    7
-#define DARK_GRAY     8
-#define HIGH_BLUE     9
-#define HIGH_GREEN    10
-#define HIGH_CYAN     11
-#define HIGH_RED      12
-#define HIGH_MAGENTA  13
-#define YELLOW        14
-#define WHITE         15
+typedef enum {
+    BLACK = 0, LOW_BLUE = 1, LOW_GREEN = 2, LOW_CYAN = 3, LOW_RED = 4, LOW_MAGENTA = 5,
+    BROWN = 6, LIGHT_GRAY = 7, DARK_GRAY = 8, HIGH_BLUE = 9, HIGH_GREEN = 10,
+    HIGH_CYAN = 11, HIGH_RED = 12, HIGH_MAGENTA = 13, YELLOW = 14, WHITE = 15
+} color;
 
 #define REG_SCREEN_CTRL 0x3d4
 #define REG_SCREEN_DATA 0x3d5

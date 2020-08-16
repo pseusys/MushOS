@@ -1,6 +1,6 @@
 #include "interruption_tables.h"
 #include "../mushlib/memory.h"
-#include "../drivers/screen.h"
+#include "../mushlib/logger.h"
 #include "../drivers/ports_io.h"
 #include "interruptions.h"
 
@@ -99,24 +99,21 @@ void init_interruptions() {
 
 
 void set_interrupt_handler(u_byte n, interruption_handler handler) {
-    print("Handler set for interruption: ");
-    print_char(n + 0x30); // TODO: num to str.
-    print_char('\n');
+    const char* msg = "Handler set for interruption: ";
+    im(msg)in(n, DECIMAL, UNSIGNED_BYTE)endl()
     interruption_handlers[n] = handler;
 }
 
 
 
 void isr_handler(registers* regs) {
-    if (regs->int_no == DEFAULT_IRS) print_color("Received undefined user interrupt.\n", HIGH_RED, BLACK);
+    if (regs->int_no == DEFAULT_IRS) b("Received undefined user interrupt.")
 
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
     } else {
-        print_color("Received processor interrupt: ", HIGH_RED, BLACK);
-        print_char_color(regs->int_no + 0x30, HIGH_RED, BLACK); // TODO: add definition to all 32 ints.
-        print_char_color('\n', HIGH_RED, BLACK);
+        bb()bm("Received undefined user interrupt: ")bn(regs->int_no, HEXADECIMAL, UNSIGNED_DOUBLE_WORD)endl()
     }
 }
 
@@ -135,8 +132,6 @@ void irq_handler(registers* regs) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
     } else {
-        print_color("Received hardware interrupt: ", HIGH_BLUE, BLACK);
-        print_char_color(regs->int_no + 0x30, HIGH_BLUE, BLACK); // TODO: add definition to all 16 ints.
-        print_char_color('\n', HIGH_BLUE, BLACK);
+        im("Received hardware interrupt: ")in(regs->int_no, HEXADECIMAL, UNSIGNED_DOUBLE_WORD)endl()
     }
 }

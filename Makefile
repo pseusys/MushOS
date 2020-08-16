@@ -8,6 +8,7 @@ build: clean create ./images/floppy.img
 debug: clean run
 
 run: create ./images/floppy.img
+	wc -c ./images/floppy.img;
 	qemu-system-i386 -vga std -drive format=raw,file=./images/floppy.img
 
 test: clean create ./images/floppy.img
@@ -23,11 +24,14 @@ test: clean create ./images/floppy.img
 	objcopy -O binary $< $@
 	du -b ./build/kernel.bin > ./build/kernel_size.sot #Read segments and write into bootloader.
 
-./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Ttext 0x1000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ./mushlib/,./build/,$(OBJ)))}
+./build/kernel.elf: ./build/kernel_gate.o ${OBJ} ./build/kernel_follower.o
+	ld -m elf_i386 -o $@ -Tdata 0x8000 -Tbss 0x9000 -Ttext 0xa000 --defsym=sentinel=0x10000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ./mushlib/,./build/,$(OBJ)))} ./build/kernel_follower.o
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@
+
+./build/kernel_follower.o:
+	nasm ./boot/kernel_follower.asm -f elf -o $@
 
 %.o: %.c ${HEADERS}
 	gcc -m32 -ffreestanding -c $< -o ./build/$(@F)

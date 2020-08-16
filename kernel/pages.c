@@ -138,7 +138,7 @@ void initialise_paging()
     while (i < placement_address)
     {
         // Kernel code is readable but not writeable from userspace.
-        alloc_frame(get_page(i, 1, kernel_directory), 1, 0);
+        alloc_frame(get_page(i, 1, kernel_directory), 1, 0); //
         i += 0x1000;
     }
     // Before we enable paging, we must register our page fault handler.

@@ -15,7 +15,7 @@
  * Second man 2 implement: https://github.com/cfenollosa/os-tutorial
  *
  * Documentation! For each stage!
- * 0. Paging + heap + memory functions (dummy RAM positioning) -> Arrays, stack, line -> string -> logger.
+ * 0. Heap + memory functions (dummy RAM positioning) -> MushLib.
  * 1. Kernel constants (root CS and root DS (passed from loader), booting device, kernel size, max RAM)
  *                          -> define RAM positions everywhere (loader, interruptions).
  * 2. Memory map -> positioning of kernel / stack + kernel loading size (written in boot sector, defined after compilation).

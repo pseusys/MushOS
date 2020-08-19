@@ -26,7 +26,7 @@
  * 8. Video mode.
  * 9. Sample apps.
  * 10. Und so weiter...
- * Extra! Add testing in Travis CI with special QUEMU target in console mode.
+ * Extra! Add testing in Travis CI with special QEMU target in console mode.
  */
 
 int kek() {
@@ -43,6 +43,6 @@ void _start() {
     init_timer(100);
     initialise_paging();
 
-    //u_dword *ptr = (u_dword*) 0xA0000000;
-    //u_dword do_page_fault = *ptr;
+    u_dword *ptr = (u_dword*) 0xA0000000;
+    *ptr = 2;
 }

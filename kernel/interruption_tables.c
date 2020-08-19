@@ -99,8 +99,7 @@ void init_interruptions() {
 
 
 void set_interrupt_handler(u_byte n, interruption_handler handler) {
-    const char* msg = "Handler set for interruption: ";
-    im(msg)in(n, DECIMAL, UNSIGNED_BYTE)endl()
+    im("Handler set for interruption: ")in(n, DECIMAL, UNSIGNED_BYTE)endl()
     interruption_handlers[n] = handler;
 }
 

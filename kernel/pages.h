@@ -15,25 +15,25 @@ typedef struct page {
 } page_t;
 
 typedef struct page_table {
-    page_t pages[1024];
+    page_t pages [1024];
 } page_table_t;
 
 typedef struct page_directory {
     /**
        Array of pointers to pagetables.
     **/
-    page_table_t *tables[1024];
+    //page_table_t* tables[1024];
     /**
        Array of pointers to the pagetables above, but gives their *physical*
        location, for loading into the CR3 register.
     **/
-    u_dword tablesPhysical[1024];
+    struct page_table* tablesPhysical[1024];
     /**
        The physical address of tablesPhysical. This comes into play
        when we get our kernel heap allocated and the directory
        may be in a different location in virtual memory.
     **/
-    u_dword physicalAddr;
+    //u_dword physicalAddr;
 } page_directory_t;
 
 /**
@@ -53,7 +53,9 @@ void switch_page_directory(page_directory_t *new);
   If make == 1, if the page-table in which this page should
   reside isn't created, create it!
 **/
-page_t *get_page(u_dword address, boolean make, page_directory_t *dir);
+page_t* get_page(u_dword address, boolean make, page_directory_t *dir);
+
+u_dword* get_page_address(u_dword address);
 
 /**
   Handler for page faults.

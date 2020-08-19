@@ -15,7 +15,7 @@ static void print_num(u_dword b, color front, color back, system sys) {
         byte symbol = b % sys;
         print_num(b / sys, front, back, sys);
         print_atom(symbol, front, back, sys);
-    }
+    } else print_atom(0, front, back, sys);
 }
 
 static void print_boolean(boolean b, color front, color back, system sys) {

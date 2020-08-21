@@ -14,6 +14,8 @@ typedef enum {
 
 void print_number(dword num, mode m, system sys, color front, color back);
 
+void log(char* template, ...);
+
 // SUPPORT MACROS
 #define endl() {\
     print_char('\n');\

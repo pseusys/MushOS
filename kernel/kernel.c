@@ -3,6 +3,7 @@
 #include "timer.h"
 #include "../drivers/keyboard.h"
 #include "pages.h"
+#include "heap.h"
 
 /**
  * Make kernel constants:
@@ -37,12 +38,13 @@ int kek() {
 
 void _start() {
     clear_screen();
+    initialize_heap((void*) 0x1000, 0x6500);
+
+    log("Kernel started at %s - %s\n", __DATE__, __TIME__);
     gm("Kernel started at ")gm(__DATE__)gm(" - ")gm(__TIME__)endl()
+
     init_interruptions();
     init_keyboard();
     init_timer(100);
     initialise_paging();
-
-    u_dword *ptr = (u_dword*) 0xA0000000;
-    *ptr = 2;
 }

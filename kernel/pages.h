@@ -52,7 +52,7 @@ typedef struct {
 **/
 void initialise_paging();
 
-u_dword* get_page_address(u_dword address);
+void* get_page_address(u_dword address);
 
 /**
   Handler for page faults.

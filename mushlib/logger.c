@@ -1,4 +1,6 @@
 #include "logger.h"
+#include "vararg.h"
+#include "string.h"
 
 static const char undefined = '?';
 
@@ -70,4 +72,45 @@ void print_number(dword num, mode m, system sys, color front, color back) {
             print_char_color(undefined, front, back);
             break;
     }
+}
+
+
+void log(char* template, ...) {
+    u_dword temps = 1;
+    for (int k = 0; k < len(template); ++k) if (template[k] == '%') temps++;
+
+    u_dword* args = malloc(temps * sizeof(u_dword));
+    args_init(args)
+
+    u_dword argumentor = 0;
+    for (int j = 0; j < len(template); ++j)
+        if (template[j] != '%') print_char(template[j]);
+        else if (j < len(template) - 1) {
+            argumentor++;
+            j++;
+
+            switch (template[j]) {
+                case 'l':
+                    print_number(args[argumentor], BOOLEAN, DECIMAL, WHITE, BLACK);
+                    break;
+                case 'p':
+                    print_number(args[argumentor], POINTER, HEXADECIMAL, WHITE, BLACK);
+                    break;
+                case 'd':
+                    print_number(args[argumentor], UNSIGNED_DOUBLE_WORD, DECIMAL, WHITE, BLACK);
+                    break;
+                case 'c':
+                    print_char(args[argumentor]);
+                    break;
+                case 's':
+                    print((c_string) args[argumentor]);
+                    break;
+                default:
+                    argumentor--;
+                    j--;
+                    break;
+            }
+        }
+
+    free(args);
 }

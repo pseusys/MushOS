@@ -63,7 +63,7 @@ page_pointer* get_page(u_dword address, u_dword make_tail, page_directory *dir) 
 
 
 
-u_dword* get_page_address(u_dword address) {
+void* get_page_address(u_dword address) {
     page_pointer* pointer = get_page(address, 0, kernel_directory);
     if (pointer) return (u_dword*) get_page_pointer(pointer);
     else return nullptr;

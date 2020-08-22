@@ -1,6 +1,5 @@
 #include "heap.h"
 #include "../mushlib/memory.h"
-#include "../mushlib/logger.h"
 
 heap_header* header;
 
@@ -39,12 +38,17 @@ void initialize_heap(void* start_address, u_dword size) {
 
 void* malloc(u_dword size) {
     if (header->first_address) {
+        void* best_address = nullptr, * best_previous = nullptr, * best_next = nullptr;
+        u_dword best_size = header->heap_end - header->heap_start;
+
         void* current_address = header->heap_start;
         void* next_address = header->first_address;
 
         u_dword free_space_size = next_address - current_address - sizeof(block_header);
-        if (free_space_size >= (size + sizeof(block_header)))
-            return allocate_space(current_address, size, nullptr, next_address);
+        if ((free_space_size >= (size + sizeof(block_header))) && (free_space_size < best_size)) {
+            best_size = free_space_size;
+            best_address = current_address; best_previous = nullptr; best_next = next_address;
+        }
 
         current_address = next_address;
         block_header* current_block = get_header(current_address);
@@ -52,8 +56,10 @@ void* malloc(u_dword size) {
 
         while (next_address) {
             free_space_size = next_address - current_address - current_block->size - sizeof(block_header);
-            if (free_space_size >= (size + sizeof(block_header)))
-                return allocate_space(current_address + current_block->size, size, current_address, next_address);
+            if ((free_space_size >= (size + sizeof(block_header))) && (free_space_size < best_size)) {
+                best_size = free_space_size;
+                best_address = current_address + current_block->size; best_previous = current_address; best_next = next_address;
+            }
 
             current_address = next_address;
             current_block = get_header(current_address);
@@ -61,10 +67,12 @@ void* malloc(u_dword size) {
         }
 
         free_space_size = header->heap_end - current_address - current_block->size - sizeof(block_header);
-        if (free_space_size >= (size + sizeof(block_header)))
-            return allocate_space(current_address + current_block->size, size, current_address, nullptr);
+        if ((free_space_size >= (size + sizeof(block_header))) && (free_space_size < best_size)) {
+            best_address = current_address + current_block->size; best_previous = current_address; best_next = nullptr;
+        }
 
-        return nullptr;
+        if (best_address != nullptr) best_address = allocate_space(best_address, size, best_previous, best_next);
+        return best_address;
 
     } else {
         header->first_address = allocate_space(header->heap_start, size, nullptr, nullptr);
@@ -72,10 +80,26 @@ void* malloc(u_dword size) {
     }
 }
 
+void* realloc(void* structure, u_dword new_size) {
+    block_header* block = get_header(structure);
+    if (new_size < block->size) {
+        block->size = new_size;
+    } else if (new_size > block->size) {
+        if (new_size < block->next - structure) block->size = new_size;
+        else {
+            free(structure);
+            void* new_structure = malloc(new_size);
+            memory_copy(structure, new_structure, block->size);
+            structure = new_structure;
+        }
+    }
+    return structure;
+}
+
+
 void free(void* structure) {
-    print_number((u_dword) structure, INTEGER, HEXADECIMAL, WHITE, BLACK);
     block_header* block = get_header(structure);
     if (structure == header->first_address) header->first_address = block->next;
-    if (block->next) block->next->previous = block->previous;
-    if (block->previous) block->previous->next = block->next;
+    if (block->next) get_header(block->next)->previous = block->previous;
+    if (block->previous) get_header(block->previous)->next = block->next;
 }

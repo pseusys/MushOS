@@ -40,7 +40,6 @@ void _start() {
     initialize_heap((void*) 0x1000, 0x6500);
 
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
-    error("LOL NUMBER %d\n", 69.69669)
 
     init_interruptions();
     init_keyboard();

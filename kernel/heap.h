@@ -7,7 +7,7 @@ typedef struct block_header block_header;
 
 struct block_header {
     u_dword size;
-    block_header* previous, * next;
+    void* previous, * next;
 };
 
 typedef struct {

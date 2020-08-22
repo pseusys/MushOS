@@ -12,8 +12,9 @@
  *
  * Divide boot loader into: loader, functions, GDT.
  *
- * First man 2 implement: https://web.archive.org/web/20160324232118/http://jamesmolloy.co.uk/tutorial_html/
- * Second man 2 implement: https://github.com/cfenollosa/os-tutorial
+ * First man: https://www.cs.bham.ac.uk/~exr/lectures/opsys/10_11/lectures/os-dev.pdf
+ * Second man: https://web.archive.org/web/20160324232118/http://jamesmolloy.co.uk/tutorial_html/
+ * Third man: https://github.com/cfenollosa/os-tutorial
  *
  * Documentation! For each stage!
  * 1. Kernel constants (root CS and root DS (passed from loader), booting device, kernel size, max RAM)

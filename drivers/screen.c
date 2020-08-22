@@ -39,7 +39,7 @@ static u_dword scroll (u_dword cursor_offset) {
     }
 
     byte* last = (byte*) VIDEO_MEMORY + ((ROWS_NUM - 1) * COLS_NUM * 2);
-    u_word sample = (BLACK << 12) + (LIGHT_GRAY << 8) + ' ';
+    u_word sample = (BLACK << 12u) + (LIGHT_GRAY << 8u) + ' ';
     memory_fill(last, (byte *) &sample, 2, COLS_NUM);
     cursor_offset -= COLS_NUM * 2;
 
@@ -61,7 +61,7 @@ void print_char_color (char c, byte text_color, byte back_color) {
 }
 
 void print_char_color_at (char c, screen_coords coords, byte text_color, byte back_color) {
-    byte attributes = (back_color << 4) + text_color;
+    byte attributes = (back_color << 4u) + text_color;
     byte* vm = (byte*) VIDEO_MEMORY;
 
     u_dword mem_offset;

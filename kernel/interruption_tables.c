@@ -99,21 +99,19 @@ void init_interruptions() {
 
 
 void set_interrupt_handler(u_byte n, interruption_handler handler) {
-    im("Handler set for interruption: ")in(n, DECIMAL, UNSIGNED_BYTE)endl()
+    info("Handler set for interruption: %d\n", n)
     interruption_handlers[n] = handler;
 }
 
 
 
 void isr_handler(registers* regs) {
-    if (regs->int_no == DEFAULT_IRS) b("Received undefined user interrupt.")
+    if (regs->int_no == DEFAULT_IRS) bad("Received undefined user interrupt.")
 
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
-    } else {
-        bb()bm("Received undefined user interrupt: ")bn(regs->int_no, HEXADECIMAL, UNSIGNED_DOUBLE_WORD)endl()
-    }
+    } else error("Received undefined user interrupt: %h\n", regs->int_no)
 }
 
 void irq_handler(registers* regs) {
@@ -130,7 +128,5 @@ void irq_handler(registers* regs) {
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
-    } else {
-        im("Received hardware interrupt: ")in(regs->int_no, HEXADECIMAL, UNSIGNED_DOUBLE_WORD)endl()
-    }
+    } else info("Received hardware interrupt: %h\n", regs->int_no)
 }

@@ -1,10 +1,9 @@
 #include "logger.h"
 #include "vararg.h"
-#include "string.h"
 
 static const char undefined = '?';
 
-static void print_atom(byte b, color front, color back, system sys) {
+static void print_atom(u_byte b, color front, color back, system sys) {
     if ((sys >= 2) && (sys <= 10)) print_char_color(b + 48, front, back);
     else if ((sys > 10) && (sys <= 36)) {
         if (b < 10) print_char_color(b + 48, front, back);
@@ -12,98 +11,109 @@ static void print_atom(byte b, color front, color back, system sys) {
     } else print_char_color(undefined, front, back);
 }
 
-static void print_num(u_dword b, color front, color back, system sys) {
+static void print_int(u_dword b, color front, color back, system sys) {
     if (b) {
         byte symbol = b % sys;
-        print_num(b / sys, front, back, sys);
+        print_int(b / sys, front, back, sys);
         print_atom(symbol, front, back, sys);
-    } else print_atom(0, front, back, sys);
-}
-
-static void print_boolean(boolean b, color front, color back, system sys) {
-    if (sys == DECIMAL) {
-        if (b) print_color("true", front, back);
-        else print_color("false", front, back);
-    } else {
-        if (b) print_char_color('1', front, back);
-        else print_char_color('0', front, back);
     }
 }
 
-static void print_pointer(u_dword b, color front, color back, system sys) {
+static void print_float(float b, color front, color back, system sys, u_dword after_comma) {
+    if (after_comma) {
+        if (b > 1) {
+            byte symbol = (u_dword) b % sys;
+            print_float(b / (float) sys, front, back, sys, 4);
+            print_atom(symbol, front, back, sys);
+            if (b / (float) sys < 1) print_char_color('.', front, back);
+        } else if (b) {
+            b *= (float) sys;
+            byte symbol = (u_dword) b % sys;
+            print_float(b / (float) sys, front, back, sys, after_comma - 1);
+            print_atom(symbol, front, back, sys);
+        }
+    }
+}
+
+static void print_boolean(boolean b, color front, color back) {
+    if (b) print_color("true", front, back);
+    else print_color("false", front, back);
+}
+
+static void print_pointer(u_dword b, color front, color back) {
     print_color(".", front, back);
-    print_number(b, UNSIGNED_DOUBLE_WORD, sys, front, back);
+    if (b == nullptr) print_color("null", front, back);
+    else print_int(b, front, back, HEXADECIMAL);
 }
 
-
-
-void print_number(dword num, mode m, system sys, color front, color back) {
-    switch (m) {
-        case BOOLEAN:
-            print_boolean(num, front, back, sys);
+void print_number(float num, type t, system sys, color front, color back) {
+    switch (sys) {
+        case DECIMAL:
             break;
-
-        case BYTE:
-            if (num < 0) print_char_color('-', front, back);
-            print_number(-num, UNSIGNED_BYTE, sys, front, back);
+        case HEXADECIMAL:
+            print_color("0x", front, back);
             break;
-
-        case WORD:
-            if (num < 0) print_char_color('-', front, back);
-            print_number(-num, UNSIGNED_WORD, sys, front, back);
+        case BINARY:
+            print_color("0b", front, back);
             break;
-
-        case DOUBLE_WORD:
-            if (num < 0) print_char_color('-', front, back);
-            print_number(-num, UNSIGNED_DOUBLE_WORD, sys, front, back);
-            break;
-
-        case UNSIGNED_BYTE:
-        case UNSIGNED_WORD:
-        case UNSIGNED_DOUBLE_WORD:
-            print_num(num, front, back, sys);
-            break;
-
-        case POINTER:
-            print_pointer(num, front, back, sys);
-            break;
-
         default:
-            print_char_color(undefined, front, back);
-            break;
+            log(front, back, "(base %d) ", sys);
+    }
+
+    if (num == 0) print_atom(0, front, back, sys);
+    else if (num < 0) {
+        print_char_color('-', front, back);
+        if (t == INTEGER) print_int(-num, front, back, sys);
+        else print_float(-num, front, back, sys, 4);
+    } else {
+        if (t == INTEGER) print_int(num, front, back, sys);
+        else print_float(num, front, back, sys, 4);
     }
 }
 
 
-void log(char* template, ...) {
-    u_dword temps = 1;
-    for (int k = 0; k < len(template); ++k) if (template[k] == '%') temps++;
+
+void log(color text, color back, const char* template, ...) {
+    u_dword temps = 3, length = 0;
+    while (template[length]) {
+        if (template[length] == '%') temps++;
+        length++;
+    }
 
     u_dword* args = malloc(temps * sizeof(u_dword));
     args_init(args)
 
-    u_dword argumentor = 0;
-    for (int j = 0; j < len(template); ++j)
-        if (template[j] != '%') print_char(template[j]);
-        else if (j < len(template) - 1) {
+    u_dword argumentor = 2;
+    for (int j = 0; j < length; ++j)
+        if (template[j] != '%') print_char_color(template[j], text, back);
+        else if (j < length - 1) {
             argumentor++;
             j++;
 
             switch (template[j]) {
                 case 'l':
-                    print_number(args[argumentor], BOOLEAN, DECIMAL, WHITE, BLACK);
+                    print_boolean(args[argumentor], text, back);
                     break;
                 case 'p':
-                    print_number(args[argumentor], POINTER, HEXADECIMAL, WHITE, BLACK);
+                    print_pointer(args[argumentor], text, back);
                     break;
                 case 'd':
-                    print_number(args[argumentor], UNSIGNED_DOUBLE_WORD, DECIMAL, WHITE, BLACK);
+                    print_number(args[argumentor], INTEGER, DECIMAL, text, back);
+                    break;
+                case 'h':
+                    print_number(args[argumentor], INTEGER, HEXADECIMAL, text, back);
+                    break;
+                case 'b':
+                    print_number(args[argumentor], INTEGER, BINARY, text, back);
+                    break;
+                case 'f':
+                    print_number(args[argumentor], FLOAT, DECIMAL, text, back);
                     break;
                 case 'c':
-                    print_char(args[argumentor]);
+                    print_char_color(args[argumentor], text, back);
                     break;
                 case 's':
-                    print((c_string) args[argumentor]);
+                    print_color((c_string) args[argumentor], text, back);
                     break;
                 default:
                     argumentor--;

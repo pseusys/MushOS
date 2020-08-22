@@ -4,9 +4,10 @@
 #include "interruptions.h"
 
 page_directory* kernel_directory;
+u_dword memory_end = 0x1000000; // 16 MB as for now
+
 extern u_dword placement_address;
 extern byte sentinel;
-u_dword memory_end = 0x1000000; // 16 MB as for now
 
 
 
@@ -97,8 +98,7 @@ void initialise_paging() {
 
 
 
-void page_fault(registers* regs)
-{
+void page_fault(registers* regs) {
     // A page fault has occurred.
     // The faulting address is stored in the CR2 register.
     u_dword faulting_address;
@@ -112,11 +112,11 @@ void page_fault(registers* regs)
     int id = regs->err_code & 0x10;          // Caused by an instruction fetch?
 
     // Output an error message.
-    bm("Page fault! ( ")
-    if (present) {bm("present ")}
-    if (!rw) {bm("read-only ")}
-    if (us) {bm("user-mode ")}
-    if (reserved) {bm("reserved ")}
-    bm(") at ")bn(faulting_address, HEXADECIMAL, POINTER)endl()
+    bad("Page fault! ( ")
+    if (present) bad("present ")
+    if (!rw) bad("read-only ")
+    if (us) bad("user-mode ")
+    if (reserved) bad("reserved ")
+    bad(") at %h\n", faulting_address)
     asm("jmp .");
 }

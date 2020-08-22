@@ -16,7 +16,6 @@
  * Second man 2 implement: https://github.com/cfenollosa/os-tutorial
  *
  * Documentation! For each stage!
- * 0. Heap + memory functions (dummy RAM positioning) -> MushLib.
  * 1. Kernel constants (root CS and root DS (passed from loader), booting device, kernel size, max RAM)
  *                          -> define RAM positions everywhere (loader, interruptions).
  * 2. Memory map -> positioning of kernel / stack + kernel loading size (written in boot sector, defined after compilation).
@@ -40,8 +39,8 @@ void _start() {
     clear_screen();
     initialize_heap((void*) 0x1000, 0x6500);
 
-    log("Kernel started at %s - %s\n", __DATE__, __TIME__);
-    gm("Kernel started at ")gm(__DATE__)gm(" - ")gm(__TIME__)endl()
+    good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
+    error("LOL NUMBER %d\n", 69.69669)
 
     init_interruptions();
     init_keyboard();

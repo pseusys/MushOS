@@ -32,7 +32,7 @@ boolean memory_compare (byte* comp1, byte* comp2, u_dword length) {
 
 u_dword placement_address;
 
-u_dword k_malloc_physical(u_dword sz, boolean align, u_dword *phys) {
+void* k_malloc_physical(u_dword sz, boolean align, u_dword *phys) {
     if (align && (placement_address & 0x00000fff)) { // If the address is not already page-aligned, align it.
         placement_address &= 0xfffff000;
         placement_address += 0x1000;
@@ -40,23 +40,13 @@ u_dword k_malloc_physical(u_dword sz, boolean align, u_dword *phys) {
     if (phys) *phys = placement_address;
     u_dword tmp = placement_address;
     placement_address += sz;
-    return tmp;
+    return (void*) tmp;
 }
 
-u_dword k_malloc(u_dword sz) {
+void* k_malloc(u_dword sz) {
     return k_malloc_physical(sz, false, nullptr);
 }
 
-u_dword k_malloc_aligned(u_dword sz, boolean align) {
+void* k_malloc_aligned(u_dword sz, boolean align) {
     return k_malloc_physical(sz, align, nullptr);
-}
-
-
-
-byte* allocate_memory (u_dword structs_number, u_dword struct_len) {
-    return nullptr;
-}
-
-void free_memory (byte* pos) {
-
 }

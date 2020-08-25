@@ -1,7 +1,7 @@
 #ifndef MUSHOS_HEAP_H
 #define MUSHOS_HEAP_H
 
-#include "generic.h"
+#include "../kernel/generic.h"
 
 typedef struct block_header block_header;
 

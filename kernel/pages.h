@@ -4,6 +4,8 @@
 #include "generic.h"
 #include "interruption_tables.h"
 
+#define page_size 0x1000
+
 typedef struct {
     u_dword present    : 1;   // Page present in memory
     u_dword rw         : 1;   // Read-only if clear, readwrite if set

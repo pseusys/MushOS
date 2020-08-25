@@ -1,7 +1,7 @@
 #ifndef MUSHOS_VARARG_H
 #define MUSHOS_VARARG_H
 
-#include "../kernel/heap.h"
+#include "heap.h"
 
 #define args_init(args) {\
     u_dword stack_offset = 8;\

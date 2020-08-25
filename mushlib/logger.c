@@ -46,7 +46,7 @@ static void print_pointer(u_dword b, color front, color back) {
     else print_int(b, front, back, HEXADECIMAL);
 }
 
-void print_number(float num, type t, system sys, color front, color back) {
+void print_number(u_dword num, type t, system sys, color front, color back) {
     switch (sys) {
         case DECIMAL:
             break;

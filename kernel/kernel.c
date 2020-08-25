@@ -3,7 +3,7 @@
 #include "timer.h"
 #include "../drivers/keyboard.h"
 #include "pages.h"
-#include "heap.h"
+#include "../mushlib/heap.h"
 
 /**
  * Make kernel constants:
@@ -38,7 +38,7 @@ int kek() {
 
 void _start() {
     clear_screen();
-    initialize_heap((void*) 0x1000, 0x6500);
+    initialize_heap((void*) 0x1000, 0x6000);
 
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 

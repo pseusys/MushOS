@@ -12,7 +12,7 @@ typedef enum {
     INTEGER, FLOAT
 } type;
 
-void print_number(float num, type t, system sys, color front, color back);
+void print_number(u_dword num, type t, system sys, color front, color back);
 
 void log(color text, color back, const char* template, ...);
 

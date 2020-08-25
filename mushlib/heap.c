@@ -1,5 +1,5 @@
 #include "heap.h"
-#include "../mushlib/memory.h"
+#include "memory.h"
 
 heap_header* header;
 

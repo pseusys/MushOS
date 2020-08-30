@@ -5,4 +5,6 @@
 #ifndef MUSHOS_FILE_SYSTEM_H
 #define MUSHOS_FILE_SYSTEM_H
 
+extern void read_fs(void* address);
+
 #endif //MUSHOS_FILE_SYSTEM_H

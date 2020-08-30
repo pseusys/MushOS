@@ -4,6 +4,7 @@
 #include "../drivers/keyboard.h"
 #include "pages.h"
 #include "../mushlib/heap.h"
+#include "../drivers/file_system.h"
 
 /**
  * Make kernel constants:
@@ -46,4 +47,16 @@ void _start() {
     init_keyboard();
     init_timer(100);
     initialise_paging();
+
+    byte* buffer = malloc(512);
+    byte* sector = (byte*) 0x7c00;
+    read_fs(buffer);
+
+    boolean identic = true;
+    good("%l\n", identic);
+    for (int i = 0; i < 30; ++i) {
+        info("%c - %c %l\n", buffer[i], sector[i], identic);
+        identic &= (buffer[i] == sector[i]);
+    }
+    good("%l", identic);
 }

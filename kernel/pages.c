@@ -1,5 +1,5 @@
 #include "pages.h"
-#include "../mushlib/logger.h"
+#include "../drivers/screen.h"
 #include "../mushlib/memory.h"
 #include "interruptions.h"
 

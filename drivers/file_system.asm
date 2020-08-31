@@ -81,12 +81,11 @@ read_fs:
    mov     dx,1f7h         ;Command port
    mov     al,20h          ;Read with retry.
    out     dx,al
+
 .still_going:
    in      al,dx
-   test    al,8            ;This means the sector buffer requires
-            ;servicing.
-   jz      .still_going     ;Don't continue until the sector buffer
-            ;is ready.
+   test    al,8            ;This means the sector buffer requires servicing.
+   jz      .still_going     ;Don't continue until the sector buffer is ready.
 
    mov     cx,512/2        ;One sector /2
    mov     di, [ebp+8]

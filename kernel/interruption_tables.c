@@ -1,6 +1,6 @@
 #include "interruption_tables.h"
 #include "../mushlib/memory.h"
-#include "../mushlib/logger.h"
+#include "../drivers/screen.h"
 #include "../drivers/ports_io.h"
 #include "interruptions.h"
 

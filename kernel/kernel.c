@@ -1,4 +1,4 @@
-#include "../mushlib/logger.h"
+#include "../drivers/screen.h"
 #include "interruption_tables.h"
 #include "timer.h"
 #include "../drivers/keyboard.h"
@@ -52,11 +52,7 @@ void _start() {
     byte* sector = (byte*) 0x7c00;
     read_fs(buffer);
 
-    boolean identic = true;
-    good("%l\n", identic);
-    for (int i = 0; i < 30; ++i) {
-        info("%c - %c %l\n", buffer[i], sector[i], identic);
-        identic &= (buffer[i] == sector[i]);
-    }
-    good("%l", identic);
+    int unmatches = 0;
+    for (int i = 0; i < 512; ++i) if (buffer[i] != sector[i]) unmatches++;
+    good("Differences: %d\n", unmatches)
 }

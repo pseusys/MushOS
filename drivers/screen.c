@@ -1,8 +1,27 @@
 #include "screen.h"
 #include "ports_io.h"
 #include "../mushlib/memory.h"
-#include "../mushlib/heap.h"
-#include "../mushlib/vararg.h"
+#include "../kernel/interruption_tables.h"
+#include "../mushlib/stdio.h"
+#include "../mushlib/syscall.h"
+
+#define REG_SCREEN_CTRL 0x3d4
+#define REG_SCREEN_DATA 0x3d5
+
+#define VIDEO_MEMORY 0xb8000
+
+#define BLACK 0u
+#define LIGHT_GRAY 7u
+
+#define ROWS_NUM 25
+#define COLS_NUM 80
+
+typedef struct {
+    word row;
+    word column;
+} screen_coords;
+
+
 
 static u_dword get_cursor_offset() {
     port_byte_out(REG_SCREEN_CTRL, 14);
@@ -20,12 +39,12 @@ static void set_cursor_offset(u_dword offset) {
     port_byte_out(REG_SCREEN_DATA, (byte) (offset & 0x00ff));
 }
 
-screen_coords get_cursor() {
+static screen_coords get_cursor() {
     u_dword offset = get_cursor_offset();
     return (screen_coords) {offset % COLS_NUM + 1, offset / COLS_NUM};
 }
 
-void set_cursor(screen_coords coords) {
+static void set_cursor(screen_coords coords) {
     set_cursor_offset(coords.row * COLS_NUM + coords.column);
 }
 
@@ -50,25 +69,10 @@ static u_dword scroll (u_dword cursor_offset) {
 
 
 
-void print_char (char c) {
-    print_char_color_at(c, (screen_coords) {-1, -1}, LIGHT_GRAY, BLACK);
-}
-
-void print_char_at (char c, screen_coords coords) {
-    print_char_color_at(c, coords, LIGHT_GRAY, BLACK);
-}
-
 void print_char_color (char c, byte text_color, byte back_color) {
-    print_char_color_at(c, (screen_coords) {-1, -1}, text_color, back_color);
-}
-
-void print_char_color_at (char c, screen_coords coords, byte text_color, byte back_color) {
     byte attributes = (back_color << 4u) + text_color;
     byte* vm = (byte*) VIDEO_MEMORY;
-
-    u_dword mem_offset;
-    if ((coords.column == -1) && (coords.row == -1)) mem_offset = get_cursor_offset() * 2;
-    else mem_offset = coords.row * coords.column;
+    u_dword mem_offset = get_cursor_offset() * 2;
 
     if (c == '\n') {
         u_dword rows = (mem_offset / 2) / COLS_NUM + 1;
@@ -94,28 +98,15 @@ void print_char_color_at (char c, screen_coords coords, byte text_color, byte ba
     set_cursor_offset(mem_offset / 2);
 }
 
-
-
-void print (c_string str) {
-    print_color_at(str, (screen_coords) {-1, -1}, LIGHT_GRAY, BLACK);
+char get_char(screen_coords coords) {
+    byte* vm = (byte*) VIDEO_MEMORY;
+    return vm[coords.row * coords.column];
 }
 
-void print_at (c_string str, screen_coords coords) {
-    print_color_at(str, coords, LIGHT_GRAY, BLACK);
-}
 
-void print_color (c_string str, byte text_color, byte back_color) {
-    print_color_at(str, (screen_coords) {-1, -1}, text_color, back_color);
-}
 
-void print_color_at (c_string str, screen_coords coords, byte text_color, byte back_color) {
-    if ((coords.column != -1) && (coords.row != -1)) set_cursor(coords);
-
-    int i = 0;
-    while (str[i] != 0) {
-        print_char_color(str[i], text_color, back_color);
-        i++;
-    }
+void print_string_color(char* str, byte text_color, byte back_color) {
+    for (int i = 0; str[i] != 0; ++i) print_char_color(str[i], text_color, back_color);
 }
 
 
@@ -128,124 +119,54 @@ void clear_screen() {
 
 
 
-static void print_atom(u_byte b, color front, color back, system sys) {
-    if ((sys >= 2) && (sys <= 10)) print_char_color(b + 48, front, back);
-    else if ((sys > 10) && (sys <= 36)) {
-        if (b < 10) print_char_color(b + 48, front, back);
-        else print_char_color(b + 65 - 10, front, back);
-    } else print_char_color(undefined, front, back);
-}
+typedef enum {
+    GET_CHAR = 0, SET_CHAR = 1, SET_CHARS = 2, GET_CURSOR = 3, SET_CURSOR = 4, CLEAR_SCREEN = 5
+} call_type;
 
-static void print_int(u_dword b, color front, color back, system sys) {
-    if (b) {
-        byte symbol = b % sys;
-        print_int(b / sys, front, back, sys);
-        print_atom(symbol, front, back, sys);
-    }
-}
-
-static void print_float(float b, color front, color back, system sys, u_dword after_comma) {
-    if (after_comma) {
-        if (b > 1) {
-            byte symbol = (u_dword) b % sys;
-            print_float(b / (float) sys, front, back, sys, 4);
-            print_atom(symbol, front, back, sys);
-            if (b / (float) sys < 1) print_char_color('.', front, back);
-        } else if (b) {
-            b *= (float) sys;
-            byte symbol = (u_dword) b % sys;
-            print_float(b / (float) sys, front, back, sys, after_comma - 1);
-            print_atom(symbol, front, back, sys);
+static void screen_callback(registers* regs) {
+    u_dword call_type, ret_value = 0;
+    get_orbital_arg(regs->ebp, 0, call_type)
+    switch (call_type) {
+        case GET_CHAR: {
+            ret_value = get_char((screen_coords) {0, 0});
+            break;
         }
-    }
-}
-
-static void print_boolean(boolean b, color front, color back) {
-    if (b) print_color("true", front, back);
-    else print_color("false", front, back);
-}
-
-static void print_pointer(u_dword b, color front, color back) {
-    print_color(".", front, back);
-    if (b == nullptr) print_color("null", front, back);
-    else print_int(b, front, back, HEXADECIMAL);
-}
-
-void print_number(u_dword num, type t, system sys, color front, color back) {
-    switch (sys) {
-        case DECIMAL:
+        case SET_CHAR: {
+            u_dword character, front_color, back_color;
+            get_orbital_arg(regs->ebp, 1, character)
+            get_orbital_arg(regs->ebp, 2, front_color)
+            get_orbital_arg(regs->ebp, 3, back_color)
+            print_char_color(character, front_color, back_color);
             break;
-        case HEXADECIMAL:
-            print_color("0x", front, back);
+        }
+        case SET_CHARS: {
+            u_dword string, front_color, back_color;
+            get_orbital_arg(regs->ebp, 1, string)
+            get_orbital_arg(regs->ebp, 2, front_color)
+            get_orbital_arg(regs->ebp, 3, back_color)
+            print_string_color((char*) string, front_color, back_color);
+        }
+        case GET_CURSOR: {
+            ret_value = get_cursor_offset();
             break;
-        case BINARY:
-            print_color("0b", front, back);
+        }
+        case SET_CURSOR: {
+            u_dword offset;
+            get_orbital_arg(regs->ebp, 1, offset)
+            set_cursor_offset(offset);
+            break;
+        }
+        case CLEAR_SCREEN:
+            clear_screen();
             break;
         default:
-            log(front, back, "(base %d) ", sys);
+            break;
     }
-
-    if (num == 0) print_atom(0, front, back, sys);
-    else if (num < 0) {
-        print_char_color('-', front, back);
-        if (t == INTEGER) print_int(-num, front, back, sys);
-        else print_float(-num, front, back, sys, 4);
-    } else {
-        if (t == INTEGER) print_int(num, front, back, sys);
-        else print_float(num, front, back, sys, 4);
-    }
+    push_orbital(regs->ebp, ret_value)
 }
 
 
 
-void log(color text, color back, const char* template, ...) {
-    u_dword temps = 3, length = 0;
-    while (template[length]) {
-        if (template[length] == '%') temps++;
-        length++;
-    }
-
-    u_dword* args = malloc(temps * sizeof(u_dword));
-    args_init(args)
-
-    u_dword argumentor = 2;
-    for (int j = 0; j < length; ++j)
-        if (template[j] != '%') print_char_color(template[j], text, back);
-        else if (j < length - 1) {
-            argumentor++;
-            j++;
-
-            switch (template[j]) {
-                case 'l':
-                    print_boolean(args[argumentor], text, back);
-                    break;
-                case 'p':
-                    print_pointer(args[argumentor], text, back);
-                    break;
-                case 'd':
-                    print_number(args[argumentor], INTEGER, DECIMAL, text, back);
-                    break;
-                case 'h':
-                    print_number(args[argumentor], INTEGER, HEXADECIMAL, text, back);
-                    break;
-                case 'b':
-                    print_number(args[argumentor], INTEGER, BINARY, text, back);
-                    break;
-                case 'f':
-                    print_number(args[argumentor], FLOAT, DECIMAL, text, back);
-                    break;
-                case 'c':
-                    print_char_color(args[argumentor], text, back);
-                    break;
-                case 's':
-                    print_color((c_string) args[argumentor], text, back);
-                    break;
-                default:
-                    argumentor--;
-                    j--;
-                    break;
-            }
-        }
-
-    free(args);
+void init_screen_io() {
+    set_interrupt_handler(48, screen_callback);
 }

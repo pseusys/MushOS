@@ -1,8 +1,8 @@
 #include "interruption_tables.h"
 #include "../mushlib/memory.h"
-#include "../drivers/screen.h"
 #include "../drivers/ports_io.h"
 #include "interruptions.h"
+#include "../mushlib/stdio.h"
 
 IDT_entry idt [256];
 IDT_descriptor idt_descriptor_pointer;
@@ -86,7 +86,14 @@ void init_interruptions() {
     create_idt_entry(46, (u_dword) irq14, CS, 0b10001110);
     create_idt_entry(47, (u_dword) irq15, CS, 0b10001110);
 
-    for (int i = 48; i < 256; ++i) {
+    create_idt_entry(48, (u_dword) isr48, CS, 0b10001110);
+    create_idt_entry(49, (u_dword) isr49, CS, 0b10001110);
+    create_idt_entry(50, (u_dword) isr50, CS, 0b10001110);
+    create_idt_entry(51, (u_dword) isr51, CS, 0b10001110);
+    create_idt_entry(52, (u_dword) isr52, CS, 0b10001110);
+
+
+    for (int i = 53; i < 256; ++i) {
         create_idt_entry(i, (u_dword) isr32, CS, 0b10001110);
     }
 
@@ -99,8 +106,8 @@ void init_interruptions() {
 
 
 void set_interrupt_handler(u_byte n, interruption_handler handler) {
-    info("Handler set for interruption: %d\n", n)
     interruption_handlers[n] = handler;
+    if (n != 32) info("Handler set for interruption: %d\n", n)
 }
 
 
@@ -111,7 +118,10 @@ void isr_handler(registers* regs) {
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
-    } else error("Received undefined user interrupt: %h\n", regs->int_no)
+    } else {
+        error("Received undefined user interrupt: %h\n", regs->int_no)
+        asm("jmp .");
+    }
 }
 
 void irq_handler(registers* regs) {

@@ -75,4 +75,10 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
+extern void isr48();
+extern void isr49();
+extern void isr50();
+extern void isr51();
+extern void isr52();
+
 #endif //MUSHOS_GENERIC_H

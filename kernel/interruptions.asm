@@ -18,7 +18,7 @@ idt_flush:
 
 
 %macro ISR_NO_ERROR_CODE 1  ; define a macro, taking one parameter
-  global isr%1        ; %1 accesses the first parameter.
+  global isr%1              ; %1 accesses the first parameter.
   isr%1:
     push byte 0
     push byte %1
@@ -91,6 +91,14 @@ IRQ 12, 44
 IRQ 13, 45
 IRQ 14, 46
 IRQ 15, 47
+
+
+
+ISR_NO_ERROR_CODE 48
+ISR_NO_ERROR_CODE 49
+ISR_NO_ERROR_CODE 50
+ISR_NO_ERROR_CODE 51
+ISR_NO_ERROR_CODE 52
 
 
 

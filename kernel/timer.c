@@ -9,7 +9,7 @@ static u_dword tick = 0;
 static void timer_callback(registers* regs) {
     tick++;
     /*print("Tick: ");
-    print_char(tick + 0x30); // TODO: num to str.
+    print_char(tick + 0x30);
     print_char('\n');*/
 }
 

@@ -1,7 +1,7 @@
 #include "pages.h"
-#include "../drivers/screen.h"
 #include "../mushlib/memory.h"
 #include "interruptions.h"
+#include "../mushlib/stdio.h"
 
 #define page_size 0x1000
 

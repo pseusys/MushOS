@@ -18,7 +18,7 @@ static u_byte RECOGNIZED_CHARS [] = {'1', '2', '3', '4', '5', '6', '7', '8', '9'
 
 static void print_letter(u_byte scancode) {
     for (int i = 0; i < 51; ++i) {
-        if (scancode == RECOGNIZED_CODES[i]) print_char(RECOGNIZED_CHARS[i]);
+        //if (scancode == RECOGNIZED_CODES[i]) print_char(RECOGNIZED_CHARS[i]);
     }
     if (scancode <= 0x7f); // Unknown key up.
     else; // Unknown key down.

@@ -1,10 +1,12 @@
-#include "../drivers/screen.h"
 #include "interruption_tables.h"
-#include "timer.h"
-#include "../drivers/keyboard.h"
-#include "pages.h"
 #include "../mushlib/heap.h"
+#include "../mushlib/stdio.h"
+#include "../drivers/screen.h"
+#include "../drivers/keyboard.h"
+#include "timer.h"
+#include "pages.h"
 #include "../drivers/file_system.h"
+#include "../mushlib/syscall.h"
 
 /**
  * Make kernel constants:
@@ -38,14 +40,16 @@ int kek() {
 }
 
 void _start() {
-    clear_screen();
     initialize_heap((void*) 0x1000, 0x6000);
 
+    init_interruptions();
+    init_timer(100);
+    init_screen_io();
+
+    //clear_screen();
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 
-    init_interruptions();
     init_keyboard();
-    init_timer(100);
     initialise_paging();
 
     byte* buffer = malloc(512);

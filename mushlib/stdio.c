@@ -94,14 +94,6 @@ void print_number(u_dword num, type t, system sys, u_dword front, u_dword back) 
 
 
 
-void print_with_arguments() {
-
-}
-
-void print(c_string format, ...) {
-
-}
-
 void print_colored(console_color font, console_color back, c_string format, ...) {
     u_dword temps = 0, length = 0;
     while (format[length]) {

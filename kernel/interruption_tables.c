@@ -119,7 +119,7 @@ void isr_handler(registers* regs) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
     } else {
-        error("Received undefined user interrupt: %h\n", regs->int_no)
+        bad("Received undefined user interrupt: %h\n", regs->int_no)
         asm("jmp .");
     }
 }

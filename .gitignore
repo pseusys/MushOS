@@ -1,6 +1,13 @@
-./build.sh
-./build
-./images
+./MushCore/build
+./MushCore/images
+./MushCreator/fs
 ./.idea
 ./CMakeLists.txt
 ./cmake-build-debug
+
+MushCore\build
+MushCore\images
+MushCreator\fs
+.idea
+CMakeLists.txt
+cmake-build-debug

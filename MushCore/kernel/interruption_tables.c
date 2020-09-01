@@ -4,21 +4,20 @@
 #include "interruptions.h"
 #include "../mushlib/stdio.h"
 
-IDT_entry idt [256];
-IDT_descriptor idt_descriptor_pointer;
-
+IDT* idt_table;
 interruption_handler interruption_handlers[256];
 
 static void create_idt_entry (u_dword pos, u_dword base, u_word selector, u_byte flags) {
-    idt[pos].base_low = (base & 0xffff);
-    idt[pos].selector = selector;
-    idt[pos].always0 = 0x00;
-    idt[pos].flags = flags;
-    idt[pos].base_high = (base >> 16);
+    idt_table->entries[pos].base_low = (base & 0xffff);
+    idt_table->entries[pos].selector = selector;
+    idt_table->entries[pos].always0 = 0x00;
+    idt_table->entries[pos].flags = flags;
+    idt_table->entries[pos].base_high = (base >> 16);
 }
 
 void init_interruptions() {
-    memory_clear((byte *) idt, 256 * sizeof(IDT_entry), 0);
+    idt_table = k_malloc_aligned(sizeof(IDT), false);
+    memory_clear((byte *) idt_table->entries, 256 * sizeof(IDT_entry), 0);
 
     u_word CS = 0x08;
     create_idt_entry(0, (u_dword) isr0, CS, 0b10001110);
@@ -97,10 +96,10 @@ void init_interruptions() {
         create_idt_entry(i, (u_dword) isr32, CS, 0b10001110);
     }
 
-    idt_descriptor_pointer.size = 256 * sizeof(IDT_entry) - 1;
-    idt_descriptor_pointer.pos = (u_dword) &idt;
+    idt_table->descriptor.size = 256 * sizeof(IDT_entry) - 1;
+    idt_table->descriptor.pos = (u_dword) &(idt_table->entries);
 
-    idt_flush((u_dword) &idt_descriptor_pointer);
+    idt_flush((u_dword) &(idt_table->descriptor));
 }
 
 

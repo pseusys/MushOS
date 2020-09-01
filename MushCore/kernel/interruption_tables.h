@@ -16,6 +16,11 @@ typedef struct {
     u_dword pos;
 } __attribute__((packed)) IDT_descriptor;
 
+typedef struct {
+    IDT_entry entries [256];
+    IDT_descriptor descriptor;
+} IDT;
+
 void init_interruptions();
 
 typedef struct {

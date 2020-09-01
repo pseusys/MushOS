@@ -5,8 +5,7 @@
 
 void create_fs();
 
-int read_out_file(char* name, byte* raw_bytes);
-int write_out_file(char* name, byte* raw_bytes, int size);
+int insert_header(char* name);
 
 void write_at(int pos, byte info);
 byte read_at(int pos);

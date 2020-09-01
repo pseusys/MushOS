@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "adapter.h"
+#include "../file_system/structures.h"
 
 const char* file_name = "./fs/FS.binary";
 const int fs_size = 4194304;
@@ -18,25 +19,27 @@ void create_fs() {
 
 
 
-int read_out_file(char* name, byte* raw_bytes) {
+int insert_header(char* name) {
     FILE* file = fopen(name, "rb");
 
     fseek(file, 0L, SEEK_END);
     int size = ftell(file);
+    if (size > fs_header_offset) {
+        printf("\n\n\nWarning! Kernel size overflow!!");
+        return 228;
+    } else printf("\n\n\nKernel free space: %d of %d", fs_header_offset - size, fs_header_offset);
     rewind(file);
 
-    raw_bytes = calloc(size, sizeof(byte));
-    int written = (int) fread(raw_bytes, sizeof(byte), size, file);
-
+    byte* raw_bytes = calloc(size, sizeof(byte));
+    int read = (int) fread(raw_bytes, sizeof(byte), size, file);
     fclose(file);
-    return written;
-}
 
-int write_out_file(char* name, byte* raw_bytes, int size) {
-    FILE* file = fopen(name, "a+b");
-    int written = (int) fwrite(raw_bytes, sizeof(byte), size, file);
-    fclose(file);
-    return written;
+    if (read) {
+        file = fopen(file_name, "r+b");
+        int written = (int) fwrite(raw_bytes, size, 1, file);
+        fclose(file);
+        return written;
+    } else return read;
 }
 
 

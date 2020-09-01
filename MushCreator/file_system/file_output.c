@@ -73,7 +73,7 @@ int format_drive() {
         if (perc == percent) {
             perc = 0;
             percent_counter++;
-            printf("Percent formatted: %d\n", percent_counter);
+            //printf("Percent formatted: %d\n", percent_counter);
         } else perc++;
         empty_block->linker.previous = i - 1;
         empty_block->linker.next = i + 1;

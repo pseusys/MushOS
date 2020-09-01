@@ -37,7 +37,8 @@ int main() {
     printf("Extension: %s\n", get_extension(stasis));
     printf("Path: %s\n", get_path(stasis));
 
-    delete_file_global("/foo/bar");
-
-    return 0;
+    int inserted =  insert_header("../MushCore/images/floppy.img");
+    printf("\n\nHeader inserted: %d", inserted);
+    if (inserted == 228) return inserted;
+    else return 0;
 }

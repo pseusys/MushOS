@@ -18,7 +18,7 @@ u_byte* page_tables_pool;
 u_dword page_dirs_pool;
 
 extern u_dword placement_address;
-extern byte sentinel;
+void* sentinel = (void*) 0x10000;
 
 
 
@@ -240,7 +240,7 @@ void* get_page_address(u_dword address) {
 void initialise_paging() {
     // The size of physical memory. For the moment we
     // assume it is 16MB big.
-    placement_address = (u_dword) &sentinel;
+    placement_address = (u_dword) sentinel;
 
     u_dword page_pool_size = (memory_end - memory_start) / page_size / 8;
     page_pool = k_malloc_aligned(page_pool_size, false);

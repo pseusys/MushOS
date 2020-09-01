@@ -1,7 +1,7 @@
 #ifndef MUSHFS_STRUCTURES_H
 #define MUSHFS_STRUCTURES_H
 
-#include "../presets.h"
+#include "../../MushCore/kernel/generic.h"
 
 
 typedef struct {

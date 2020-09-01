@@ -1,7 +1,7 @@
 #ifndef MUSHFS_DRIVER_PROXY_H
 #define MUSHFS_DRIVER_PROXY_H
 
-#include "../presets.h"
+#include "../../MushCore/kernel/generic.h"
 
 int read_int(int offset);
 void write_int(int offset, int data);

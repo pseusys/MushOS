@@ -1,8 +1,8 @@
 #include "interruption_tables.h"
-#include "../../mushlib/memory.h"
+#include "../mushlib/memory.h"
 #include "../drivers/ports_io.h"
 #include "interruptions.h"
-#include "../../mushlib/stdio.h"
+#include "../mushlib/stdio.h"
 
 IDT_entry idt [256];
 IDT_descriptor idt_descriptor_pointer;

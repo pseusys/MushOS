@@ -1,5 +1,5 @@
 #include "file_input.h"
-#include "../windows_adapter/driver_proxy.h"
+#include "../adapter/driver_proxy.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -147,7 +147,7 @@ boolean get_previous_bytes(data_iterator* iterator, byte* container, int length)
 
 void check_root() {
     boolean drive_valid = check_drive();
-    printf("Drive valid: %d\n", check_drive());
+    printf("Drive valid: %d\n", drive_valid);
     if (!drive_valid) return;
 
     system_header* header = malloc(sizeof(system_header));
@@ -229,7 +229,7 @@ void read_bytes(file* f, byte* bytes, int size, int offset) {
 
 file* find_file_in_dir(string file_name, file* dir) {
     int current_file_page = 0;
-    file* current_file = null;
+    file* current_file = nullptr;
     boolean exists = false;
     directory_entry* entry = malloc(sizeof(directory_entry));
     file_header* header = malloc(sizeof(file_header));
@@ -267,10 +267,10 @@ file* recur_file_r(mod_string path, file* parent) {
         substring_end(path, current_dir_path, delimiter_pos);
 
         file* current_dir = find_file_in_dir(current_dir_path, parent);
-        if (current_dir == null) {
+        if (current_dir == nullptr) {
             free(current_dir_path);
             free(current_dir);
-            return null;
+            return nullptr;
         }
 
         move_string_by(path, delimiter_pos + 1);
@@ -285,7 +285,7 @@ file* recur_file_r(mod_string path, file* parent) {
 file* open_file_global(string path) {
     mod_string copy_path = malloc(len(path) + 1);
     copy_mod(path, copy_path);
-    file* result = null;
+    file* result = nullptr;
 
     if (len(path) == 0) {
         result = open_file(get_root_dir_number());
@@ -308,7 +308,7 @@ file* get_root_dir() {
 
 boolean file_exists(string path) {
     file* f = open_file_global(path);
-    boolean answer = f != null;
+    boolean answer = f != nullptr;
     close_file(f);
     return answer;
 }

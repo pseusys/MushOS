@@ -1,7 +1,7 @@
 #ifndef MUSHFS_FILE_INPUT_H
 #define MUSHFS_FILE_INPUT_H
 
-#include "../presets.h"
+#include "../../MushCore/kernel/generic.h"
 #include "structures.h"
 #include "../utils/string_utils.h"
 

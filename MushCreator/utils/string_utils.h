@@ -1,7 +1,7 @@
 #ifndef MUSHFS_STRING_UTILS_H
 #define MUSHFS_STRING_UTILS_H
 
-#include "../presets.h"
+#include "../../MushCore/kernel/generic.h"
 
 typedef const char* string;
 typedef char* mod_string;

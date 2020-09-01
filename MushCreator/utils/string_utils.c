@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "string_utils.h"
 
 int len(string str) {

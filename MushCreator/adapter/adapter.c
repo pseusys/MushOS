@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include "adapter.h"
 
-const char* file_name = "FS.binary";
+const char* file_name = "./fs/FS.binary";
 const int fs_size = 4194304;
 
 void create_fs() {

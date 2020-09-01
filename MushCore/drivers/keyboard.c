@@ -1,7 +1,6 @@
 #include "keyboard.h"
-#include "../../kernel/interruption_tables.h"
-#include "../../kernel/interruptions.h"
-#include "screen.h"
+#include "../kernel/interruption_tables.h"
+#include "../kernel/interruptions.h"
 #include "ports_io.h"
 
 static u_byte RECOGNIZED_CODES [] = {0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08, 0x09, 0x0a,

@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "windows_adapter/windows.h"
+#include "adapter/adapter.h"
 #include "file_system/file_input.h"
 #include "file_system/file_output.h"
 
@@ -26,7 +26,7 @@ int main() {
 
     printf("\nStasis:\n");
     free(stasis);
-    stasis = null;
+    stasis = nullptr;
     stasis = open_file_global("/foo/bar/stasis.lo");
     byte* content = malloc(131);
     read_bytes(stasis, content, 131, 0);

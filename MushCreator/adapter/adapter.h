@@ -1,7 +1,7 @@
 #ifndef MUSHFS_WINDOWS_H
 #define MUSHFS_WINDOWS_H
 
-#include "../presets.h"
+#include "../../MushCore/kernel/generic.h"
 
 void create_fs();
 

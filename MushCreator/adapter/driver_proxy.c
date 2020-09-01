@@ -3,18 +3,18 @@
 
 int read_int(int offset) {
     int data = 0;
-    data |= read_at(offset);
-    data |= (read_at(offset + 1) << 8);
-    data |= (read_at(offset + 2) << 16);
-    data |= (read_at(offset + 3) << 24);
+    data |= (read_at(offset) & 0xff);
+    data |= ((read_at(offset + 1) & 0xff) << 8);
+    data |= ((read_at(offset + 2) & 0xff) << 16);
+    data |= ((read_at(offset + 3) & 0xff) << 24);
     return data;
 }
 
 void write_int(int offset, int data) {
-    write_at(offset, data & 0x000000ff);
-    write_at(offset + 1, (data & 0x0000ff00) >> 8);
-    write_at(offset + 2, (data & 0x00ff0000) >> 16);
-    write_at(offset + 3, (data & 0xff000000) >> 24);
+    write_at(offset, data & 0xff);
+    write_at(offset + 1, (data >> 8) & 0xff);
+    write_at(offset + 2, (data >> 16) & 0xff);
+    write_at(offset + 3, (data >> 24) & 0xff);
 }
 
 

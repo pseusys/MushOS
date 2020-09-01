@@ -1,12 +1,11 @@
 #include "interruption_tables.h"
-#include "../../mushlib/heap.h"
-#include "../../mushlib/stdio.h"
+#include "../mushlib/heap.h"
+#include "../mushlib/stdio.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
 #include "timer.h"
 #include "pages.h"
 #include "../drivers/file_system.h"
-#include "../../mushlib/syscall.h"
 
 /**
  * Make kernel constants:

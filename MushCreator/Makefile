@@ -7,8 +7,8 @@ debug: clean run
 run: create build
 	./fs/creator.elf
 
-build: %.c ${HEADERS}
-	gcc $< -o ./fs/creator.elf
+build:
+	gcc ${C_SOURCES} ${HEADERS} -o ./fs/creator.elf
 
 create:
 	if [ ! -e ./fs ]; then mkdir ./fs; fi;

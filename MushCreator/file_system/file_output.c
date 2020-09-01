@@ -1,7 +1,7 @@
 #include "file_output.h"
 #include "file_input.h"
-#include "../windows_adapter/driver_proxy.h"
-#include "../windows_adapter/windows.h"
+#include "../adapter/driver_proxy.h"
+#include "../adapter/adapter.h"
 #include <stdlib.h>
 #include <stdio.h>
 
@@ -311,7 +311,7 @@ void add_file_to_dir(file* f, file* dir) {
 
 void delete_file_from_dir(file* f, file* dir) {
     if (f->header->is_directory) {
-        file* current_file = null;
+        file* current_file = nullptr;
         directory_entry* entry = malloc(sizeof(directory_entry));
         int files_num = f->header->size / sizeof(directory_entry);
 
@@ -351,14 +351,14 @@ file* recur_file_w(mod_string path, file* parent, action act) {
 
     if (delimiter_pos == -1) {
         file* actual = find_file_in_dir(path, parent);
-        if (actual == null) {
+        if (actual == nullptr) {
             if (act == CREATE) {
                 actual = create_file(path, parent->main_page);
                 add_file_to_dir(actual, parent);
             }
         } else if (act == DELETE) {
             delete_file_from_dir(actual, parent);
-            return null;
+            return nullptr;
         }
         return actual;
 
@@ -367,7 +367,7 @@ file* recur_file_w(mod_string path, file* parent, action act) {
         substring_end(path, current_dir_path, delimiter_pos);
 
         file* current_dir = find_file_in_dir(current_dir_path, parent);
-        if (current_dir == null) {
+        if (current_dir == nullptr) {
             if (act == CREATE) {
                 current_dir = create_file(current_dir_path, parent->main_page);
                 current_dir->header->is_directory = true;
@@ -376,7 +376,7 @@ file* recur_file_w(mod_string path, file* parent, action act) {
             } else {
                 free(current_dir_path);
                 free(current_dir);
-                return null;
+                return nullptr;
             }
         }
 
@@ -392,7 +392,7 @@ file* recur_file_w(mod_string path, file* parent, action act) {
 file* create_file_global(string path) {
     mod_string copy_path = malloc(len(path) + 1);
     copy_mod(path, copy_path);
-    file* result = null;
+    file* result = nullptr;
 
     if (len(path) == 0) {
         result = open_file(get_root_dir_number());

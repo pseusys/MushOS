@@ -1,5 +1,5 @@
-C_SOURCES = $(wildcard ./adapter/*.c ./file_system/*.c ./utils/*.c main.c)
-HEADERS = $(wildcard ./adapter/*.h ./file_system/*.h ./utils/*.h)
+C_SOURCES = $(wildcard ./adapter/*.c ./file_system/*.c ../MushLib/string.c main.c)
+HEADERS = $(wildcard ./adapter/*.h ./file_system/*.h ../MushLib/string.h)
 OBJ = ${C_SOURCES:.c=.o}
 
 debug: clean run

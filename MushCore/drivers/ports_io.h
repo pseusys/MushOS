@@ -1,7 +1,7 @@
 #ifndef MUSHOS_PORTS_IO_H
 #define MUSHOS_PORTS_IO_H
 
-#include "../kernel/generic.h"
+#include "../../MushLib/generic.h"
 
 // Corresponding assembly functions defined in ports_io.asm
 

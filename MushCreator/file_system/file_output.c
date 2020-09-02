@@ -1,9 +1,18 @@
 #include "file_output.h"
 #include "file_input.h"
+#include "../../MushLib/string.h"
+
+#ifdef MUSHENV
+#include "../../MushCore/drivers/file_system.h"
+#include "../../MushLib/heap.h"
+#include "../../MushLib/stdio.h"
+#else
 #include "../adapter/driver_proxy.h"
 #include "../adapter/adapter.h"
 #include <stdlib.h>
-#include <stdio.h>
+#define bad(temp, args...) printf(temp, ## args);
+#define info(temp, args...) printf(temp, ## args);
+#endif
 
 
 // Call to occupy a block, it returns the block-to-occupy number;
@@ -60,7 +69,7 @@ int format_drive() {
     system_header* header = malloc(sizeof(system_header));
     header->magic_number = magic;
     header->root_page = fs_header_offset + sizeof(system_header);
-    header->empty_pages = available_size / page_size - 1;
+    header->empty_pages = available_size / file_page_size - 1;
     header->empty.previous = 0;
     header->empty.next = header->empty_pages - 1;
     write_struct(fs_header_offset, (byte*) header, sizeof(system_header));

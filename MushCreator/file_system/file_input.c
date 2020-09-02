@@ -1,19 +1,31 @@
 #include "file_input.h"
+#include "../../MushLib/string.h"
+
+#ifdef MUSHENV
+#include "../../MushCore/drivers/file_system.h"
+#include "../../MushLib/heap.h"
+#include "../../MushLib/stdio.h"
+#else
 #include "../adapter/driver_proxy.h"
 #include <stdlib.h>
 #include <stdio.h>
+#define bad(temp, args...) printf(temp, ## args);
+#define info(temp, args...) printf(temp, ## args);
+#endif
 
 
 int get_page_offset(int page_num) {
-    return fs_header_offset + sizeof(system_header) + (page_num * page_size);
+    return fs_header_offset + sizeof(system_header) + (page_num * file_page_size);
 }
 
 int get_page_content_offset(int page_num) {
-    return fs_header_offset + sizeof(system_header) + (page_num * page_size) + sizeof(block_header);
+    return fs_header_offset + sizeof(system_header) + (page_num * file_page_size) + sizeof(block_header);
 }
 
 boolean check_drive() {
-    return magic == read_int(fs_header_offset);
+    int magic_int = 0;
+    read_struct(fs_header_offset, (byte*) &magic_int, sizeof(int));
+    return magic == magic_int;
 }
 
 
@@ -147,37 +159,36 @@ boolean get_previous_bytes(data_iterator* iterator, byte* container, int length)
 
 void check_root() {
     boolean drive_valid = check_drive();
-    printf("Drive valid: %d\n", drive_valid);
+    info("Drive valid: %d\n", drive_valid);
     if (!drive_valid) return;
 
     system_header* header = malloc(sizeof(system_header));
     read_struct(fs_header_offset, (byte*) header, sizeof(system_header));
-    printf("\nSystem header info:\n");
-    printf("\tEmpty pages: %d\n", header->empty_pages);
-    printf("\tRoot offset: %d\n", header->root_page);
-    printf("\tFirst empty: %d\n", header->empty.previous);
-    printf("\tLast empty: %d\n", header->empty.next);
+    info("\nSystem header info:\n");
+    info("\tEmpty pages: %d\n", header->empty_pages);
+    info("\tRoot offset: %d\n", header->root_page);
+    info("\tFirst empty: %d\n", header->empty.previous);
+    info("\tLast empty: %d\n", header->empty.next);
 
     block_header* root_dir_block = malloc(sizeof(block_header));
     read_struct(get_page_offset(header->root_page), (byte*) root_dir_block, sizeof(block_header));
-    printf("\nRoot dir block info:\n");
-    printf("\tIs empty: %d\n", root_dir_block->is_occupied);
-    printf("\tNext block: %d; previous block: %d\n", root_dir_block->linker.next, root_dir_block->linker.previous);
-    printf("\tHead block: %d\n", root_dir_block->head);
+    info("\nRoot dir block info:\n");
+    info("\tIs empty: %d\n", root_dir_block->is_occupied);
+    info("\tNext block: %d; previous block: %d\n", root_dir_block->linker.next, root_dir_block->linker.previous);
+    info("\tHead block: %d\n", root_dir_block->head);
 
     file_header* root_dir_file = malloc(sizeof(file_header));
     read_struct(get_page_content_offset(header->root_page), (byte*) root_dir_file, sizeof(file_header));
-    printf("\nRoot dir file_header info:\n");
-    printf("\tSize: %d\n", root_dir_file->size);
-    printf("\tProperty: %d\n", root_dir_file->property);
-    printf("\tParent page: %d\n", root_dir_file->parent_page);
-    printf("\tPath: %s (", root_dir_file->file_name);
-    for (int i = 0; i < 16; ++i) printf("%d ", root_dir_file->file_name[i]);
-    printf(")\n");
+    info("\nRoot dir file_header info:\n");
+    info("\tSize: %d\n", root_dir_file->size);
+    info("\tProperty: %d\n", root_dir_file->property);
+    info("\tParent page: %d\n", root_dir_file->parent_page);
+    info("\tPath: %s (", root_dir_file->file_name);
+    for (int i = 0; i < 16; ++i) info("%d ", root_dir_file->file_name[i])
+    info(")\n");
 
     file_header* root_dir = malloc(sizeof(file_header));
     read_struct(get_page_content_offset(header->root_page) + sizeof(file_header), (byte*) root_dir, sizeof(file_header));
-    printf("\nRoot dir info:\n");
 
     free(header);
     free(root_dir_block);

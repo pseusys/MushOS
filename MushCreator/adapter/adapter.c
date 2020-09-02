@@ -25,9 +25,10 @@ int insert_header(char* name) {
     fseek(file, 0L, SEEK_END);
     int size = ftell(file);
     if (size > fs_header_offset) {
-        printf("\n\n\nWarning! Kernel size overflow!!");
+        printf("\n\n\nWarning! Kernel size overflow!!\n");
+        printf("\n\n\nKernel free space: %d of %d\n", fs_header_offset - size, fs_header_offset);
         return 228;
-    } else printf("\n\n\nKernel free space: %d of %d", fs_header_offset - size, fs_header_offset);
+    } else printf("\n\n\nKernel free space: %d of %d\n", fs_header_offset - size, fs_header_offset);
     rewind(file);
 
     byte* raw_bytes = calloc(size, sizeof(byte));

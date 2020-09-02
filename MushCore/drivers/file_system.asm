@@ -57,47 +57,91 @@ read_fs:
     push ebp ; Saving register base.
     mov ebp, esp ; Setting register base to register top.
                  ; Function won't be able to interfere with previous stack entries.
+    pusha
 
-   mov     dx,1f6h         ;Drive and head port
-   mov     al,0a0h         ;Drive 0, head 0
-   out     dx,al
+    mov     dx, 1f2h         ;Sector count port
+    mov     al, [ebp+20]            ;Read one sector
+    out     dx, al
 
-   mov     dx,1f2h         ;Sector count port
-   mov     al,1            ;Read one sector
-   out     dx,al
+    mov     eax, [ebp+8]
+    mov     dx, 1f3h         ;Sector number port
+    out     dx, al
 
-   mov     dx,1f3h         ;Sector number port
-   mov     al,1            ;Read sector one
-   out     dx,al
+    shr     eax, 8
+    mov     dx, 1f4h         ;Cylinder low port
+    out     dx, al
 
-   mov     dx,1f4h         ;Cylinder low port
-   mov     al,0            ;Cylinder 0
-   out     dx,al
+    shr     eax, 8
+    mov     dx, 1f5h         ;Cylinder high port
+    out     dx, al
 
-   mov     dx,1f5h         ;Cylinder high port
-   mov     al,0            ;The rest of the cylinder 0
-   out     dx,al
+    mov     bl, [ebp+12]
+    shr     bl, 4
+    or      bl, 0xe0
 
-   mov     dx,1f7h         ;Command port
-   mov     al,20h          ;Read with retry.
-   out     dx,al
+    shr     eax, 8
+    mov     dx, 1f6h         ;Drive and head port
+    or      al, bl
+    out     dx, al
 
-.still_going:
-   in      al,dx
-   test    al,8            ;This means the sector buffer requires servicing.
-   jz      .still_going     ;Don't continue until the sector buffer is ready.
+    mov     dx, 1f7h         ;Command port
+    mov     al, 20h          ;Read with retry.
+    out     dx, al
 
-   mov     cx,512/2        ;One sector /2
-   mov     di, [ebp+8]
-   mov     dx,1f0h         ;Data port - data comes in and out of here.
-   rep     insw
+    in      al, dx
+    in      al, dx
+    in      al, dx
+    in      al, dx
 
-   mov esp, ebp ; Restoring stack.
-   pop ebp
-   ret
+.busy:
+    in      al, dx
+    test    al, 0x80            ;This means the sector buffer requires servicing.
+    jz      .ready     ;Don't continue until the sector buffer is ready.
 
-r_buffer times 512 db 0
-r_buffer2 times 512 db 0
+    test    al, 1
+    jnz     .error
+    test    al, 0x20
+    jnz     .error
+
+    jmp     .busy
+
+.error:
+    popa
+    mov eax, 1
+    mov esp, ebp ; Restoring stack.
+    pop ebp
+    ret
+
+.ready:
+    in      al, dx
+    test    al, 8            ;This means the sector buffer requires servicing.
+    jz      .ready     ;Don't continue until the sector buffer is ready.
+
+    mov     ecx, 0
+    mov     dx, 1f0h         ;Data port - data comes in and out of here.
+    mov     cx, [ebp+24]
+    shr     cx, 1
+    mov     di, [ebp+28]
+    rep     insw
+
+    mov     cx, [ebp+16]
+    shr     cx, 1
+    mov     di, [ebp+28]
+    rep     insw
+
+    mov     cl, [ebp+20]
+    shl     cx, 9
+    sub     ecx, [ebp+16]
+.dump:
+    in      ax, dx
+    loop    .dump
+
+    popa
+    mov eax, 0
+    mov esp, ebp ; Restoring stack.
+    pop ebp
+    ret
+
 
 
 
@@ -114,7 +158,7 @@ r_buffer2 times 512 db 0
 
 write_fs:
    mov     dx,1f6h         ;Drive and head port
-   mov     al,0a0h         ;Drive 0, head 0
+   mov     al,0e0h         ;Drive 0, head 0
    out     dx,al
 
    mov     dx,1f2h         ;Sector count port

@@ -1,9 +1,8 @@
 #include "screen.h"
 #include "ports_io.h"
-#include "../kernel/generic.h"
-#include "../mushlib/memory.h"
+#include "../../MushLib/memory.h"
 #include "../kernel/interruption_tables.h"
-#include "../mushlib/syscall.h"
+#include "../../MushLib/syscall.h"
 
 #define REG_SCREEN_CTRL 0x3d4
 #define REG_SCREEN_DATA 0x3d5
@@ -105,8 +104,9 @@ char get_char(screen_coords coords) {
 
 
 
-void print_string_color(char* str, byte text_color, byte back_color) {
-    for (int i = 0; str[i] != 0; ++i) print_char_color(str[i], text_color, back_color);
+void print_string_color(char* str, byte text_color, byte back_color, u_dword length) {
+    if (length == 0) for (int i = 0; str[i] != 0; ++i) print_char_color(str[i], text_color, back_color);
+    else for (int i = 0; i < length; ++i) print_char_color(str[i], text_color, back_color);
 }
 
 
@@ -140,11 +140,12 @@ static void screen_callback(registers* regs) {
             break;
         }
         case SET_CHARS: {
-            u_dword string, front_color, back_color;
+            u_dword string, front_color, back_color, length;
             get_orbital_arg(regs->ebp, 1, string)
             get_orbital_arg(regs->ebp, 2, front_color)
             get_orbital_arg(regs->ebp, 3, back_color)
-            print_string_color((char*) string, front_color, back_color);
+            get_orbital_arg(regs->ebp, 4, length)
+            print_string_color((char*) string, front_color, back_color, length);
         }
         case GET_CURSOR: {
             ret_value = get_cursor_offset();

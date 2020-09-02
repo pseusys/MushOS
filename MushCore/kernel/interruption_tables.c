@@ -1,8 +1,9 @@
 #include "interruption_tables.h"
-#include "../mushlib/memory.h"
+#include "../../MushLib/memory.h"
 #include "../drivers/ports_io.h"
 #include "interruptions.h"
-#include "../mushlib/stdio.h"
+#include "../../MushLib/stdio.h"
+#include "placement.h"
 
 IDT* idt_table;
 interruption_handler interruption_handlers[256];
@@ -137,5 +138,5 @@ void irq_handler(registers* regs) {
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
-    } else info("Received hardware interrupt: %h\n", regs->int_no)
+    } else info("Received hardware interrupt: %h\n", regs->int_no - 15)
 }

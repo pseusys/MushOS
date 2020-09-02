@@ -1,6 +1,6 @@
-C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c ./mushlib/*.c)
-ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ./mushlib/*.asm)
-HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./mushlib/*.h)
+C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c ../MushLib/*.c ../MushCreator/file_system/file_input.c)
+ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ../MushLib/*.asm)
+HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./MushLib/*.h ../MushCreator/file_system/file_input.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 build: clean create ./images/floppy.img
@@ -22,16 +22,15 @@ test: clean create ./images/floppy.img
 
 ./build/kernel.bin: ./build/kernel.elf
 	objcopy -O binary $< $@
-	du -b ./build/kernel.bin > ./build/kernel_size.sot #Read segments and write into bootloader.
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Tdata 0x8000 -Tbss 0x8500 -Ttext 0xa000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ./mushlib/,./build/,$(OBJ)))}
+	ld -m elf_i386 -o $@ -Tdata 0x8000 -Tbss 0x8500 -Ttext 0xa000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ../MushLib/,./build/,$(subst ../MushCreator/file_system/,./build/,$(OBJ))))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@
 
 %.o: %.c ${HEADERS}
-	gcc -m32 -ffreestanding -c $< -o ./build/$(@F)
+	gcc -DMUSHENV -m32 -ffreestanding -c $< -o ./build/$(@F)
 
 %.obj: %.asm
 	nasm $< -f elf -o ./build/$(@F)

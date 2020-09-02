@@ -1,9 +1,9 @@
 #ifndef MUSHFS_FILE_INPUT_H
 #define MUSHFS_FILE_INPUT_H
 
-#include "../../MushCore/kernel/generic.h"
+#include "../../MushLib/generic.h"
 #include "structures.h"
-#include "../utils/string_utils.h"
+#include "../../MushLib/string.h"
 
 
 int get_page_offset(int page_num);

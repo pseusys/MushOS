@@ -1,11 +1,13 @@
 #include "interruption_tables.h"
-#include "../mushlib/heap.h"
-#include "../mushlib/stdio.h"
+#include "../../MushLib/heap.h"
+#include "../../MushLib/stdio.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/file_system.h"
 #include "timer.h"
 #include "pages.h"
-#include "../drivers/file_system.h"
+#include "placement.h"
+#include "../../MushCreator/file_system/file_input.h"
 
 /**
  * Make kernel constants:
@@ -51,11 +53,13 @@ void _start() {
     init_keyboard();
     initialise_paging();
 
-    byte* buffer = malloc(512);
-    byte* sector = (byte*) 0x7c00;
-    read_fs(buffer);
+    init_simple_fs_driver();
+    get_placement_address();
 
-    int unmatches = 0;
-    for (int i = 0; i < 512; ++i) if (buffer[i] != sector[i]) unmatches++;
-    good("Differences: %d\n", unmatches)
+    info("\nStasis:\n")
+    file* stasis = open_file_global("/foo/bar/stasis.lo");
+    byte* content = malloc(131);
+    read_bytes(stasis, content, 131, 0);
+    for (int i = 0; i < 131; ++i) info("%c", content[i]);
+    info("\n\n");
 }

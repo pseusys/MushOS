@@ -1,7 +1,7 @@
 #ifndef MUSHFS_STRUCTURES_H
 #define MUSHFS_STRUCTURES_H
 
-#include "../../MushCore/kernel/generic.h"
+#include "../../MushLib/generic.h"
 
 
 typedef struct {
@@ -25,8 +25,8 @@ typedef struct {
 
 
 #define magic 0x10afc01
-#define fs_header_offset 0x8400
-#define page_size 512
+#define fs_header_offset 0xa400
+#define file_page_size 512
 #define page_content_size (signed int) (512 - sizeof(block_header))
 
 typedef struct {

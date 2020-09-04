@@ -30,6 +30,30 @@ int main() {
     free(orbit);
     free(sputnik);
 
+
+
+    stasis = open_file_global("/foo/bar/stasis.lo");
+    printf("\nStasis (%d):\n", stasis->header->size);
+    byte* content = malloc(stasis->header->size);
+    read_bytes(stasis, content, stasis->header->size, 0);
+    printf("%s\n", content);
+    close_file(stasis);
+    free(content);
+    printf("\n\n");
+
+    stasis = open_file_global("/orbit/sputnik.elf");
+    printf("\nSputnik (%d):\n", stasis->header->size);
+    content = malloc(stasis->header->size);
+    read_bytes(stasis, content, stasis->header->size, 0);
+    for (int i = 0; i < stasis->header->size; ++i) printf("%d ", content[i]);
+    printf("\n");
+    for (int i = 0; i < stasis->header->size; ++i) printf("%c", content[i]);
+    printf("\n");
+    close_file(stasis);
+    free(content);
+
+
+
     int inserted = insert_header("../MushCore/images/floppy.img");
     printf("Header inserted: %d\n", inserted);
     if (inserted != 1) {

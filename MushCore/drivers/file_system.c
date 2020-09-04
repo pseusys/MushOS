@@ -1,6 +1,7 @@
 #include "file_system.h"
 #include "../kernel/interruption_tables.h"
 #include "../../MushLib/math.h"
+#include "../../MushLib/stdio.h"
 
 
 extern boolean read_fs(u_dword sector, boolean slave_drive, u_word len, u_byte sectors, u_word offset, u_word* buffer);
@@ -17,6 +18,9 @@ void init_simple_fs_driver() {
 
 
 boolean read_struct(int offset, byte* data, int length) {
-    if ((offset % 2) || (length % 2)) return false;
+    if ((offset % 2) || (length % 2)) {
+        bad("Data offset and length should be aligned to 2.\n")
+        return false;
+    }
     return read_fs(offset / 512, false, length, m_ceil(length, 512), offset % 512, (u_word*) data);
 }

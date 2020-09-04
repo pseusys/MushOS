@@ -20,7 +20,3 @@ boolean read_struct(int offset, byte* data, int length) {
     if ((offset % 2) || (length % 2)) return false;
     return read_fs(offset / 512, false, length, m_ceil(length, 512), offset % 512, (u_word*) data);
 }
-
-boolean write_struct(int offset, byte* data, int length) {
-    if ((offset % 2) || (length % 2)) return false;
-}

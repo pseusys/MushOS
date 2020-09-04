@@ -5,6 +5,7 @@
 
 void create_fs();
 
+int read_external(char* name, byte** container);
 int insert_header(char* name);
 
 void write_at(int pos, byte info);

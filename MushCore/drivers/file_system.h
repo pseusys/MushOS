@@ -6,7 +6,6 @@
 void init_simple_fs_driver();
 
 boolean read_struct(int offset, byte* data, int length);
-boolean write_struct(int offset, byte* data, int length);
 
 void read_sys();
 

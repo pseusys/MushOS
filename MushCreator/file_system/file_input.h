@@ -16,7 +16,7 @@ int get_next_block_number(int current);
 int get_previous_block_number(int current);
 int get_file_block_head_number(int file_page);
 
-boolean data_step(data_iterator* iterator, boolean flush_page);
+boolean data_step_read(data_iterator* iterator);
 
 int get_root_dir_number();
 boolean is_eof(data_iterator* iterator);

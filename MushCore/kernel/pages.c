@@ -1,6 +1,5 @@
 #include "pages.h"
 #include "../../MushLib/memory.h"
-#include "interruptions.h"
 #include "../../MushLib/stdio.h"
 #include "placement.h"
 
@@ -230,9 +229,12 @@ static page_pointer* get_page(u_dword address, u_dword make_tail, page_directory
 }
 
 void* get_page_address(u_dword address) {
-    page_pointer* pointer = get_page(address, 0, kernel_directory);
-    if (pointer) return (u_dword*) get_page_pointer(*pointer);
-    else return nullptr;
+    u_dword page = (u_dword) allocate_page();
+    page_pointer* ptr = get_page((u_dword) page, 0x00000003, current_directory);
+    if (ptr) {
+        *ptr = create_page_entry((const byte*) page, 0x00000003);
+        return (u_dword*) get_page_pointer(*ptr);
+    } else return nullptr;
 }
 
 
@@ -269,11 +271,6 @@ void initialise_paging() {
     asm volatile("mov %%cr0, %0": "=r"(cr0));
     cr0 |= 0x80000001; // Enable paging!
     asm volatile("mov %0, %%cr0":: "r"(cr0));
-
-    u_dword page = (u_dword) allocate_page();
-    *get_page((u_dword) page, 0x00000003, current_directory) = create_page_entry((const byte*) page, 0x00000003);
-    u_dword *ptr = (u_dword*) page;
-    u_dword do_page_fault = *ptr;
 }
 
 

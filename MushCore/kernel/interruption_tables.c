@@ -8,6 +8,10 @@
 IDT* idt_table;
 interruption_handler interruption_handlers[256];
 
+static void debug(registers* regs) {
+    bad("Registers:\n\teax: %d\n\tebx: %d\n\tecx: %d\n\tedx: %d", regs->eax, regs->ebx, regs->ecx, regs->edx)
+}
+
 static void create_idt_entry (u_dword pos, u_dword base, u_word selector, u_byte flags) {
     idt_table->entries[pos].base_low = (base & 0xffff);
     idt_table->entries[pos].selector = selector;

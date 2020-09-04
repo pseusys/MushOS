@@ -1,5 +1,6 @@
 #include "heap.h"
 #include "memory.h"
+#include "stdio.h"
 
 heap_header* header;
 

@@ -24,7 +24,7 @@ test: clean create ./images/floppy.img
 	objcopy -O binary $< $@
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -Tdata 0x8000 -Tbss 0x8500 -Ttext 0xa000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ../MushLib/,./build/,$(subst ../MushCreator/file_system/,./build/,$(OBJ))))}
+	ld -m elf_i386 -o $@ -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ../MushLib/,./build/,$(subst ../MushCreator/file_system/,./build/,$(OBJ))))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@

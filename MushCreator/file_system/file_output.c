@@ -206,11 +206,31 @@ void truncate(data_iterator* iterator, int bytes) {
     for (int i = 0; i < free_pages; ++i) delete_page(iterator);
 }
 
+boolean data_step_write(data_iterator* iterator) {
+    while (iterator->offset >= page_content_size) {
+        int next = get_next_block_number(iterator->current);
+        write_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
+        if (next == -1) return true;
+        iterator->offset = 0;
+        iterator->current = next;
+        read_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
+    }
+    while (iterator->offset < 0) {
+        int previous = get_previous_block_number(iterator->current);
+        write_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
+        if (previous == -1) return true;
+        iterator->offset = page_content_size - 1;
+        iterator->current = previous;
+        read_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
+    }
+    return false;
+}
+
 
 
 void set_next_bytes(data_iterator* iterator, const byte* container, int length) {
     for (int i = 0; i < length; ++i) {
-        while (data_step(iterator, true)) add_page(iterator);
+        while (data_step_write(iterator)) add_page(iterator);
         iterator->page[iterator->offset] = container[i];
         iterator->offset++;
     }
@@ -219,7 +239,7 @@ void set_next_bytes(data_iterator* iterator, const byte* container, int length) 
 
 void set_previous_bytes(data_iterator* iterator, const byte* container, int length) {
     for (int i = length; i >= 0; --i) {
-        while (data_step(iterator, true)) add_page(iterator);
+        while (data_step_write(iterator)) add_page(iterator);
         iterator->page[iterator->offset] = container[i];
         iterator->offset--;
     }

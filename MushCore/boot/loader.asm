@@ -9,7 +9,7 @@ start:
 
 KERNEL_OFFSET equ 0x8000 ; Offset in RAM, where kernel will be loaded, it is also defined in linker.
                          ; Should be enough since we have micro kernel here.
-CODE_OFFSET equ 0xa000 ;
+CODE_OFFSET equ 0x9000 ;
 
 
 gdt_start: ; Beginning of GDT-table. The table itself contains information about RAM segments.
@@ -134,7 +134,7 @@ kernel_start: ; Start of booting code.
     mov si, BOOT_MSG ; Setting and printing boot message.
     call write_string
 
-    mov dh, 82 ; Loading 15 sectors from disk into memory. It's enough for our kernel. TODO: compile-time setting.
+    mov dh, 80 ; Loading 82 sectors from disk into memory. It covers kernel space from 0x8000 to 0x12000
     mov dl, [BOOT_DRIVE] ; Setting current boot drive.
     mov bx, KERNEL_OFFSET ; Setting kernel position to one defined above.
     call read_disk

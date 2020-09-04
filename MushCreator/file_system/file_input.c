@@ -56,10 +56,9 @@ int get_file_block_head_number(int file_page) {
 
 
 
-boolean data_step(data_iterator* iterator, boolean flush_page) {
+boolean data_step_read(data_iterator* iterator) {
     while (iterator->offset >= page_content_size) {
         int next = get_next_block_number(iterator->current);
-        if (flush_page) write_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
         if (next == -1) return true;
         iterator->offset = 0;
         iterator->current = next;
@@ -67,7 +66,6 @@ boolean data_step(data_iterator* iterator, boolean flush_page) {
     }
     while (iterator->offset < 0) {
         int previous = get_previous_block_number(iterator->current);
-        if (flush_page) write_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
         if (previous == -1) return true;
         iterator->offset = page_content_size - 1;
         iterator->current = previous;
@@ -97,12 +95,12 @@ boolean set_offset(data_iterator* iterator, int skip) {
     iterator->current = get_file_block_head_number(iterator->current);
     read_struct(get_page_content_offset(iterator->current), iterator->page, page_content_size);
     iterator->offset = skip;
-    return data_step(iterator, false);
+    return data_step_read(iterator);
 }
 
 boolean add_offset(data_iterator* iterator, int skip) {
     iterator->offset += skip;
-    return data_step(iterator, false);
+    return data_step_read(iterator);
 }
 
 void reset_and_reload(data_iterator* iterator) {
@@ -139,7 +137,7 @@ void dismiss_data(data_iterator* container) {
 
 boolean get_next_bytes(data_iterator* iterator, byte* container, int length) {
     for (int i = 0; i < length; ++i) {
-        if (data_step(iterator, false)) return true;
+        if (data_step_read(iterator)) return true;
         container[i] = iterator->page[iterator->offset];
         iterator->offset++;
     }
@@ -148,7 +146,7 @@ boolean get_next_bytes(data_iterator* iterator, byte* container, int length) {
 
 boolean get_previous_bytes(data_iterator* iterator, byte* container, int length) {
     for (int i = length; i >= 0; --i) {
-        if (data_step(iterator, false)) return true;
+        if (data_step_read(iterator)) return true;
         container[i] = iterator->page[iterator->offset];
         iterator->offset--;
     }
@@ -159,33 +157,33 @@ boolean get_previous_bytes(data_iterator* iterator, byte* container, int length)
 
 void check_root() {
     boolean drive_valid = check_drive();
-    info("Drive valid: %d\n", drive_valid);
+    info("Drive valid: %d\n", drive_valid)
     if (!drive_valid) return;
 
     system_header* header = malloc(sizeof(system_header));
     read_struct(fs_header_offset, (byte*) header, sizeof(system_header));
-    info("\nSystem header info:\n");
-    info("\tEmpty pages: %d\n", header->empty_pages);
-    info("\tRoot offset: %d\n", header->root_page);
-    info("\tFirst empty: %d\n", header->empty.previous);
-    info("\tLast empty: %d\n", header->empty.next);
+    info("\nSystem header info:\n")
+    info("\tEmpty pages: %d\n", header->empty_pages)
+    info("\tRoot offset: %d\n", header->root_page)
+    info("\tFirst empty: %d\n", header->empty.previous)
+    info("\tLast empty: %d\n", header->empty.next)
 
     block_header* root_dir_block = malloc(sizeof(block_header));
     read_struct(get_page_offset(header->root_page), (byte*) root_dir_block, sizeof(block_header));
-    info("\nRoot dir block info:\n");
-    info("\tIs empty: %d\n", root_dir_block->is_occupied);
+    info("\nRoot dir block info:\n")
+    info("\tIs empty: %d\n", root_dir_block->is_occupied)
     info("\tNext block: %d; previous block: %d\n", root_dir_block->linker.next, root_dir_block->linker.previous);
     info("\tHead block: %d\n", root_dir_block->head);
 
     file_header* root_dir_file = malloc(sizeof(file_header));
     read_struct(get_page_content_offset(header->root_page), (byte*) root_dir_file, sizeof(file_header));
-    info("\nRoot dir file_header info:\n");
-    info("\tSize: %d\n", root_dir_file->size);
-    info("\tProperty: %d\n", root_dir_file->property);
-    info("\tParent page: %d\n", root_dir_file->parent_page);
-    info("\tPath: %s (", root_dir_file->file_name);
+    info("\nRoot dir file_header info:\n")
+    info("\tSize: %d\n", root_dir_file->size)
+    info("\tProperty: %d\n", root_dir_file->property)
+    info("\tParent page: %d\n", root_dir_file->parent_page)
+    info("\tPath: %s (", root_dir_file->file_name)
     for (int i = 0; i < 16; ++i) info("%d ", root_dir_file->file_name[i])
-    info(")\n");
+    info(")\n")
 
     file_header* root_dir = malloc(sizeof(file_header));
     read_struct(get_page_content_offset(header->root_page) + sizeof(file_header), (byte*) root_dir, sizeof(file_header));
@@ -278,6 +276,7 @@ file* recur_file_r(mod_string path, file* parent) {
         substring_end(path, current_dir_path, delimiter_pos);
 
         file* current_dir = find_file_in_dir(current_dir_path, parent);
+
         if (current_dir == nullptr) {
             free(current_dir_path);
             free(current_dir);

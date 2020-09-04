@@ -19,28 +19,35 @@ void create_fs() {
 
 
 
-int insert_header(char* name) {
+int read_external(char* name, byte** container) {
     FILE* file = fopen(name, "rb");
-
     fseek(file, 0L, SEEK_END);
     int size = ftell(file);
-    if (size > fs_header_offset) {
-        printf("\n\n\nWarning! Kernel size overflow!!\n");
-        printf("\n\n\nKernel free space: %d of %d\n", fs_header_offset - size, fs_header_offset);
-        return 228;
-    } else printf("\n\n\nKernel free space: %d of %d\n", fs_header_offset - size, fs_header_offset);
     rewind(file);
-
-    byte* raw_bytes = calloc(size, sizeof(byte));
-    int read = (int) fread(raw_bytes, sizeof(byte), size, file);
+    *container = calloc(size, sizeof(byte));
+    int read = (int) fread(*container, sizeof(byte), size, file);
     fclose(file);
+    return read;
+}
+
+int insert_header(char* name) {
+    byte* raw_bytes = 0;
+    int read = read_external(name, &raw_bytes);
+    if (read > fs_header_offset) {
+        printf("\nWarning! Kernel size overflow!!\nKernel free space: %d of %d\n", fs_header_offset - read, fs_header_offset);
+        return 228;
+    } else printf("\nKernel free space: %d of %d\n", fs_header_offset - read, fs_header_offset);
 
     if (read) {
-        file = fopen(file_name, "r+b");
-        int written = (int) fwrite(raw_bytes, size, 1, file);
+        FILE* file = fopen(file_name, "r+b");
+        int written = (int) fwrite(raw_bytes, read, 1, file);
         fclose(file);
+        free(raw_bytes);
         return written;
-    } else return read;
+    } else {
+        free(raw_bytes);
+        return read;
+    }
 }
 
 

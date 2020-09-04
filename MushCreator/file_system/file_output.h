@@ -17,6 +17,8 @@ void add_page(data_iterator* iterator);
 void delete_page(data_iterator* iterator);
 void truncate(data_iterator* iterator, int bytes);
 
+boolean data_step_write(data_iterator* iterator);
+
 void set_next_bytes(data_iterator* iterator, const byte* container, int length);
 void set_previous_bytes(data_iterator* iterator, const byte* container, int length);
 

@@ -33,7 +33,7 @@ void initialize_heap(void* start_address, u_dword size) {
     header = start_address;
     memory_clear(start_address, sizeof(heap_header), 0);
     header->heap_start = start_address + sizeof(heap_header);
-    header->heap_end = start_address + size - sizeof(heap_header);
+    header->heap_end = start_address + size;
     header->first_address = nullptr;
 }
 
@@ -72,8 +72,10 @@ void* malloc(u_dword size) {
             best_address = current_address + current_block->size; best_previous = current_address; best_next = nullptr;
         }
 
-        if (best_address != nullptr) best_address = allocate_space(best_address, size, best_previous, best_next);
-        return best_address;
+        void* final_address = nullptr;
+        if (best_address != nullptr) final_address = allocate_space(best_address, size, best_previous, best_next);
+        if (best_address == header->heap_start) header->first_address = final_address;
+        return final_address;
 
     } else {
         header->first_address = allocate_space(header->heap_start, size, nullptr, nullptr);
@@ -97,10 +99,54 @@ void* realloc(void* structure, u_dword new_size) {
     return structure;
 }
 
-
 void free(void* structure) {
     heap_block_header* block = get_header(structure);
     if (structure == header->first_address) header->first_address = block->next;
     if (block->next) get_header(block->next)->previous = block->previous;
     if (block->previous) get_header(block->previous)->next = block->next;
+}
+
+void test_free(void* structure) {
+    heap_block_header* block = get_header(structure);
+    if (structure == header->first_address) {
+        warn("First address: ")
+        print_number(header->first_address, 0, 16, YELLOW, BLACK);
+        warn(" next address: ")
+        print_number(block->next, 0, 16, YELLOW, BLACK);
+        warn("\n")
+        header->first_address = block->next;
+        warn("First address: ")
+        print_number(header->first_address, 0, 16, YELLOW, BLACK);
+        warn(" next address: ")
+        print_number(block->next, 0, 16, YELLOW, BLACK);
+        warn("\n")
+    }
+    if (block->next) get_header(block->next)->previous = block->previous;
+    if (block->previous) get_header(block->previous)->next = block->next;
+}
+
+
+
+void print_heap() {
+    if (header) {
+        info("Heap start: ")
+        print_number(header->heap_start, 0, 16, HIGH_BLUE, BLACK);
+        info(", heap end: ")
+        print_number(header->heap_end, 0, 16, HIGH_BLUE, BLACK);
+        info("\n")
+        if (header->first_address) {
+            void* ptr = header->first_address;
+            info("Entries: ")
+            print_number(ptr, 0, 16, HIGH_BLUE, BLACK);
+            info(" -> ")
+            heap_block_header* block_header = get_header(ptr);
+            while (block_header->next) {
+                ptr = block_header->next;
+                block_header = get_header(block_header->next);
+                print_number(ptr, 0, 16, HIGH_BLUE, BLACK);
+                info(" -> ")
+            }
+            info("(end)\n")
+        } else info("No data in heap!\n")
+    } else info("Header not initialized.\n")
 }

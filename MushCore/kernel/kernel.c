@@ -9,6 +9,7 @@
 #include "placement.h"
 #include "../../MushCreator/file_system/file_input.h"
 #include "../drivers/navigator.h"
+#include "../../MushLib/syscall.h"
 
 /**
  * Make kernel constants:
@@ -42,7 +43,7 @@ int kek() {
 }
 
 void _start() {
-    initialize_heap((void*) 0x1000, 0x5000);
+    initialize_heap((void*) 0x1000, 0x6000);
 
     init_interruptions();
     init_timer(100);
@@ -57,12 +58,20 @@ void _start() {
     init_simple_fs_driver();
     get_placement_address();
 
-    file* stasis = open_file_global("/foo/bar/stasis.lo");
-    info("\nStasis (%d):\n", stasis->header->size)
-    byte* content = malloc(stasis->header->size);
+    info("\n")
+
+    file* stasis;
+    byte* content;
+
+    stasis = open_file_global("/foo/bar/stasis.lo");
+    content = malloc(stasis->header->size);
     read_bytes(stasis, content, stasis->header->size, 0);
-    info("%s\n", content)
+    info("Stasis (%d):\n", stasis->header->size)
+    info("%s\n", content);
     close_file(stasis);
+    free(content);
+    stasis = nullptr;
+    content = nullptr;
 
     good("SPUTNIK OUTPUT:\n")
     domestic_launch("/orbit/sputnik.elf");

@@ -23,6 +23,7 @@ typedef enum {
     WHITE        = 15u
 } console_color;
 
+void print_number(dword num, u_dword t, u_dword sys, u_dword front, u_dword back);
 void print_colored(console_color font, console_color back, string format, ...);
 
 

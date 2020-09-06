@@ -2,6 +2,7 @@
 #include "heap.h"
 #include "vararg.h"
 #include "syscall.h"
+#include "../MushCore/drivers/screen.h"
 
 #define undefined '?'
 
@@ -15,16 +16,19 @@ typedef enum {
 
 
 
-void print_char(char c, console_color front, console_color back) {
+void print_char (char c, console_color front, console_color back) {
     call_orbit(48, 4, 1, c, front, back)
+    //print_char_color(c, front, back);
 }
 
 void print_color (string str, byte text_color, byte back_color) {
+    //print_string_color((mod_string) str, text_color, back_color, 0);
     call_orbit(48, 5, 2, str, text_color, back_color, 0)
 }
 
 void print_n_color (string str, byte text_color, byte back_color, u_dword length) {
     if (length > 0) call_orbit(48, 5, 2, str, text_color, back_color, length)
+    // print_string_color((mod_string) str, text_color, back_color, length);
 }
 
 static void print_atom(u_byte b, u_dword front, u_dword back, system sys) {
@@ -109,51 +113,49 @@ void print_colored(console_color font, console_color back, string format, ...) {
         return;
     }
 
-    u_dword* args = malloc(temps * sizeof(u_dword));
+    u_dword* args = (u_dword*) malloc(temps * sizeof(u_dword));
     args_init_from(args, sizeof(console_color) * 2 + sizeof(string))
 
     u_dword argumentor = 0, printed = 0;
-    for (int j = 0; j < length; ++j)
+    for (int j = 0; j < length; ++j) {
         if (format[j] == '%') {
             print_n_color(format + printed, font, back, j - printed);
             printed = j + 2;
-            if (j < length - 1) {
-                j++;
-                switch (format[j]) {
-                    case 'l':
-                        print_boolean(args[argumentor], font, back);
-                        break;
-                    case 'p':
-                        print_pointer(args[argumentor], font, back);
-                        break;
-                    case 'd':
-                        print_number(args[argumentor], INTEGER, DECIMAL, font, back);
-                        break;
-                    case 'h':
-                        print_number(args[argumentor], INTEGER, HEXADECIMAL, font, back);
-                        break;
-                    case 'b':
-                        print_number(args[argumentor], INTEGER, BINARY, font, back);
-                        break;
-                    case 'f':
-                        print_number(args[argumentor], FLOAT, DECIMAL, font, back);
-                        break;
-                    case 'c':
-                        print_char(args[argumentor], font, back);
-                        break;
-                    case 's':
-                        print_color((string) args[argumentor], font, back);
-                        break;
-                    default:
-                        argumentor--;
-                        j--;
-                        printed -= 2;
-                        break;
-                }
-                argumentor++;
+            j++;
+            switch (format[j]) {
+                case 'l':
+                    print_boolean(args[argumentor], font, back);
+                    break;
+                case 'p':
+                    print_pointer(args[argumentor], font, back);
+                    break;
+                case 'd':
+                    print_number(args[argumentor], INTEGER, DECIMAL, font, back);
+                    break;
+                case 'h':
+                    print_number(args[argumentor], INTEGER, HEXADECIMAL, font, back);
+                    break;
+                case 'b':
+                    print_number(args[argumentor], INTEGER, BINARY, font, back);
+                    break;
+                case 'f':
+                    print_number(args[argumentor], FLOAT, DECIMAL, font, back);
+                    break;
+                case 'c':
+                    print_char(args[argumentor], font, back);
+                    break;
+                case 's':
+                    print_color((string) args[argumentor], font, back);
+                    break;
+                default:
+                    argumentor--;
+                    j--;
+                    printed -= 2;
+                    break;
             }
+            argumentor++;
         }
+    }
     print_n_color(format + printed, font, back, length - printed);
-
     free(args);
 }

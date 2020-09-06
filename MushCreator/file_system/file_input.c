@@ -211,6 +211,7 @@ file* open_file(int page) {
 
 void close_file(file* f) {
     dismiss_data(f->iterator);
+    free(f->header);
     free(f);
 }
 
@@ -237,7 +238,7 @@ void read_bytes(file* f, byte* bytes, int size, int offset) {
 
 
 file* find_file_in_dir(string file_name, file* dir) {
-    info("Searching for %s in parent directory...\n", file_name)
+    //info("Searching for %s in parent directory...\n", file_name)
 
     int current_file_page = 0;
     file* current_file = nullptr;
@@ -257,7 +258,7 @@ file* find_file_in_dir(string file_name, file* dir) {
     }
 
     if (exists) current_file = open_file(current_file_page);
-    info("Reading file %s to %p\n", header->file_name, current_file)
+    //info("Reading file %s to %p\n", header->file_name, current_file)
 
     free(header);
     free(entry);
@@ -271,11 +272,11 @@ file* open_check_link(file* f) {
 
 
 file* recur_file_r(mod_string path, file* parent) {
-    info("Opening file %s\n", path)
+    //info("Opening file %s\n", path)
     int delimiter_pos = first_pos(path, delimiter);
 
     if (delimiter_pos == -1) {
-        info("Recursion finished!\n")
+        //info("Recursion finished!\n")
         return open_check_link(find_file_in_dir(path, parent));
     } else {
         mod_string current_dir_path = malloc(delimiter_pos + 1);
@@ -285,16 +286,16 @@ file* recur_file_r(mod_string path, file* parent) {
 
         if (current_dir == nullptr) {
             free(current_dir_path);
-            free(current_dir);
+            close_file(current_dir);
             return nullptr;
         }
 
         move_string_by(path, delimiter_pos + 1);
         file* result = recur_file_r(path, current_dir);
         free(current_dir_path);
-        free(current_dir);
+        close_file(current_dir);
 
-        info("Returning result (%p)\n", result)
+        //info("Returning result (%p)\n", result)
 
         return result;
     }
@@ -314,7 +315,7 @@ file* open_file_global(string path) {
         close_file(root);
     }
 
-    info("File opened at %p\n", result)
+    //info("File opened at %p\n", result)
 
     free(copy_path);
     return result;

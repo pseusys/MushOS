@@ -104,7 +104,7 @@ char get_char(screen_coords coords) {
 
 
 
-void print_string_color(char* str, byte text_color, byte back_color, u_dword length) {
+void print_string_color(string str, byte text_color, byte back_color, u_dword length) {
     if (length == 0) for (int i = 0; str[i] != 0; ++i) print_char_color(str[i], text_color, back_color);
     else for (int i = 0; i < length; ++i) print_char_color(str[i], text_color, back_color);
 }
@@ -140,12 +140,12 @@ static void screen_callback(registers* regs) {
             break;
         }
         case SET_CHARS: {
-            u_dword string, front_color, back_color, length;
-            orbital_get_arg(regs->ebp, 1, string)
+            u_dword str, front_color, back_color, length;
+            orbital_get_arg(regs->ebp, 1, str)
             orbital_get_arg(regs->ebp, 2, front_color)
             orbital_get_arg(regs->ebp, 3, back_color)
             orbital_get_arg(regs->ebp, 4, length)
-            print_string_color((char*) string, front_color, back_color, length);
+            print_string_color((mod_string) str, front_color, back_color, length);
         }
         case GET_CURSOR: {
             ret_value = get_cursor_offset();

@@ -11,7 +11,7 @@ struct heap_block_header {
 };
 
 typedef struct {
-    heap_block_header* first_address;
+    void* first_address;
     void* heap_start, * heap_end;
 } heap_header;
 
@@ -28,5 +28,8 @@ u_dword size(void* structure);
 void* realloc(void* structure, u_dword new_size);
 
 void free(void* structure);
+void test_free(void* structure);
+
+void print_heap();
 
 #endif //MUSHOS_HEAP_H

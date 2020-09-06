@@ -124,7 +124,7 @@ void isr_handler(registers* regs) {
         handler(regs);
     } else {
         bad("Received undefined user interrupt: %h\n", regs->int_no)
-        asm("jmp .");
+        asm volatile ("jmp .");
     }
 }
 

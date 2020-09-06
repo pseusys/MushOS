@@ -6,4 +6,5 @@ all:
 
 build_debug:
 	cd ./MushCore/; make build;
+	cd ./MushDome/Sputnik; make build;
 	cd ./MushCreator/; make debug;

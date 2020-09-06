@@ -22,6 +22,7 @@ typedef struct {
 } IDT;
 
 void init_interruptions();
+void init_debug_handler();
 
 typedef struct {
     u_dword ds;                  // Data segment selector

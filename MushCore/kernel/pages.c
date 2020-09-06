@@ -229,10 +229,9 @@ static page_pointer* get_page(u_dword address, u_dword make_tail, page_directory
 }
 
 void* get_page_address(u_dword address) {
-    u_dword page = (u_dword) allocate_page();
-    page_pointer* ptr = get_page((u_dword) page, 0x00000003, current_directory);
+    page_pointer* ptr = get_page((u_dword) address, 0x00000003, current_directory);
     if (ptr) {
-        *ptr = create_page_entry((const byte*) page, 0x00000003);
+        *ptr = create_page_entry((const byte*) address, 0x00000003);
         return (u_dword*) get_page_pointer(*ptr);
     } else return nullptr;
 }
@@ -282,7 +281,7 @@ void page_fault(registers* regs) {
     asm ("mov %%cr2, %0" : "=r" (faulting_address));
 
     // The error code gives us details of what happened.
-    int present   = !(regs->err_code & 0x1); // Page not present
+    int present = regs->err_code & 0x1;      // Page not present
     int rw = regs->err_code & 0x2;           // Write operation?
     int us = regs->err_code & 0x4;           // Processor was in user-mode?
     int reserved = regs->err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?

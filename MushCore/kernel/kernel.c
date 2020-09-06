@@ -10,6 +10,7 @@
 #include "../../MushCreator/file_system/file_input.h"
 #include "../drivers/navigator.h"
 #include "../../MushLib/syscall.h"
+#include "interruptions.h"
 
 /**
  * Make kernel constants:
@@ -49,6 +50,7 @@ void _start() {
     init_timer(100);
     init_screen_io();
 
+    init_debug_handler();
     //clear_screen();
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 

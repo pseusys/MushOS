@@ -4,12 +4,22 @@
 #include "interruptions.h"
 #include "../../MushLib/stdio.h"
 #include "placement.h"
+#include "../../MushLib/syscall.h"
 
 IDT* idt_table;
 interruption_handler interruption_handlers[256];
 
+
 static void debug(registers* regs) {
-    bad("Registers:\n\teax: %d\n\tebx: %d\n\tecx: %d\n\tedx: %d", regs->eax, regs->ebx, regs->ecx, regs->edx)
+    //bad("Registers:\n\teax: %h\n\tebx: %h\n\tecx: %h\n\tedx: %h\n", regs->eax, regs->ebx, regs->ecx, regs->edx)
+    bad("Stack:\n\tebp: %h\n\tesp: %h\n", regs->ebp, regs->esp)
+    //bad("Instruction:\n\teip: %h\n", regs->eip)
+    //bad("IO:\n\tesi: %h\n\tedi: %h\n", regs->esi, regs->edi)
+    u_dword arg = 0;
+    for (int i = 0; i < 5; ++i) {
+        orbital_get_arg(regs->ebp, i, arg)
+        bad("Orbital arg #%d: %d\n", i, arg)
+    }
 }
 
 static void create_idt_entry (u_dword pos, u_dword base, u_word selector, u_byte flags) {
@@ -107,6 +117,10 @@ void init_interruptions() {
     idt_flush((u_dword) &(idt_table->descriptor));
 }
 
+void init_debug_handler() {
+    set_interrupt_handler(49, debug);
+}
+
 
 
 void set_interrupt_handler(u_byte n, interruption_handler handler) {
@@ -122,8 +136,11 @@ void isr_handler(registers* regs) {
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
+    } else if (regs->int_no < 48) {
+        bad("Received undefined interrupt: %h\n", regs->int_no)
+        asm volatile ("jmp .");
     } else {
-        bad("Received undefined user interrupt: %h\n", regs->int_no)
+        bad("Received some interrupt: %h\n", regs->int_no)
         asm volatile ("jmp .");
     }
 }

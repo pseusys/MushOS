@@ -1,8 +1,11 @@
 void _start() {
-    asm volatile ("push %0" :: "r"(1));
-    asm volatile ("push %0" :: "r"('U'));
-    asm volatile ("push %0" :: "r"(15u));
-    asm volatile ("push %0" :: "r"(0u));
+    char* silos = "Beep-beep\n";
+    //asm volatile ("int %0" :: "i"(49));
+    asm volatile ("push %0" :: "r"(0));
+    asm volatile ("push %0" :: "r"(0));
+    asm volatile ("push %0" :: "r"(15));
+    asm volatile ("push %0" :: "r"(silos));
+    asm volatile ("push %0" :: "r"(2));
     asm volatile (
         "push %%ebp\n"
         "mov %%esp, %%ebp\n"
@@ -10,4 +13,10 @@ void _start() {
         "mov %%ebp, %%esp\n"
         "pop %%ebp" :: "i"(48)
     );
+    //asm volatile ("int %0" :: "i"(49));
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
 }

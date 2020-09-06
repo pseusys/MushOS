@@ -28,7 +28,6 @@ u_dword size(void* structure);
 void* realloc(void* structure, u_dword new_size);
 
 void free(void* structure);
-void test_free(void* structure);
 
 void print_heap();
 

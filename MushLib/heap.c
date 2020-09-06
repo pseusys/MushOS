@@ -106,44 +106,25 @@ void free(void* structure) {
     if (block->previous) get_header(block->previous)->next = block->next;
 }
 
-void test_free(void* structure) {
-    heap_block_header* block = get_header(structure);
-    if (structure == header->first_address) {
-        warn("First address: ")
-        print_number(header->first_address, 0, 16, YELLOW, BLACK);
-        warn(" next address: ")
-        print_number(block->next, 0, 16, YELLOW, BLACK);
-        warn("\n")
-        header->first_address = block->next;
-        warn("First address: ")
-        print_number(header->first_address, 0, 16, YELLOW, BLACK);
-        warn(" next address: ")
-        print_number(block->next, 0, 16, YELLOW, BLACK);
-        warn("\n")
-    }
-    if (block->next) get_header(block->next)->previous = block->previous;
-    if (block->previous) get_header(block->previous)->next = block->next;
-}
-
 
 
 void print_heap() {
     if (header) {
         info("Heap start: ")
-        print_number(header->heap_start, 0, 16, HIGH_BLUE, BLACK);
+        print_number((dword) header->heap_start, 0, 16, HIGH_BLUE, BLACK);
         info(", heap end: ")
-        print_number(header->heap_end, 0, 16, HIGH_BLUE, BLACK);
+        print_number((dword) header->heap_end, 0, 16, HIGH_BLUE, BLACK);
         info("\n")
         if (header->first_address) {
             void* ptr = header->first_address;
             info("Entries: ")
-            print_number(ptr, 0, 16, HIGH_BLUE, BLACK);
+            print_number((dword) ptr, 0, 16, HIGH_BLUE, BLACK);
             info(" -> ")
             heap_block_header* block_header = get_header(ptr);
             while (block_header->next) {
                 ptr = block_header->next;
                 block_header = get_header(block_header->next);
-                print_number(ptr, 0, 16, HIGH_BLUE, BLACK);
+                print_number((dword) ptr, 0, 16, HIGH_BLUE, BLACK);
                 info(" -> ")
             }
             info("(end)\n")

@@ -163,7 +163,7 @@ static void screen_callback(registers* regs) {
         default:
             break;
     }
-    //orbital_push(regs->ebp, ret_value)
+    orbital_push(regs->ebp, ret_value)
 }
 
 

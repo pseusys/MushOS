@@ -1,6 +1,15 @@
-all:
-	nasm code.asm -f elf -o code.elf
+C_SOURCES = $(wildcard ./code/main.c)
+HEADERS = $(wildcard )
+OBJ = ${C_SOURCES:.c=.o}
 
-build:
-	gcc -DMUSHENV -m32 -ffreestanding -c main.c -o main.o
-	ld -m elf_i386 -o main.elf -n --section-start=.got.plt=0x100000 -Tdata 0x100010 -Tbss 0x100010 -Ttext 0x100100 main.o
+build: clean create ${OBJ}
+	ld -m elf_i386 -o ./build/main.elf -n --section-start=.got.plt=0x104000 -Tdata 0x104010 -Tbss 0x104050 -Ttext 0x104100 ${subst ../../MushLib/,./build/,$(subst ./code/,./build/,$(OBJ))}
+
+%.o: %.c ${HEADERS}
+	gcc -DMUSHENV -m32 -ffreestanding -c $< -o ./build/$(@F)
+
+create:
+	if [ ! -e ./build ]; then mkdir ./build; fi;
+
+clean:
+	if [ -e ./build ]; then rm -r ./build; fi;

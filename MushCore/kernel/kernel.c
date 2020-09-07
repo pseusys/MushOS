@@ -76,6 +76,6 @@ void _start() {
     content = nullptr;
 
     good("SPUTNIK OUTPUT:\n")
-    domestic_launch("/orbit/sputnik.elf");
+    domestic_launch("/orbit/sputnik.elf", 0);
     good("SPUTNIK ENDED.\n")
 }

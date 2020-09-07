@@ -1,6 +1,6 @@
 #include "heap.h"
 #include "memory.h"
-#include "stdio.h"
+//#include "stdio.h"
 
 heap_header* header;
 
@@ -108,7 +108,7 @@ void free(void* structure) {
 
 
 
-void print_heap() {
+/*void print_heap() {
     if (header) {
         info("Heap start: ")
         print_number((dword) header->heap_start, 0, 16, HIGH_BLUE, BLACK);
@@ -130,4 +130,4 @@ void print_heap() {
             info("(end)\n")
         } else info("No data in heap!\n")
     } else info("Header not initialized.\n")
-}
+}*/

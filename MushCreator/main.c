@@ -24,7 +24,7 @@ int main() {
     free(stasis);
 
     byte* sputnik;
-    int sputnik_size = read_external("../MushDome/Sputnik/main.elf", &sputnik);
+    int sputnik_size = read_external("../MushDome/Sputnik/build/main.elf", &sputnik);
     file* orbit = create_file_global("/orbit/sputnik.elf");
     write_file(orbit, sputnik, sputnik_size);
     free(orbit);

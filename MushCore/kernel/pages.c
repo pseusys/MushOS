@@ -6,7 +6,8 @@
 #define page_size 0x1000
 
 page_directory* kernel_directory, * current_directory;
-u_dword memory_start = 0x100000;
+u_dword orbit_start = 0x100000;
+u_dword memory_start = 0x200000;
 u_dword memory_end = 0xf00000;
 u_dword memory_edge = 0x1000000;
 
@@ -71,13 +72,13 @@ static page_pointer create_page_entry(const byte* pointer, u_dword tail) {
 
 
 static void* allocate_page() {
-    u_dword num = (memory_end - memory_start) / page_size;
+    u_dword num = (memory_end - orbit_start) / page_size;
     for (u_dword i = 0; i < num; ++i) {
         if (page_pool[i] != 0xff) {
             for (u_dword j = 0; j < 8; ++j) {
                 if (!(page_pool[i] & (1u << j))) {
                     page_pool[i] |= (1u << j);
-                    return (void *) (memory_start + (i * 8 * page_size) + (j * page_size));
+                    return (void *) (orbit_start + (i * 8 * page_size) + (j * page_size));
                 }
             }
         }
@@ -219,7 +220,7 @@ static page_pointer* get_page(u_dword address, u_dword make_tail, page_directory
         return &get_page_table_pointer(dir->tablesPhysical[table_idx])->pages[address % 1024];
     } else if (make_tail) {
         page_table* page_table_pointer = nullptr;
-        if ((address < memory_start) || (address >= memory_end))
+        if ((address < orbit_start) || (address >= memory_end))
             page_table_pointer = (page_table*) k_malloc_aligned(sizeof(page_table), true);
         else page_table_pointer = allocate_page_table();
         dir->tablesPhysical[table_idx] = create_page_table_entry(page_table_pointer, make_tail);
@@ -241,7 +242,7 @@ void* get_page_address(u_dword address) {
 void initialise_paging() {
     // The size of physical memory. For the moment we
     // assume it is 16MB big.
-    u_dword page_pool_size = (memory_end - memory_start) / page_size / 8;
+    u_dword page_pool_size = (memory_end - orbit_start) / page_size / 8;
     page_pool = k_malloc_aligned(page_pool_size, false);
     memory_clear((byte*) page_pool, page_pool_size, 0);
 
@@ -253,7 +254,7 @@ void initialise_paging() {
     kernel_directory = (page_directory*) k_malloc_aligned(sizeof(page_directory), true);
     memory_clear((byte*) kernel_directory, sizeof(page_directory), 0);
 
-    for (u_dword j = 0; j < memory_start; j += page_size)
+    for (u_dword j = 0; j < orbit_start; j += page_size)
         *get_page(j, 0x00000003, kernel_directory) = create_page_entry((const byte*) j, 0x00000003);
     for (u_dword j = memory_end; j < memory_edge; j += page_size)
         *get_page(j, 0x00000003, kernel_directory) = create_page_entry((const byte*) j, 0x00000003);
@@ -293,6 +294,6 @@ void page_fault(registers* regs) {
     if (!rw) bad("read-only ")
     if (us) bad("user-mode ")
     if (reserved) bad("reserved ")
-    bad(") at %h\n", faulting_address)
+    bad(") at %h (EIP: %h)\n", faulting_address, regs->eip)
     asm("jmp .");
 }

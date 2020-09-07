@@ -4,6 +4,32 @@
 #include "../../MushLib/generic.h"
 
 
+/**
+ * Orbital slot map:
+ *  ┌─────────┬─────────┬───────────────┐
+ *  │  Heap   │  Stack  │  Code & Data  │
+ *  ├─────────┼─────────┼───────────────┤
+ *  │         │         │               │
+ *  │ 0x3000b │ 0x1000b │    0x4000b    │
+ *  │         │         │               │
+ *  └─────────┴─────────┴───────────────┘
+ * 0x0     0x3000    0x4000          0x8000
+ */
+
+
+#define move_stack_to(new_stack) {\
+    asm volatile ("mov %%esp, (%0)" :: "r"(new_stack - 4));\
+    asm volatile ("mov %%ebp, (%0)" :: "r"(new_stack - 8));\
+    asm volatile ("mov %0, %%esp" :: "r"(new_stack - 8));\
+    asm volatile ("mov %0, %%ebp" :: "r"(new_stack - 8));\
+}
+
+#define move_stack_back() {\
+    asm volatile ("pop %ebp");\
+    asm volatile ("pop %esp");\
+};
+
+
 typedef struct {
     dword elf;
 
@@ -50,6 +76,6 @@ typedef struct {
 
 
 
-void domestic_launch(string filename);
+void domestic_launch(string filename, u_dword slot);
 
 #endif //MUSHOS_NAVIGATOR_H

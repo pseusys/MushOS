@@ -11,14 +11,14 @@ interruption_handler interruption_handlers[256];
 
 
 static void debug(registers* regs) {
-    //bad("Registers:\n\teax: %h\n\tebx: %h\n\tecx: %h\n\tedx: %h\n", regs->eax, regs->ebx, regs->ecx, regs->edx)
-    bad("Stack:\n\tebp: %h\n\tesp: %h\n", regs->ebp, regs->esp)
-    //bad("Instruction:\n\teip: %h\n", regs->eip)
-    //bad("IO:\n\tesi: %h\n\tedi: %h\n", regs->esi, regs->edi)
+    bad("Registers:\n\teax: %h\n\tebx: %h\n\tecx: %h\n\tedx: %h\n", regs->eax, regs->ebx, regs->ecx, regs->edx)
+    bad("Stack:\n\tebp: %h\n\tesp: %h\n", regs->ebp, regs->esp_plus + 0x14)
+    bad("Instruction:\n\teip: %h\n", regs->eip)
+    bad("IO:\n\tesi: %h\n\tedi: %h\n", regs->esi, regs->edi)
     u_dword arg = 0;
-    for (int i = 0; i < 5; ++i) {
-        orbital_get_arg(regs->ebp, i, arg)
-        bad("Orbital arg #%d: %d\n", i, arg)
+    for (int i = 0; i < 10; ++i) {
+        asm volatile ("mov (%1), %0" : "=r" (arg) : "r" (regs->esp_plus + 0x14 + i * sizeof(u_dword)));
+        bad("Orbital arg #%d: %h\n", i, arg)
     }
 }
 

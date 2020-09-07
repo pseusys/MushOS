@@ -7,7 +7,8 @@
 
 
 extern u_dword memory_start;
-extern u_dword memory_end;
+extern u_dword orbit_start;
+static u_dword entry_point;
 
 void print_seg(elf_program_header* header) {
     info("Segment info:\n")
@@ -21,7 +22,7 @@ void print_seg(elf_program_header* header) {
     info("\tSegment alignment: %h\n\n", header->alignment)
 }
 
-void domestic_launch(string filename) {
+void domestic_launch(string filename, u_dword slot) {
     file* executable = open_file_global(filename);
     info("Launching %s\n", get_name(executable))
     elf_file_header* header = (elf_file_header*) malloc(sizeof(elf_file_header));
@@ -31,35 +32,32 @@ void domestic_launch(string filename) {
     elf_program_header* program_headers = (elf_program_header*) malloc(sizeof(elf_program_header) * header->program_header_number);
     seek_to(executable, header->program_header_offset);
     read_bytes(executable, (byte*) program_headers, size(program_headers), 0);
+
+    u_dword slot_number = orbit_start + (slot * 0x1000);
+
     for (int i = 0; i < header->program_header_number; ++i) {
         if (program_headers[i].type == 1) {
-            print_seg(&(program_headers[i]));
-            if ((program_headers[i].virtual_address >= memory_start) &&
-                (program_headers[i].virtual_address + program_headers[i].segment_size <= memory_end)) {
-                u_dword memory_offset = 0, segment_offset = program_headers[i].segment_offset;
-                while (memory_offset + page_size < program_headers[i].segment_size) {
-                    void *page = get_page_address(program_headers[i].virtual_address + memory_offset);
-                    info("Accessing page %p", page)
-                    seek_to(executable, segment_offset);
-                    read_bytes(executable, page, page_size, 0);
-                    memory_offset += page_size;
-                    segment_offset += page_size;
-                }
-                u_dword remains = program_headers[i].segment_size - memory_offset;
-                info("Accessing page %h\n", program_headers[i].virtual_address + memory_offset)
-                void *page = get_page_address(program_headers[i].virtual_address + memory_offset);
-                info("Transferring %h bytes from offset %h in file to pos %h on memory...\n", remains, segment_offset, page)
-                seek_to(executable, segment_offset);
-                read_bytes(executable, page, remains, 0);
+            //print_seg(&(program_headers[i]));
+            u_dword slot_address = program_headers[i].virtual_address;
+            u_dword data_size = program_headers[i].segment_size;
+            u_dword data_offset = program_headers[i].segment_offset;
+            if ((slot_number >= orbit_start) && (data_size <= page_size * 4) && (slot_address + data_size < memory_start)) {
+                for (int j = slot_number; j < slot_number + 0x8000; j += page_size) get_page_address(j);
+                info("Transferring %h bytes from offset %h in file to pos %h on memory...\n", data_size, data_offset, slot_address)
+                seek_to(executable, data_offset);
+                read_bytes(executable, (void*) slot_address, page_size, 0);
             } else {
                 bad("Fatal error: segment in orbital app %s is wrongly positioned.\n", get_name(executable))
-                bad("%h <= %h\n", program_headers[i].virtual_address, memory_start)
-                bad("%h >= %h\n", program_headers[i].virtual_address + program_headers[i].segment_size, memory_end)
+                bad("%h <= %h\n", program_headers[i].virtual_address, orbit_start)
+                bad("%h >= %h\n", program_headers[i].virtual_address + program_headers[i].segment_size, memory_start)
                 return;
             }
         } else info("Skipping non-loadable segment (type %h)...\n", program_headers[i].type)
     }
 
-    info("Calling %p\n", header->entry)
-    asm volatile ("call *%0" :: "r"(header->entry));
+    entry_point = header->entry;
+    info("Calling slot %p, point %p\n", slot_number, entry_point)
+    move_stack_to(slot_number + 0x4000)
+    asm volatile ("call *%0" :: "r"(entry_point));
+    move_stack_back()
 }

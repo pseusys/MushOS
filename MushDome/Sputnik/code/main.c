@@ -1,6 +1,13 @@
+#define orbital_slot 0x100000
+
+
 void _start() {
     char* silos = "Beep-beep\n";
-    //asm volatile ("int %0" :: "i"(49));
+
+    //initialize_heap((void*) orbital_slot, 0x3000);
+    //warn("Sputnik says: %s\n", silos)
+
+
     asm volatile ("push %0" :: "r"(0));
     asm volatile ("push %0" :: "r"(0));
     asm volatile ("push %0" :: "r"(15));
@@ -13,10 +20,12 @@ void _start() {
         "mov %%ebp, %%esp\n"
         "pop %%ebp" :: "i"(48)
     );
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+    asm volatile ("pop %eax");
+
     //asm volatile ("int %0" :: "i"(49));
-    asm volatile ("pop %eax");
-    asm volatile ("pop %eax");
-    asm volatile ("pop %eax");
-    asm volatile ("pop %eax");
-    asm volatile ("pop %eax");
+    //asm volatile ("jmp .");
 }

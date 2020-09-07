@@ -26,9 +26,9 @@ void init_debug_handler();
 
 typedef struct {
     u_dword ds;                  // Data segment selector
-    u_dword edi, esi, ebp, useless, ebx, edx, ecx, eax; // Pushed by pusha.
+    u_dword edi, esi, ebp, esp_plus, ebx, edx, ecx, eax; // Pushed by pusha.
     u_dword int_no, err_code;    // Interrupt number and error code (if applicable)
-    u_dword eip, cs, eflags, esp, ss; // Pushed by the processor automatically.
+    u_dword eip, cs, eflags; // Pushed by the processor automatically.
 } registers;
 
 typedef void (*interruption_handler)(registers* regs);

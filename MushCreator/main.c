@@ -45,10 +45,10 @@ int main() {
     printf("\nSputnik (%d):\n", stasis->header->size);
     content = malloc(stasis->header->size);
     read_bytes(stasis, content, stasis->header->size, 0);
-    for (int i = 0; i < stasis->header->size; ++i) printf("%d ", content[i]);
+    for (int i = 0; i < stasis->header->size; ++i) printf("%x: %x\n", (i), ((unsigned char) content[i]));
     printf("\n");
-    for (int i = 0; i < stasis->header->size; ++i) printf("%c", content[i]);
-    printf("\n");
+    //for (int i = 0; i < stasis->header->size; ++i) printf("%c", content[i]);
+    //printf("\n");
     close_file(stasis);
     free(content);
 

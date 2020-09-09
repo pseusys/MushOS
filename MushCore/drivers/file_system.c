@@ -18,9 +18,13 @@ void init_simple_fs_driver() {
 
 
 boolean read_struct(int offset, byte* data, int length) {
+    int page_offset = offset % 512;
+    bad("Reading %d sectors at offset %d (%d bytes, %d offset)\n", m_ceil(length + 20, 512), offset, length, page_offset)
     if ((offset % 2) || (length % 2)) {
         bad("Data offset and length should be aligned to 2.\n")
         return false;
     }
-    return read_fs(offset / 512, false, length, m_ceil(length, 512), offset % 512, (u_word*) data);
+    read_fs(offset / 512, false, length, m_ceil(length + 20, 512), page_offset, (u_word*) data);
+    //bad("ERROR: %l\n", );
+    return true;
 }

@@ -13,13 +13,13 @@ static u_dword entry_point;
 
 void print_seg(elf_program_header* header) {
     info("Segment info:\n")
-    info("\tSegment type: %h\n", header->type)
-    info("\tSegment offset: %h\n\n", header->segment_offset)
-    info("\tSegment virtual address: %h\n", header->virtual_address)
-    info("\tSegment physical address: %h\n\n", header->physical_address)
-    info("\tSegment size in file: %h\n", header->segment_file_size)
-    info("\tSegment size in memory: %h\n\n", header->segment_size)
-    info("\tSegment flags: %h\n", header->flags)
+    info("\tSegment type: %h\n", header->p_type)
+    info("\tSegment offset: %h\n\n", header->p_offset)
+    info("\tSegment virtual address: %h\n", header->p_vaddr)
+    info("\tSegment physical address: %h\n\n", header->p_paddr)
+    info("\tSegment size in file: %h\n", header->p_filesz)
+    info("\tSegment size in memory: %h\n\n", header->p_memsz)
+    info("\tSegment flags: %h\n", header->p_flags)
     info("\tSegment alignment: %h\n\n", header->alignment)
 }
 
@@ -39,22 +39,22 @@ void domestic_launch(string filename, u_dword slot) {
     memory_clear((byte*) slot_number, page_size * 8, 0);
 
     for (int i = 0; i < header->program_header_number; ++i) {
-        if (program_headers[i].type == 1) {
-            //print_seg(&(program_headers[i]));
-            u_dword slot_address = program_headers[i].virtual_address;
-            u_dword data_size = program_headers[i].segment_file_size;
-            u_dword data_offset = program_headers[i].segment_offset;
+        if (program_headers[i].p_type == 1) {
+            // print_seg(&(program_headers[i]));
+            u_dword slot_address = program_headers[i].p_vaddr;
+            u_dword data_size = program_headers[i].p_filesz;
+            u_dword data_offset = program_headers[i].p_offset;
             if ((slot_number >= orbit_start) && (data_size < (page_size * 4)) && (slot_address + data_size < memory_start)) {
                 info("Transferring %h bytes from offset %h in file to pos %h on memory...\n", data_size, data_offset, slot_address)
                 seek_to(executable, data_offset);
                 read_bytes(executable, (void*) slot_address, data_size, 0);
             } else {
                 bad("Fatal error: segment in orbital app %s is wrongly positioned.\n", get_name(executable))
-                bad("%h <= %h\n", program_headers[i].virtual_address, orbit_start)
-                bad("%h >= %h\n", program_headers[i].virtual_address + program_headers[i].segment_file_size, memory_start)
+                bad("%h <= %h\n", program_headers[i].p_vaddr, orbit_start)
+                bad("%h >= %h\n", program_headers[i].p_vaddr + program_headers[i].p_filesz, memory_start)
                 return;
             }
-        } else info("Skipping non-loadable segment (type %h)...\n", program_headers[i].type)
+        } else info("Skipping non-loadable segment (type %h)...\n", program_headers[i].p_type)
     }
 
     entry_point = header->entry;

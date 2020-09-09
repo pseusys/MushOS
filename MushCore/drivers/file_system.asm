@@ -132,6 +132,7 @@ read_fs:
     mov     cl, [ebp+20]
     shl     cx, 9
     sub     ecx, [ebp+16]
+    sub     ecx, [ebp+24]
 .dump:
     in      ax, dx
     loop    .dump

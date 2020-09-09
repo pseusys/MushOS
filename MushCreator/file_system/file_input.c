@@ -276,7 +276,6 @@ file* recur_file_r(mod_string path, file* parent) {
     int delimiter_pos = first_pos(path, delimiter);
 
     if (delimiter_pos == -1) {
-        //info("Recursion finished!\n")
         return open_check_link(find_file_in_dir(path, parent));
     } else {
         mod_string current_dir_path = malloc(delimiter_pos + 1);

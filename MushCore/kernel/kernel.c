@@ -65,17 +65,19 @@ void _start() {
     file* stasis;
     byte* content;
 
+    //check_drive();
+
     stasis = open_file_global("/foo/bar/stasis.lo");
     content = malloc(stasis->header->size);
     read_bytes(stasis, content, stasis->header->size, 0);
     info("Stasis (%d):\n", stasis->header->size)
-    info("%s\n", content);
+    for (int i = 0; i < stasis->header->size; ++i) info("%c", content[i])
     close_file(stasis);
     free(content);
     stasis = nullptr;
     content = nullptr;
 
-    good("SPUTNIK OUTPUT:\n")
-    domestic_launch("/orbit/sputnik.elf", 0);
-    good("SPUTNIK ENDED.\n")
+    //good("SPUTNIK OUTPUT:\n")
+    //domestic_launch("/orbit/sputnik.elf", 0);
+    //good("SPUTNIK ENDED.\n")
 }

@@ -61,16 +61,16 @@ typedef struct {
 } elf_file_header;
 
 typedef struct {
-    dword type;
-    dword segment_offset;
+    dword p_type;
+    dword p_offset;
 
-    dword virtual_address;
-    dword physical_address;
+    dword p_vaddr;
+    dword p_paddr;
 
-    dword segment_file_size;
-    dword segment_size;
+    dword p_filesz;
+    dword p_memsz;
 
-    dword flags;
+    dword p_flags;
     dword alignment;
 } elf_program_header;
 

@@ -20,6 +20,7 @@ typedef struct {
     int empty_pages;
     list_linker empty;
     int root_page;
+    //byte filler[512 - 5 * sizeof(int)];
 } system_header;
 
 

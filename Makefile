@@ -1,10 +1,8 @@
-all:
-	cd ./MushCore/; make build;
-	cd ./MushDome/Sputnik; make build;
-	cd ./MushCreator/; make debug;
-	qemu-system-i386 -d guest_errors -vga std -drive format=raw,file=./MushCreator/fs/FS.binary;
+clean:
+	cd ./MushCore/; make clean;
 
 build_debug:
 	cd ./MushCore/; make build;
-	cd ./MushDome/Sputnik; make build;
-	cd ./MushCreator/; make debug;
+
+rerun: clean build_debug
+	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=./MushCore/images/floppy.img;

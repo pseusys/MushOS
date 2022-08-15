@@ -3,18 +3,11 @@
 #include "../../MushLib/stdio.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
-#include "../drivers/file_system.h"
 #include "timer.h"
 #include "pages.h"
-#include "placement.h"
-#include "../../MushCreator/file_system/file_input.h"
-#include "../drivers/navigator.h"
-#include "../../MushLib/syscall.h"
-#include "interruptions.h"
 
 /**
  * Make kernel constants:
- *
  *
  *
  * Divide boot loader into: loader, functions, GDT.
@@ -37,12 +30,6 @@
  * Extra! Add testing in Travis CI with special QEMU target in console mode.
  */
 
-int kek() {
-    char* video_memory = (char*) 0xb8000;
-    video_memory[0] = 'A';
-    return 0;
-}
-
 void _start() {
     initialize_heap((void*) 0x1000, 0x6000);
 
@@ -51,33 +38,8 @@ void _start() {
     init_screen_io();
 
     init_debug_handler();
-    //clear_screen();
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 
     init_keyboard();
     initialise_paging();
-
-    init_simple_fs_driver();
-    get_placement_address();
-
-    info("\n")
-
-    file* stasis;
-    byte* content;
-
-    //check_drive();
-
-    stasis = open_file_global("/foo/bar/stasis.lo");
-    content = malloc(stasis->header->size);
-    read_bytes(stasis, content, stasis->header->size, 0);
-    info("Stasis (%d):\n", stasis->header->size)
-    for (int i = 0; i < stasis->header->size; ++i) info("%c", content[i])
-    close_file(stasis);
-    free(content);
-    stasis = nullptr;
-    content = nullptr;
-
-    //good("SPUTNIK OUTPUT:\n")
-    //domestic_launch("/orbit/sputnik.elf", 0);
-    //good("SPUTNIK ENDED.\n")
 }

@@ -1,6 +1,6 @@
 #include "interruption_tables.h"
-#include "../../MushLib/heap.h"
-#include "../../MushLib/stdio.h"
+#include "../../lib/heap.h"
+#include "../../lib/stdio.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
 #include "timer.h"

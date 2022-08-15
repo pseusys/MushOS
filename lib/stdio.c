@@ -2,7 +2,7 @@
 #include "heap.h"
 #include "vararg.h"
 #include "syscall.h"
-#include "../MushCore/drivers/screen.h"
+#include "../core/drivers/screen.h"
 
 #define undefined '?'
 

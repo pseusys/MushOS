@@ -1,12 +1,13 @@
-C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c ../MushLib/*.c)
-ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ../MushLib/*.asm)
-HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./MushLib/*.h)
+C_SOURCES = $(wildcard ./kernel/*.c ./drivers/*.c ../lib/*.c)
+ASM_SOURCES = $(wildcard ./kernel/*.asm ./drivers/*.asm ../lib/*.asm)
+HEADERS = $(wildcard ./kernel/*.h ./drivers/*.h ./lib/*.h)
 OBJ = ${C_SOURCES:.c=.o} ${ASM_SOURCES:.asm=.obj}
 
 build: create ./images/floppy.img
 
 ./images/floppy.img: ./build/loader.bin ./build/kernel.bin
 	cat $^ > ./images/floppy.img
+	truncate -s 4194304 ./images/floppy.img
 
 ./build/loader.bin:
 	nasm ./boot/loader.asm -f bin -o $@
@@ -15,7 +16,7 @@ build: create ./images/floppy.img
 	objcopy -O binary $< $@
 
 ./build/kernel.elf: ./build/kernel_gate.o ${OBJ}
-	ld -m elf_i386 -o $@ -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ../MushLib/,./build/,$(OBJ)))}
+	ld -m elf_i386 -o $@ -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000 $< ${subst ./kernel/,./build/,$(subst ./drivers/,./build/,$(subst ../lib/,./build/,$(OBJ)))}
 
 ./build/kernel_gate.o:
 	nasm ./boot/kernel_gate.asm -f elf -o $@

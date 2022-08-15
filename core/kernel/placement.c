@@ -1,5 +1,5 @@
 #include "placement.h"
-#include "../../MushLib/stdio.h"
+#include "../../lib/stdio.h"
 
 u_dword placement_address = 0x12000;
 

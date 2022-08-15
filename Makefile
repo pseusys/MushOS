@@ -1,8 +1,8 @@
 clean:
-	cd ./MushCore/; make clean;
+	cd ./core/; make clean;
 
 build_debug:
-	cd ./MushCore/; make build;
+	cd ./core/; make build;
 
-rerun: clean build_debug
-	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=./MushCore/images/floppy.img;
+all: clean build_debug
+	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=./core/images/floppy.img;

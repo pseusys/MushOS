@@ -7,7 +7,7 @@
  *  ├────────────────────────────────┤ 0x1000
  *  │                                │
  *  │                                │
- *  │           Kernel Heap          │ See @code MushLib/heap
+ *  │           Kernel Heap          │ See @code lib/heap
  *  │                                │
  *  │                                │
  *  ├────────────────────────────────┤ 0x7000
@@ -16,11 +16,11 @@
  *  │                                │
  *  ├────────────────────────────────┤ 0x7c00
  *  │                                │
- *  │      Boot sector and GDT       │ See @code MushCore/boot/loader
+ *  │      Boot sector and GDT       │ See @code core/boot/loader
  *  │                                │
  *  ├────────────────────────────────┤ 0x8000
  *  │                                │
- *  │      Kernel data segment       │ See @code MushCore/Makefile
+ *  │      Kernel data segment       │ See @code core/Makefile
  *  │                                │
  *  ├────────────────────────────────┤ 0x9000
  *  │                                │
@@ -30,19 +30,19 @@
  *  │                                │
  *  ├────────────────────────────────┤ 0x12000
  *  │                                │
- *  │         Placement new          │ See @code MushCore/kernel/placement
+ *  │         Placement new          │ See @code core/kernel/placement
  *  │                                │
  *  ├────────────────────────────────┤ 0x20000
  *  │                                │
  *  │                                │
- *  │          Page tables           │ See @code MushCore/kernel/pages
+ *  │          Page tables           │ See @code core/kernel/pages
  *  │  (0x40000 bytes -> 64 tables)  │
  *  │                                │
  *  │                                │
  *  ├────────────────────────────────┤ 0x60000
  *  │                                │
  *  │                                │
- *  │        Page directories        │ See @code MushCore/kernel/pages
+ *  │        Page directories        │ See @code core/kernel/pages
  *  │   (0x20000 bytes -> 32 dirs)   │
  *  │                                │
  *  │                                │
@@ -56,7 +56,7 @@
  *  │                                │
  *  │                                │
  *  │                                │
- *  │         Orbital slots          │ See @code MushCore/drivers/navigator
+ *  │         Orbital slots          │ See @code core/drivers/navigator
  *  │ (0x100000 bytes -> 32 drivers) │
  *  │                                │
  *  │                                │

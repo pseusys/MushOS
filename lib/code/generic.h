@@ -1,5 +1,5 @@
-#ifndef MUSHOS_GENERIC_H
-#define MUSHOS_GENERIC_H
+#ifndef MUSHLIB_GENERIC_H
+#define MUSHLIB_GENERIC_H
 
 typedef unsigned char u_byte;
 typedef char byte;
@@ -19,4 +19,4 @@ typedef int boolean;
 
 #define OBSOLETE /*NOT USED YET*/
 
-#endif //MUSHOS_GENERIC_H
+#endif // MUSHLIB_GENERIC_H

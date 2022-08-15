@@ -1,7 +1,9 @@
 clean:
+	cd ./lib/; make clean;
 	cd ./core/; make clean;
 
 build_debug:
+	cd ./lib/; make build;
 	cd ./core/; make build;
 
 all: clean build_debug

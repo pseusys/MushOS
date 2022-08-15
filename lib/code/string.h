@@ -1,5 +1,5 @@
-#ifndef MUSHFS_STRING_UTILS_H
-#define MUSHFS_STRING_UTILS_H
+#ifndef MUSHLIB_STRING_UTILS_H
+#define MUSHLIB_STRING_UTILS_H
 
 #include "generic.h"
 
@@ -19,4 +19,4 @@ void move_string_by(mod_string str, int step);
 
 void concatenate(string str1, string str2, mod_string result);
 
-#endif //MUSHFS_STRING_UTILS_H
+#endif // MUSHLIB_STRING_UTILS_H

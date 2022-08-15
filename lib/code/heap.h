@@ -1,5 +1,5 @@
-#ifndef MUSHOS_HEAP_H
-#define MUSHOS_HEAP_H
+#ifndef MUSHLIB_HEAP_H
+#define MUSHLIB_HEAP_H
 
 #include "generic.h"
 
@@ -31,4 +31,4 @@ void free(void* structure);
 
 void print_heap();
 
-#endif //MUSHOS_HEAP_H
+#endif // MUSHLIB_HEAP_H

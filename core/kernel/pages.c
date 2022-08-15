@@ -1,6 +1,6 @@
 #include "pages.h"
-#include "../../lib/memory.h"
-#include "../../lib/stdio.h"
+#include <mushlib.h>
+#include "../drivers/screen.h"
 #include "placement.h"
 
 #define page_size 0x1000

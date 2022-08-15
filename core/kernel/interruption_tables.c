@@ -1,10 +1,8 @@
-#include "interruption_tables.h"
-#include "../../lib/memory.h"
+#include "mushlib.h"
 #include "../drivers/ports_io.h"
+#include "interruption_tables.h"
 #include "interruptions.h"
-#include "../../lib/stdio.h"
 #include "placement.h"
-#include "../../lib/syscall.h"
 
 IDT* idt_table;
 interruption_handler interruption_handlers[256];

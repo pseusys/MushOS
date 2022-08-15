@@ -1,5 +1,5 @@
-#ifndef MUSHOS_VARARG_H
-#define MUSHOS_VARARG_H
+#ifndef MUSHLIB_VARARG_H
+#define MUSHLIB_VARARG_H
 
 #include "heap.h"
 
@@ -24,4 +24,4 @@
 
 void* get_args(u_dword num, ...);
 
-#endif //MUSHOS_VARARG_H
+#endif // MUSHLIB_VARARG_H

@@ -1,5 +1,5 @@
-#ifndef MUSHOS_STDIO_H
-#define MUSHOS_STDIO_H
+#ifndef MUSHLIB_STDIO_H
+#define MUSHLIB_STDIO_H
 
 #include "generic.h"
 
@@ -39,4 +39,4 @@ void print_colored(console_color font, console_color back, string format, ...);
 #define error(temp, args...) {locate(HIGH_RED, BLACK) bad(temp, ## args)}
 #define warning(temp, args...) {locate(YELLOW, BLACK) warn(temp, ## args)}
 
-#endif //MUSHOS_STDIO_H
+#endif // MUSHLIB_STDIO_H

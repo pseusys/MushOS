@@ -1,8 +1,7 @@
-#include "interruption_tables.h"
-#include "../../lib/heap.h"
-#include "../../lib/stdio.h"
+#include "mushlib.h"
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
+#include "interruption_tables.h"
 #include "timer.h"
 #include "pages.h"
 

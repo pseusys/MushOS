@@ -1,5 +1,5 @@
-#ifndef MUSHOS_SYSCALL_H
-#define MUSHOS_SYSCALL_H
+#ifndef MUSHLIB_SYSCALL_H
+#define MUSHLIB_SYSCALL_H
 
 #include "generic.h"
 #include "vararg.h"
@@ -47,4 +47,4 @@ asm volatile ("pusha");\
     asm volatile ("mov %1, (%0)" :: "r" (position), "r" (value));\
 }
 
-#endif //MUSHOS_SYSCALL_H
+#endif // MUSHLIB_SYSCALL_H

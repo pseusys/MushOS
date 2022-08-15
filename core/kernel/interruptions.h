@@ -1,7 +1,7 @@
 #ifndef MUSHOS_INTERRUPTIONS_H
 #define MUSHOS_INTERRUPTIONS_H
 
-#include "../../lib/generic.h"
+#include "mushlib.h"
 
 #define IRQ0 32
 #define IRQ1 33
@@ -81,4 +81,4 @@ extern void isr50();
 extern void isr51();
 extern void isr52();
 
-#endif //MUSHOS_GENERIC_H
+#endif //MUSHOS_INTERRUPTIONS_H

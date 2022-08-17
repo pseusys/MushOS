@@ -20,7 +20,7 @@
  *  │                                │
  *  ├────────────────────────────────┤ 0x8000
  *  │                                │
- *  │      Kernel data segment       │ See @code core/Makefile
+ *  │      Kernel data segment       │ See @code core/CMakeLists.txt
  *  │                                │
  *  ├────────────────────────────────┤ 0x9000
  *  │                                │

@@ -4,3 +4,5 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # MushOS
+
+Execute with: `qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=./cmake-build-debug/MushOS.img`

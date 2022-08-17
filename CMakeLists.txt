@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.20)
 # TODO: add version to artifacts
 project(MushOS LANGUAGES C ASM_NASM VERSION 0.1)
 
 set(CMAKE_C_STANDARD 11)
 
 # Special variables used in building process:
+# TODO: add all paths to .gitignore
 # OBJECT_COPY - should be path to `objcopy` utility
 if (NOT DEFINED OBJECT_COPY)
     set(OBJECT_COPY objcopy)
@@ -40,32 +41,17 @@ add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/lib/)
 set (MUSHLIB_DIRECTORY "${CMAKE_BINARY_DIR}/lib/")
 
 # Including directory and finding library
-include_directories(${MUSHLIB_DIRECTORY})
-find_library(MUSHLIB MushLib PATHS ${MUSHLIB_DIRECTORY})
+include_directories (${MUSHLIB_DIRECTORY})
+find_library (MUSHLIB MushLib PATHS ${MUSHLIB_DIRECTORY})
 
 
-# Adding kernel target TODO: move to separate dir
-file(GLOB_RECURSE mush_core core/drivers/* core/kernel/*)
-list (PREPEND mush_core "core/boot/kernel_gate.asm")
+# Setting variable that will contain final output image file (for now to NO, it will be reset in subdirs)
+set (MUSHOS_IMG NO)
 
-# TODO: clion set executable, this executable is false
-add_executable(MushOS_kernel ${mush_core})
-target_link_options(MushOS_kernel PRIVATE -m elf_i386 -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000)
-set_target_properties(MushOS_kernel PROPERTIES SUFFIX ".elf")
-target_link_libraries(MushOS_kernel LINK_PUBLIC ${MUSHLIB} ${MushOS_loader})
-add_custom_command(TARGET MushOS_kernel POST_BUILD COMMAND ${OBJECT_COPY} -O binary $<TARGET_FILE:MushOS_kernel> $<TARGET_FILE:MushOS_kernel>.bin VERBATIM)
+# Including directories forming MushOS image, one of them will set 'MushOS' variable
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/core/)
 
 
-# Adding bootloader target TODO: move to separate dir
-add_library(MushOS_loader OBJECT core/boot/loader.asm)
-set_target_properties(MushOS_loader PROPERTIES NASM_OBJ_FORMAT bin)
-
-
-# Merging resulting files to MushOS image
-add_custom_command(OUTPUT MushOS_complete COMMAND ${CONCATENATE} $<TARGET_OBJECTS:MushOS_loader> $<TARGET_FILE:MushOS_kernel>.bin > MushOS_complete COMMAND ${TRUNCATE} -s 4194304 MushOS_complete DEPENDS MushOS_kernel MushOS_loader)
-
-# Execute debug command TODO: fix, not running
-execute_process(COMMAND "qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=$<TARGET_FILE:MushOS_complete>" VERBATIM)
-
-# Adding final target for building all MushOS parts TODO: fix if needed
-add_custom_target(run ALL DEPENDS MushOS_complete)
+# Copying system image file to top level directory and adding final target for building all MushOS parts
+add_custom_target(run ALL DEPENDS MushCore)
+add_custom_command(TARGET run POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHOS_IMG}" "${CMAKE_BINARY_DIR}/MushOS.img")

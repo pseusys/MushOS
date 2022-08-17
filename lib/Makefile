@@ -1,23 +1,23 @@
-C_SOURCES = $(wildcard ./code/*.c)
-ASM_SOURCES = $(wildcard ./code/*.asm)
-HEADERS = ./code/generic.h $(filter-out ./code/generic.h,$(wildcard ./code/*.h))
-OBJECTS = $(subst ./code/,./build/,$(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.obj))
+C_SOURCES = $(wildcard /home/milty/Documents/MushOS/lib/code/*.c)
+ASM_SOURCES = $(wildcard /home/milty/Documents/MushOS/lib/code/*.asm)
+HEADERS = /home/milty/Documents/MushOS/lib/code/generic.h $(filter-out /home/milty/Documents/MushOS/lib/code/generic.h,$(wildcard /home/milty/Documents/MushOS/lib/code/*.h))
+OBJECTS = $(subst /home/milty/Documents/MushOS/lib/code/,/home/milty/Documents/MushOS/lib/build/,$(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.obj))
 
-build: create ./bin/mushlib.h $(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.obj) ./bin/mushlib.a
+build: create /home/milty/Documents/MushOS/lib/bin/mushlib.h $(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.obj) /home/milty/Documents/MushOS/lib/bin/mushlib.a
 
-./bin/mushlib.a:
+/home/milty/Documents/MushOS/lib/bin/mushlib.a:
 	ar cr $@ $(OBJECTS)
 
-./bin/mushlib.h:
-	cat $(HEADERS) | sed '/#include\|#ifndef\|#define MUSHLIB\|#endif/d' > ./bin/proto_mushlib
-	echo "#ifndef MUSHLIB\n#define MUSHLIB\n" > $@; cat ./bin/proto_mushlib >> $@; echo "\n#endif // MUSHLIB\n" >> $@;
-	rm ./bin/proto_mushlib
+/home/milty/Documents/MushOS/lib/bin/mushlib.h:
+	cat $(HEADERS) | sed '/#include\|#ifndef\|#define MUSHLIB\|#endif/d' > /home/milty/Documents/MushOS/lib/bin/proto_mushlib
+	echo "#ifndef MUSHLIB\n#define MUSHLIB\n" > $@; cat /home/milty/Documents/MushOS/lib/bin/proto_mushlib >> $@; echo "\n#endif // MUSHLIB\n" >> $@;
+	rm /home/milty/Documents/MushOS/lib/bin/proto_mushlib
 
 %.o: %.c $(HEADERS)
-	gcc -nostartfiles -nodefaultlibs -nolibc -nostdlib -DMUSHENV -m32 -L -ffreestanding -c $< -o ./build/$(@F)
+	cc -g -nostartfiles -nodefaultlibs -nolibc -nostdlib -DMUSHENV -m32 -ffreestanding -std=gnu11 -c $< -o /home/milty/Documents/MushOS/lib/build/$(@F)
 
 %.obj: %.asm
-	nasm $< -f elf -o ./build/$(@F)
+	nasm $< -f elf -o /home/milty/Documents/MushOS/lib/build/$(@F)
 
 create:
 	if [ ! -e ./bin ]; then mkdir ./bin; fi;

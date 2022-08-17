@@ -1,6 +1,2 @@
-**/build/
-/core/images/
-/lib/bin/
-
 **/.idea/
-/cmake-build-debug/
+/cmake-build-*/

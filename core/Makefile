@@ -6,14 +6,14 @@ OBJECTS = $(subst /home/milty/Documents/MushOS/core/kernel/,/home/milty/Document
 build: create /home/milty/Documents/MushOS/core/images/floppy.img
 
 /home/milty/Documents/MushOS/core/images/floppy.img: /home/milty/Documents/MushOS/core/build/loader.bin /home/milty/Documents/MushOS/core/build/kernel.bin
-	cat $^ > /home/milty/Documents/MushOS/core/images/floppy.img
+	cat /home/milty/Documents/MushOS/cmake-build-debug/CMakeFiles/MushOS_loader.dir/core/boot/loader.asm.o ../cmake-build-debug/MushOS_kernel.elf.bin > /home/milty/Documents/MushOS/core/images/floppy.img
 	truncate -s 4194304 /home/milty/Documents/MushOS/core/images/floppy.img
 
 /home/milty/Documents/MushOS/core/build/loader.bin:
 	nasm /home/milty/Documents/MushOS/core/boot/loader.asm -f bin -o $@
 
 /home/milty/Documents/MushOS/core/build/kernel.bin: /home/milty/Documents/MushOS/core/build/kernel.elf
-	objcopy -O binary $< $@
+	objcopy -O binary ../cmake-build-debug/MushOS_kernel.elf $@
 
 /home/milty/Documents/MushOS/core/build/kernel.elf: /home/milty/Documents/MushOS/core/build/kernel_gate.o $(C_SOURCES:.c=.o) $(ASM_SOURCES:.asm=.obj)
 	ld -m elf_i386 -o $@ -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000 $< $(OBJECTS) -L ../lib/bin -l:mushlib.a

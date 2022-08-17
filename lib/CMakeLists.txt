@@ -1,5 +1,3 @@
-include (../compile_functions.cmake)
-
 # Function for adding 'IN_FILE' contents to 'OUT_FILE', while dropping 'pattern'-matching lines
 function (pipelines IN_FILE OUT_FILE pattern)
     file (STRINGS ${IN_FILE} LINES)
@@ -35,9 +33,7 @@ file (GLOB_RECURSE HEADERS code/*.h)
 list (FILTER HEADERS EXCLUDE REGEX "code/generic\\.h$")
 list (PREPEND HEADERS ${GENERIC_HEADER})
 
-# Folder where library generated files will be placed, situated in project
-set (CMAKE_CURRENT_LIBRARY_DIR ${CMAKE_CURRENT_SOURCE_DIR}/binxero)
-
+# Generate common library header, that includes all library headers, smartly merged
 set (LIBRARY_HEADER ${CMAKE_CURRENT_BINARY_DIR}/mushlib.h)
 file (WRITE ${LIBRARY_HEADER} "#ifndef MUSHLIB\n#define MUSHLIB\n")
 foreach (SOURCE ${HEADERS})
@@ -45,6 +41,6 @@ foreach (SOURCE ${HEADERS})
 endforeach (SOURCE)
 file (APPEND ${LIBRARY_HEADER} "\n#endif // MUSHLIB")
 
-# TODO: somehow add HEADER_FILE_ONLY
-add_library(mushlib STATIC ${C_SOURCES} ${ASM_SOURCES} ${LIBRARY_HEADER})
-set_target_properties(mushlib PROPERTIES LINKER_LANGUAGE C)
+# Add 'MushLib' library, it should be linked as C (C and ASM linkers are the same), it is also marked header only
+add_library(MushLib STATIC ${C_SOURCES} ${ASM_SOURCES} ${LIBRARY_HEADER})
+set_target_properties(MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON)

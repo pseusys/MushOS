@@ -11,18 +11,18 @@ My motivation for creating it was:
 
 Kernel code is stored in `core` directory, `lib` directory contains code for `mushlib` - an stdlib replacement for MushOS.  
 MushOS roadmap:
-1. Standalone bootloader
-2. Kernel code
-3. Keyboard + screen adapter
-4. MushLib basics
-5. GRUB loader booting
-6. Kernel memory map
-7. File system (MushFS) + initrd
-8. Shell + audio drivers
-9. Multitasking
-10. User mode
-11. Video mode
-12. Sample apps
+1. Standalone bootloader 👍
+2. Kernel code 👍
+3. Keyboard + screen adapter 👍
+4. MushLib basics 👍
+5. GRUB loader booting 🤙
+6. Kernel memory map 👎
+7. File system (MushFS) + initrd 👎
+8. Shell + audio drivers 👎
+9. Multitasking 👎
+10. User mode 👎
+11. Video mode 👎
+12. Sample apps 👎
 13. etc...
 
 Build using following command:  

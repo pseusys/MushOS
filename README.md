@@ -4,3 +4,29 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # MushOS
+MushOS is a UNIX-like OS prototype, written from scratch.  
+My motivation for creating it was:
+1. Research how computer works - on the deepest level of programming, where software meets hardware.
+2. Trying to resolve some low-level issues I've always been wondering about (e.g.: inability to receive allocated memory amount from pointer).
+
+Kernel code is stored in `core` directory, `lib` directory contains code for `mushlib` - an stdlib replacement for MushOS.  
+MushOS roadmap:
+1. Standalone bootloader
+2. Kernel code
+3. Keyboard + screen adapter
+4. MushLib basics
+5. GRUB loader booting
+6. Kernel memory map
+7. File system (MushFS) + initrd
+8. Shell + audio drivers
+9. Multitasking
+10. User mode
+11. Video mode
+12. Sample apps
+13. etc...
+
+Build using following command:  
+`cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/milty/Documents/MushOS -B /home/milty/Documents/MushOS/cmake-build-debug`
+
+Run using following command (qemu package required!):  
+`qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=cmake-build-debug/MushOS.img`

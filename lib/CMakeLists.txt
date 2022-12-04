@@ -34,6 +34,7 @@ list (FILTER HEADERS EXCLUDE REGEX "code/generic\\.h$")
 list (PREPEND HEADERS ${GENERIC_HEADER})
 
 # Generate common library header, that includes all library headers, smartly merged
+# TODO: add generation rule
 set (LIBRARY_HEADER ${CMAKE_CURRENT_BINARY_DIR}/mushlib.h)
 file (WRITE ${LIBRARY_HEADER} "#ifndef MUSHLIB\n#define MUSHLIB\n")
 foreach (SOURCE ${HEADERS})
@@ -43,4 +44,4 @@ file (APPEND ${LIBRARY_HEADER} "\n#endif // MUSHLIB")
 
 # Add 'MushLib' library, it should be linked as C (C and ASM linkers are the same), it is also marked header only
 add_library(MushLib STATIC ${C_SOURCES} ${ASM_SOURCES} ${LIBRARY_HEADER})
-set_target_properties(MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON)
+set_target_properties(MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON OUTPUT_NAME "mushlib")

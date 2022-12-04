@@ -42,7 +42,7 @@ set (MUSHLIB_DIRECTORY "${CMAKE_BINARY_DIR}/lib/")
 
 # Including directory and finding library
 include_directories (${MUSHLIB_DIRECTORY})
-find_library (MUSHLIB MushLib PATHS ${MUSHLIB_DIRECTORY})
+find_library (MUSHLIB mushlib PATHS ${MUSHLIB_DIRECTORY})
 
 
 # Setting variable that will contain final output image file (for now to NO, it will be reset in subdirs)
@@ -53,5 +53,5 @@ add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/core/)
 
 
 # Copying system image file to top level directory and adding final target for building all MushOS parts
-add_custom_target(run ALL DEPENDS MushCore)
+add_custom_target(run ALL DEPENDS MushLib MushCore)
 add_custom_command(TARGET run POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHOS_IMG}" "${CMAKE_BINARY_DIR}/MushOS.img")

@@ -2,11 +2,11 @@
 file (GLOB_RECURSE mush_core drivers/* kernel/*)
 list (PREPEND mush_core "boot/kernel_gate.asm")
 
-add_executable(MushCore_kernel ${mush_core})
-target_link_options(MushCore_kernel PRIVATE -m elf_i386 -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000)
-target_link_libraries(MushCore_kernel LINK_PUBLIC ${MUSHLIB} ${MushOS_loader})
-set_target_properties(MushCore_kernel PROPERTIES SUFFIX ".elf")
-add_custom_command(TARGET MushCore_kernel POST_BUILD COMMAND ${OBJECT_COPY} -O binary $<TARGET_FILE:MushCore_kernel> $<TARGET_FILE:MushCore_kernel>.bin VERBATIM)
+add_executable (MushCore_kernel ${mush_core})
+target_link_options (MushCore_kernel PRIVATE -m elf_i386 -n --section-start=.got.plt=0x8000 -Tdata 0x8100 -Tbss 0x8500 -Ttext 0x9000)
+target_link_libraries (MushCore_kernel LINK_PUBLIC ${MUSHLIB} ${MushOS_loader})
+set_target_properties (MushCore_kernel PROPERTIES SUFFIX ".elf")
+add_custom_command (TARGET MushCore_kernel POST_BUILD COMMAND ${OBJECT_COPY} -O binary $<TARGET_FILE:MushCore_kernel> $<TARGET_FILE:MushCore_kernel>.bin VERBATIM)
 
 
 # Adding bootloader target

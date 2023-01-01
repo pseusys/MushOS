@@ -21,7 +21,7 @@ endfunction ()
 
 
 # Enable C and ASM compilers, C compiler should support cross-compiling, ASM compiler should support NASM
-enable_language(C ASM_NASM)
+enable_language (C ASM_NASM)
 
 # Source sets (C and ASM)
 file (GLOB_RECURSE ASM_SOURCES code/*.asm)
@@ -43,5 +43,5 @@ endforeach (SOURCE)
 file (APPEND ${LIBRARY_HEADER} "\n#endif // MUSHLIB")
 
 # Add 'MushLib' library, it should be linked as C (C and ASM linkers are the same), it is also marked header only
-add_library(MushLib STATIC ${C_SOURCES} ${ASM_SOURCES} ${LIBRARY_HEADER})
-set_target_properties(MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON OUTPUT_NAME "mushlib")
+add_library (MushLib STATIC ${C_SOURCES} ${ASM_SOURCES} ${LIBRARY_HEADER})
+set_target_properties (MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON OUTPUT_NAME "mushlib")

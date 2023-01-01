@@ -1,0 +1,26 @@
+name: BUILD
+
+on:
+  push:
+
+jobs:
+  codestyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup NASM ☕
+        uses: ilammy/setup-nasm@v1
+      
+      - name: Setup GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          version: cc
+      
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
+
+      - name: Build 🛠
+        run: cmake -G "CodeBlocks - Unix Makefiles" -S ./ -B ./cmake-build-debug

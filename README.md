@@ -29,7 +29,7 @@ MushOS roadmap:
 13. etc...
 
 Build using following command:  
-`cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/milty/Documents/MushOS -B /home/milty/Documents/MushOS/cmake-build-debug`
+`cmake -G "CodeBlocks - Unix Makefiles" -S ./ -B ./cmake-build-debug`
 
 Run using following command (qemu package required!):  
 `qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=cmake-build-debug/MushOS.img`

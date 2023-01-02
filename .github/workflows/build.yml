@@ -23,4 +23,6 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Build 🛠
-        run: cmake -G "CodeBlocks - Unix Makefiles" -S ./ -B ./cmake-build-debug
+        run: |
+          cmake -S ./ -B ./build -G "Unix Makefiles"
+          cmake --build ./cmake-build-production --target all -j 6 --

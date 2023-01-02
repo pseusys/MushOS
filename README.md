@@ -5,8 +5,6 @@
 
 # MushOS
 
-Execute with: `qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=./cmake-build-debug/MushOS.img`
-=======
 MushOS is a UNIX-like OS prototype, written from scratch.  
 My motivation for creating it was:
 1. Research how computer works - on the deepest level of programming, where software meets hardware.
@@ -29,7 +27,7 @@ MushOS roadmap:
 13. etc...
 
 Build using following command:  
-`cmake -G "CodeBlocks - Unix Makefiles" -S ./ -B ./cmake-build-debug`
+`cmake -S ./ -B ./build -G "Unix Makefiles" && cmake --build ./build --target all --`
 
 Run using following command (qemu package required!):  
-`qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=cmake-build-debug/MushOS.img`
+`qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/MushOS.img`

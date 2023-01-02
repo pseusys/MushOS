@@ -25,4 +25,4 @@ jobs:
       - name: Build 🛠
         run: |
           cmake -S ./ -B ./build -G "Unix Makefiles"
-          cmake --build ./cmake-build-production --target all -j 6 --
+          cmake --build ./build --target all -j 6 --

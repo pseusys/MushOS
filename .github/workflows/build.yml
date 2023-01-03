@@ -11,18 +11,22 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
-      - name: Setup NASM ☕
+      - name: Setup NASM 🕸️
         uses: ilammy/setup-nasm@v1
       
-      - name: Setup GCC
+      - name: Setup GCC 🐃
         uses: egor-tensin/setup-gcc@v1
         with:
           cc: 1
       
-      - name: Setup cmake
+      - name: Setup cmake 📐
         uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Build 🛠
-        run: |
-          cmake -S ./ -B ./build -G "Unix Makefiles"
-          cmake --build ./build --target all -j 6 --
+        run: make
+
+      - name: Assert artifacts generation ❗
+        uses: andstor/file-existence-action@v2
+        with:
+          files: "./build/artifacts/mushlib.h, ./build/artifacts/mushlib.o, ./build/artifacts/MushOS.img"
+          fail: true

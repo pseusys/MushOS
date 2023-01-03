@@ -26,8 +26,8 @@ MushOS roadmap:
 12. Sample apps 👎
 13. etc...
 
-Build using following command:  
-`cmake -S ./ -B ./build -G "Unix Makefiles" && cmake --build ./build --target all --`
+Build using following command (cmake package required!):  
+`make build_all`
 
 Run using following command (qemu package required!):  
-`qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/MushOS.img`
+`make run`

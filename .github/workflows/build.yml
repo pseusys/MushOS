@@ -28,5 +28,5 @@ jobs:
       - name: Assert artifacts generation ❗
         uses: andstor/file-existence-action@v2
         with:
-          files: "./build/artifacts/mushlib.h, ./build/artifacts/mushlib.o, ./build/artifacts/MushOS.img"
+          files: "./build/artifacts/mushlib.h, ./build/artifacts/mushlib.a, ./build/artifacts/MushOS.img"
           fail: true

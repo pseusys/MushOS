@@ -23,7 +23,7 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Build 🛠
-        run: make
+        run: make build_all
 
       - name: Assert artifacts generation ❗
         uses: andstor/file-existence-action@v2

@@ -1,7 +1,7 @@
 #ifndef MUSHOS_PAGES_H
 #define MUSHOS_PAGES_H
 
-#include "mushlib.h"
+#include <mushlib.h>
 #include "interruption_tables.h"
 
 #define page_size 0x1000

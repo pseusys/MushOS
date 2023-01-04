@@ -1,4 +1,5 @@
-#include "mushlib.h"
+#include "kernel.h"
+#include <mushlib.h>
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
 #include "interruption_tables.h"

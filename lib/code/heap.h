@@ -29,6 +29,4 @@ void* realloc(void* structure, u_dword new_size);
 
 void free(void* structure);
 
-void print_heap();
-
 #endif // MUSHLIB_HEAP_H

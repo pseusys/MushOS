@@ -25,12 +25,12 @@ build_all: prepare_build
 .PHONY: build_all
 
 
-run:
+run: build_all
 	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/artifacts/MushOS.img
 .PHONY: run
 
 
-all: build_all run
+all: clean run
 .PHONY: all
 
 

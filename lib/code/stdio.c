@@ -17,17 +17,14 @@ typedef enum {
 
 void print_char (char c, console_color front, console_color back) {
     call_orbit(48, 4, 1, c, front, back)
-    //print_char_color(c, front, back);
 }
 
-void print_color (string str, byte text_color, byte back_color) {
-    //print_string_color((mod_string) str, text_color, back_color, 0);
+void print_text (string str, byte text_color, byte back_color) {
     call_orbit(48, 5, 2, str, text_color, back_color, 0)
 }
 
-void print_n_color (string str, byte text_color, byte back_color, u_dword length) {
+void print_n_text (string str, byte text_color, byte back_color, u_dword length) {
     if (length > 0) call_orbit(48, 5, 2, str, text_color, back_color, length)
-    // print_string_color((mod_string) str, text_color, back_color, length);
 }
 
 static void print_atom(u_byte b, u_dword front, u_dword back, system sys) {
@@ -63,13 +60,13 @@ static void print_float(float b, u_dword front, u_dword back, system sys, u_dwor
 }
 
 static void print_boolean(boolean b, u_dword front, u_dword back) {
-    if (b) print_color("true", front, back);
-    else print_color("false", front, back);
+    if (b) print_text("true", front, back);
+    else print_text("false", front, back);
 }
 
 static void print_pointer(u_dword b, u_dword front, u_dword back) {
     print_char('.', front, back);
-    if (b == nullptr) print_color("null", front, back);
+    if (b == nullptr) print_text("null", front, back);
     else print_int(b, front, back, HEXADECIMAL);
 }
 
@@ -78,10 +75,10 @@ void print_number(dword num, type t, system sys, u_dword front, u_dword back) {
         case DECIMAL:
             break;
         case HEXADECIMAL:
-            print_color("0x", front, back);
+            print_text("0x", front, back);
             break;
         case BINARY:
-            print_color("0b", front, back);
+            print_text("0b", front, back);
             break;
         default:
             print_colored(front, back, "(base %d) ", sys);
@@ -108,7 +105,7 @@ void print_colored(console_color font, console_color back, string format, ...) {
     }
 
     if (temps == 0) {
-        print_color(format, font, back);
+        print_text(format, font, back);
         return;
     }
 
@@ -118,7 +115,7 @@ void print_colored(console_color font, console_color back, string format, ...) {
     u_dword argumentor = 0, printed = 0;
     for (int j = 0; j < length; ++j) {
         if (format[j] == '%') {
-            print_n_color(format + printed, font, back, j - printed);
+            print_n_text(format + printed, font, back, j - printed);
             printed = j + 2;
             j++;
             switch (format[j]) {
@@ -144,7 +141,7 @@ void print_colored(console_color font, console_color back, string format, ...) {
                     print_char(args[argumentor], font, back);
                     break;
                 case 's':
-                    print_color((string) args[argumentor], font, back);
+                    print_text((string) args[argumentor], font, back);
                     break;
                 default:
                     argumentor--;
@@ -155,6 +152,6 @@ void print_colored(console_color font, console_color back, string format, ...) {
             argumentor++;
         }
     }
-    print_n_color(format + printed, font, back, length - printed);
+    print_n_text(format + printed, font, back, length - printed);
     free(args);
 }

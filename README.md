@@ -19,17 +19,16 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 2. Kernel code 👍
 3. Keyboard + screen adapter 👍
 4. MushLib basics 👍
-5. GRUB loader booting 🤙
-6. Limitations, checks and exceptions 🤙
-7. Kernel memory map 👎
-8. File system (MushFS) + initrd 👎
-9. Shell + audio drivers 👎
-10. Multitasking 👎
-11. User mode 👎
-12. Video mode 👎
-13. Sample apps 👎
-14. Create cross-compilers instead of using standard with flags 👎
-15. etc...
+5. Limitations, checks and exceptions 🤙
+6. Kernel memory map 👎
+7. File system (MushFS) + initrd 👎
+8. Shell + audio drivers 👎
+9. Multitasking 👎
+10. User mode 👎
+11. Video mode 👎
+12. Sample apps 👎
+13. Create cross-compilers instead of using standard with flags 👎
+14. etc...
 
 
 ### Build and run

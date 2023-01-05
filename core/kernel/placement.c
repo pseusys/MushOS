@@ -24,7 +24,3 @@ void* k_malloc(u_dword sz) {
 void* k_malloc_aligned(u_dword sz, boolean align) {
     return k_malloc_physical(sz, align, nullptr);
 }
-
-void get_placement_address() {
-    info("Placement address: %h\n", placement_address)
-}

@@ -28,7 +28,8 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 11. Video mode 👎
 12. Sample apps 👎
 13. Create cross-compilers instead of using standard with flags 👎
-14. etc...
+14. Consider migration to heap from placement new (re-read paging code) 👎
+15. etc...
 
 
 ### Build and run

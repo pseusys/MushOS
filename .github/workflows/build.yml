@@ -13,12 +13,17 @@ jobs:
 
       - name: Setup NASM 🕸️
         uses: ilammy/setup-nasm@v1
-      
+
       - name: Setup GCC 🐃
         uses: egor-tensin/setup-gcc@v1
         with:
           cc: 1
-      
+
+      - name: Setup Python 🐍
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
       - name: Setup cmake 📐
         uses: jwlawson/actions-setup-cmake@v1.13
 

@@ -9,7 +9,7 @@ start:
 
 KERNEL_OFFSET equ 0x8000 ; Offset in RAM, where kernel will be loaded, it is also defined in linker.
                          ; Should be enough since we have micro kernel here.
-CODE_OFFSET equ 0x9000 ;
+CODE_OFFSET equ 0xAA00   ;
 
 
 gdt_start: ; Beginning of GDT-table. The table itself contains information about RAM segments.
@@ -118,7 +118,7 @@ kernel_start: ; Start of booting code.
 
     cli ; Clearing interruptions before SP and SP modifying.
     mov ax, cs ; CS points to 7c00 at the boot time, the current segment. TODO: check!!
-    mov ss, ax ; Placing stack to the same segment.
+    mov ss, ax ; Placing stack to the same segment. TODO: So stack will be from 0x7c00 to 0x500, check that's enough!
     mov bp, start ; Stack grows downwards in memory, while the code - upwards. TODO: check!!
     mov sp, bp ; So stack starts right in the entry point, but grows to another direction.
     sti ; Setting interruptions back.

@@ -3,12 +3,10 @@
 
 #include "generic.h"
 
-typedef struct heap_block_header heap_block_header;
-
-struct heap_block_header {
+typedef struct {
     u_dword size;
     void* previous, * next;
-};
+} heap_block_header;
 
 typedef struct {
     void* first_address;

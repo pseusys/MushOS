@@ -39,8 +39,8 @@ Run using following command (qemu package required!):
 MushLib is considered to be a modular entity - there are no limitations on *how* heap or filesystem is implemented as long as the implementation has the functions matching standard signatures (from `lib/base`).
 
 For every build of MushLib it's possible to add and replace its sources.
-For example if you'd like to build MushLib with custom heap implementation, you just have to create a *.c* file pair that has the functions defined in `lib/base/heap` - and then just embed it into MushLib using the following command:
-`make REPLACE_SOURCES="path/to/your/heap.c;" run`
+For example if you'd like to build MushLib with custom heap implementation, you just have to create a *.c* file pair that has the functions defined in `lib/base/heap.h` - and then just embed it into MushLib using the following command:  
+`make REPLACE_SOURCES="path/to/your/heap.c;" build_lib`
 
 > **_NB!_** Your file has to have the same name as base mushlib file for successful replacement.
-> **_NB!_** If two different files need to be replaced, just use a semicolon (one semicolon in the end is always required!).
+> If two different files need to be replaced, just use a semicolon (one semicolon in the end is always required!).

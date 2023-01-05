@@ -27,8 +27,8 @@ section = binary.get_section(args["section"])
 
 address = int(args["address"], base=16)
 if section.virtual_address != address:
-    error(f"Section `{args['section']}` has unexpected address: {hex(section.virtual_address)}")
+    error(f"Section `{args['section']}` has unexpected address: 0x{hex(section.virtual_address)}")
 
 size = int(args["size"], base=16)
 if section.size >= size:
-    error(f"Section `{args['section']}` size too big: {hex(section.size)} >= {args['size']}")
+    error(f"Section `{args['section']}` size too big: {hex(section.size)} >= 0x{args['size']}")

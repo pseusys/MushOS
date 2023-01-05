@@ -11,7 +11,10 @@ My motivation for creating it was:
 2. Trying to resolve some low-level issues I've always been wondering about (e.g.: inability to receive allocated memory amount from pointer).
 
 Kernel code is stored in `core` directory, `lib` directory contains code for `mushlib` - an stdlib replacement for MushOS.  
-MushOS roadmap:
+
+
+### Roadmap
+
 1. Standalone bootloader 👍
 2. Kernel code 👍
 3. Keyboard + screen adapter 👍
@@ -25,7 +28,11 @@ MushOS roadmap:
 11. User mode 👎
 12. Video mode 👎
 13. Sample apps 👎
-14. etc...
+14. Create cross-compilers instead of using standard with flags 👎
+15. etc...
+
+
+### Build and run
 
 Build using following command (cmake package required!):  
 `make build_all`

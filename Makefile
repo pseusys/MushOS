@@ -21,7 +21,7 @@ venv:
 
 
 prepare_build:
-	cmake -S ./ -B build -G "Unix Makefiles" -D REPLACE_SOURCES=$(REPLACE_SOURCES) -D ADD_SOURCES=$(ADD_SOURCES)
+	cmake -S ./ -B build -D REPLACE_SOURCES=$(REPLACE_SOURCES) -D ADD_SOURCES=$(ADD_SOURCES)
 .PHONY: prepare_build
 
 build_lib: prepare_build
@@ -32,12 +32,8 @@ build_img: prepare_build venv
 	cmake --build build --target MushCore --
 .PHONY: build_img
 
-build_all: prepare_build venv
-	cmake --build build --target all --
-.PHONY: build_all
 
-
-run: build_all
+run: build_img
 	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/artifacts/MushOS.img
 .PHONY: run
 

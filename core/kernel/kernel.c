@@ -31,7 +31,7 @@
  */
 
 void _start() {
-    initialize_heap((void*) 0x1000, 0x6000);
+    initialize_heap((void*) 0x500, 0x6000);
 
     init_interruptions();
     init_timer(100);

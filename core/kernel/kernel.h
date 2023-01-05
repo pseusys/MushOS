@@ -4,7 +4,7 @@
 #include <mushlib.h>
 
 #define PANIC(message) {\
-    print_colored(HIGH_RED, BLACK, message);\
+    call_orbit(48, 5, 2, message, HIGH_RED, BLACK, 0)\
     while (true) {}\
 }
 

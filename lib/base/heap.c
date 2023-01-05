@@ -74,7 +74,7 @@ void* malloc(u_dword size) {
         void* final_address = nullptr;
         if (best_address != nullptr) final_address = allocate_space(best_address, size, best_previous, best_next);
         if (best_address == header->heap_start) header->first_address = final_address;
-        if (final_address == nullptr) ; // TODO: Throw allocation exception.
+        if (final_address == nullptr) ; // TODO: Throw allocation exception, exception handling in kernel -> panic.
         return final_address;
 
     } else {

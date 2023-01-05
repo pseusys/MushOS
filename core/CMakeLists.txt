@@ -40,5 +40,8 @@ set_target_properties (MushCore_bootloader PROPERTIES NASM_OBJ_FORMAT bin)
 
 # Merge resulting files to MushOS image file, setting 'MUSHOS_IMG' variable
 add_custom_command (OUTPUT MushCore_complete.bin COMMAND ${CONCATENATE} $<TARGET_OBJECTS:MushCore_bootloader> $<TARGET_FILE:MushCore_kernel>.bin > MushCore_complete.bin COMMAND ${TRUNCATE} -s 4194304 MushCore_complete.bin DEPENDS MushCore_kernel MushCore_bootloader)
-set (MUSHOS_IMG ${CMAKE_CURRENT_BINARY_DIR}/MushCore_complete.bin PARENT_SCOPE)
+set (MUSHOS_IMG ${CMAKE_CURRENT_BINARY_DIR}/MushCore_complete.bin)
 add_custom_target (MushCore DEPENDS MushCore_complete.bin)
+
+# Copy system image to artifacts directory
+add_custom_command (TARGET MushCore POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHOS_IMG}" "${ARTIFACTS_DIR}/MushOS.img")

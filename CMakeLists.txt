@@ -38,6 +38,9 @@ set (CMAKE_C_LINK_EXECUTABLE "${OBJECT_LINKER} <FLAGS> <CMAKE_C_LINK_FLAGS> <LIN
 add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-nostartfiles;-nodefaultlibs;-nolibc;-nostdlib;-DMUSHENV;-m32;-ffreestanding>")
 add_compile_options ("$<$<COMPILE_LANGUAGE:ASM_NASM>:-f $<IF:$<BOOL:$<TARGET_PROPERTY:NASM_OBJ_FORMAT>>,$<TARGET_PROPERTY:NASM_OBJ_FORMAT>,${CMAKE_ASM_NASM_OBJECT_FORMAT}>>")
 
+# Setup spectial artifacts directory name and path
+set (ARTIFACTS_DIR "${CMAKE_BINARY_DIR}/artifacts")
+
 
 # Add 'MushLib' path, setting directory it will be built in
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/lib/)
@@ -54,9 +57,3 @@ add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/core/)
 
 # Add final target for building all MushOS parts
 add_custom_target (run ALL DEPENDS MushLib MushCore)
-
-# Copy system image file and MushLib artifacts to special 'artifacts' directory
-set (ARTIFACTS_DIR "${CMAKE_BINARY_DIR}/artifacts")
-add_custom_command (TARGET run POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHOS_IMG}" "${ARTIFACTS_DIR}/MushOS.img")
-add_custom_command (TARGET run POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHLIB_HEAD}" "${ARTIFACTS_DIR}/mushlib.a")
-add_custom_command (TARGET run POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy "${MUSHLIB_BIN}" "${ARTIFACTS_DIR}/mushlib.h")

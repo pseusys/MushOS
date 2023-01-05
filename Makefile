@@ -3,6 +3,9 @@
 VERSIONING_FILES = CMakeLists.txt Makefile
 CURRENT_VERSION = 0.1
 
+REPLACE_SOURCES = ""
+ADD_SOURCES = ""
+
 PATH := venv/bin:$(PATH)
 
 
@@ -18,7 +21,7 @@ venv:
 
 
 prepare_build:
-	cmake -S ./ -B build -G "Unix Makefiles"
+	cmake -S ./ -B build -G "Unix Makefiles" -D REPLACE_SOURCES=$(REPLACE_SOURCES) -D ADD_SOURCES=$(ADD_SOURCES)
 .PHONY: prepare_build
 
 build_lib: prepare_build

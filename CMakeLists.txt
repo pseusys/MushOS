@@ -35,7 +35,7 @@ set (CMAKE_ASM_NASM_LINK_EXECUTABLE "${OBJECT_LINKER} <FLAGS> <CMAKE_ASM_NASM_LI
 set (CMAKE_C_LINK_EXECUTABLE "${OBJECT_LINKER} <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 
 # Add compile options: cross-compile for C files and setting output format for ASM files
-add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-nostartfiles;-nodefaultlibs;-nolibc;-nostdlib;-DMUSHENV;-m32;-ffreestanding;-mno-red-zone>")
+add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-nostartfiles;-nodefaultlibs;-nolibc;-nostdlib;-DMUSHENV;-m32;-ffreestanding;-mno-red-zone;-fno-asynchronous-unwind-tables>")
 add_compile_options ("$<$<COMPILE_LANGUAGE:ASM_NASM>:-f $<IF:$<BOOL:$<TARGET_PROPERTY:NASM_OBJ_FORMAT>>,$<TARGET_PROPERTY:NASM_OBJ_FORMAT>,${CMAKE_ASM_NASM_OBJECT_FORMAT}>>")
 
 # Setup spectial artifacts directory name and path

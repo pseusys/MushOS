@@ -1,7 +1,13 @@
 #include "pages.h"
-#include <mushlib.h>
+
+#include "../../lib/base/generic.h"
+#include "../../lib/base/stdio.h"
+#include "../../lib/base/memory.h"
+
 #include "../drivers/screen.h"
+
 #include "placement.h"
+
 
 #define page_size 0x1000
 

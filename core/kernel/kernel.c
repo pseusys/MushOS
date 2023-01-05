@@ -1,10 +1,16 @@
 #include "kernel.h"
-#include <mushlib.h>
+
+#include "../../lib/base/generic.h"
+#include "../../lib/base/heap.h"
+#include "../../lib/base/stdio.h"
+
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
+
 #include "interruption_tables.h"
 #include "timer.h"
 #include "pages.h"
+
 
 /**
  * Make kernel constants:

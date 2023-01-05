@@ -1,7 +1,13 @@
 #include "screen.h"
-#include "ports_io.h"
-#include <mushlib.h>
+
+#include "../../lib/base/generic.h"
+#include "../../lib/base/memory.h"
+#include "../../lib/base/syscall.h"
+
 #include "../kernel/interruption_tables.h"
+
+#include "ports_io.h"
+
 
 #define REG_SCREEN_CTRL 0x3d4
 #define REG_SCREEN_DATA 0x3d5

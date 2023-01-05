@@ -3,6 +3,7 @@
 
 #include "generic.h"
 
+
 int len(string str);
 void copy_part(string str, mod_string storage, int size);
 int first_pos(string str, char ch);

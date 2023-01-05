@@ -1,7 +1,8 @@
 #ifndef MUSHOS_INTERRUPTION_TABLES_H
 #define MUSHOS_INTERRUPTION_TABLES_H
 
-#include <mushlib.h>
+#include "../../lib/base/generic.h"
+
 
 typedef struct {
     u_word base_low;

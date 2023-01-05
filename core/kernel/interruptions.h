@@ -1,7 +1,8 @@
 #ifndef MUSHOS_INTERRUPTIONS_H
 #define MUSHOS_INTERRUPTIONS_H
 
-#include <mushlib.h>
+#include "../../lib/base/generic.h"
+
 
 #define IRQ0 32
 #define IRQ1 33

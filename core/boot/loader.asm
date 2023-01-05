@@ -9,7 +9,7 @@ start:
 
 KERNEL_OFFSET equ 0x8000 ; Offset in RAM, where kernel will be loaded, it is also defined in linker.
                          ; Should be enough since we have micro kernel here.
-CODE_OFFSET equ 0xAA00   ;
+CODE_OFFSET equ 0xA000   ;
 
 
 gdt_start: ; Beginning of GDT-table. The table itself contains information about RAM segments.

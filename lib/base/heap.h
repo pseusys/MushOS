@@ -3,6 +3,7 @@
 
 #include "generic.h"
 
+
 typedef struct {
     u_dword size;
     void* previous, * next;

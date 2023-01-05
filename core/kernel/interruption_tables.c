@@ -1,8 +1,14 @@
-#include <mushlib.h>
-#include "../drivers/ports_io.h"
 #include "interruption_tables.h"
+
+#include "../../lib/base/generic.h"
+#include "../../lib/base/stdio.h"
+#include "../../lib/base/memory.h"
+
+#include "../drivers/ports_io.h"
+
 #include "interruptions.h"
 #include "placement.h"
+
 
 IDT* idt_table;
 interruption_handler interruption_handlers[256];

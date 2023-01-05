@@ -1,5 +1,6 @@
 #include "string.h"
 
+
 int len(string str) {
     int string_iterator = 0;
     while (str[string_iterator] != 0) string_iterator++;

@@ -3,21 +3,48 @@
 #include "memory.h"
 
 
+/**
+ * Header of the current app heap.
+ * Every app in MushOS has its own heap.
+ * This implementation of heap is a singleton.
+ */
 heap_header* header;
 
 
 
+/**
+ * Internal function for getting heap header of any structure located in heap.
+ * It just substracts heap block header size from pointer and casts it to heap block header.
+ * @param structure a pointer to the structure.
+ * @return heap_block_header pointer.
+ */
 static heap_block_header* get_header(void* structure) {
     return (heap_block_header*) (structure - sizeof(heap_block_header));
 }
 
+/**
+ * Function for structure located in heap size calculation (in bytes).
+ * Throws heap exception if the given pointer is outside of the current heap.
+ * @param structure a pointer to the structure.
+ * @return structure size (in bytes).
+ */
 u_dword size(void* structure) {
-    return get_header(structure)->size;
+    if (structure > header->heap_start && structure < header->heap_end) return get_header(structure)->size;
+    else ; // TODO: throw exception: requested structure is outside of the heap!
 }
 
 
 
-void* allocate_space(void* free_pointer, u_dword size, heap_block_header* previous, heap_block_header* next) {
+/**
+ * Internal function for space allocation in heap.
+ * Sets up and fills heap block header, optionally alters headers of the next and previous heap blocks.
+ * @param free_pointer pointer to free space (heap block header size + required size).
+ * @param size required size of heap block.
+ * @param previous previous heap block.
+ * @param next next heap block.
+ * @return pointer to the start of the block.
+ */
+static void* allocate_space(void* free_pointer, u_dword size, heap_block_header* previous, heap_block_header* next) {
     ((heap_block_header*) free_pointer)->size = size;
     ((heap_block_header*) free_pointer)->previous = previous;
     ((heap_block_header*) free_pointer)->next = next;
@@ -30,6 +57,13 @@ void* allocate_space(void* free_pointer, u_dword size, heap_block_header* previo
 
 
 
+/**
+ * Function for heap initialization, sets up singleton heap header.
+ * This implementation of heap has fixed size, and so doesn't rely on paging.
+ * That's enough for kernel and basic app needs, TODO: provide another heap implementation for extended MushLib.
+ * @param start_address pointer to the start of the heap.
+ * @param size size of the heap.
+ */
 void initialize_heap(void* start_address, u_dword size) {
     header = start_address;
     memory_clear(start_address, sizeof(heap_header), 0);
@@ -38,6 +72,13 @@ void initialize_heap(void* start_address, u_dword size) {
     header->first_address = nullptr;
 }
 
+/**
+ * Function for allocation of a heap block.
+ * Searches for a place of suitable size to fit a structure of requested size in.
+ * Throws heap exception if no free space is available.
+ * @param size requested block size.
+ * @return pointer to the neewly allocated block.
+ */
 void* malloc(u_dword size) {
     if (header->first_address) {
         void* best_address = nullptr, * best_previous = nullptr, * best_next = nullptr;
@@ -85,6 +126,13 @@ void* malloc(u_dword size) {
     }
 }
 
+/**
+ * Function for heap block size alteration.
+ * Attempts to alter size in-place and copys the block only if in-place growth is not available.
+ * @param structure pointer to the structure for reallocation.
+ * @param new_size new requested size of the structure.
+ * @return pointer to the new structure.
+ */
 void* realloc(void* structure, u_dword new_size) {
     heap_block_header* block = get_header(structure);
     if (new_size < block->size) {
@@ -92,15 +140,19 @@ void* realloc(void* structure, u_dword new_size) {
     } else if (new_size > block->size) {
         if (new_size < block->next - structure) block->size = new_size;
         else {
-            free(structure);
             void* new_structure = malloc(new_size);
             memory_copy(structure, new_structure, block->size);
+            free(structure);
             structure = new_structure;
         }
     }
     return structure;
 }
 
+/**
+ * Function for heap block freeing.
+ * @param structure pointer to the structure for freeing.
+ */
 void free(void* structure) {
     heap_block_header* block = get_header(structure);
     if (structure == header->first_address) header->first_address = block->next;

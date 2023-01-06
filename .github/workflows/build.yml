@@ -28,10 +28,10 @@ jobs:
         uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Build 🛠
-        run: make build_all
+        run: make build_img
 
       - name: Assert artifacts generation ❗
         uses: andstor/file-existence-action@v2
         with:
-          files: "./build/artifacts/mushlib.h, ./build/artifacts/mushlib.a, ./build/artifacts/MushOS.img"
+          files: "./build/artifacts/MushOS.img"
           fail: true

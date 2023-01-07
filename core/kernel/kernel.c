@@ -10,6 +10,7 @@
 #include "interruption_tables.h"
 #include "timer.h"
 #include "pages.h"
+#include "modules.h"
 
 
 /**
@@ -47,5 +48,14 @@ void _start() {
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 
     init_keyboard();
+
+    init_module_loading_driver();
+    byte* module = load_module(2, 14);
+    byte* sector = (byte*) 0x7c00;
+
+    for (u_byte i = 0; i <= 15; i++) {
+        info("Module byte %d (%h): %h == %h\n", i, module + i, module[i], sector[i])
+    }
+
     initialise_paging();
 }

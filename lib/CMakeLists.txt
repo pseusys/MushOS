@@ -23,19 +23,19 @@ function (dump_headers IN_FILE pattern result)
 endfunction ()
 
 # Macro for replacing a C source from `base` MushLib with some external source
-macro (replace_source SOURCE source_list)
+macro (replace_source SOURCE source_list file_extension)
     get_filename_component (source_we ${SOURCE} NAME_WE)
     get_filename_component (source_abs ${SOURCE} ABSOLUTE)
-    get_filename_component (replacing "base/${source_we}\.c" ABSOLUTE)
+    get_filename_component (replacing "base/${source_we}\.${file_extension}" ABSOLUTE)
     list (TRANSFORM ${source_list} REPLACE "${replacing}$" "${source_abs}")
 endmacro ()
 
 # Macro for adding some external C and H sources to MushLib
 macro (add_source SOURCE source_list headers_list)
     get_filename_component (source_c "${SOURCE}.c" ABSOLUTE)
-    list (APPEND ${source_list} "${source_c}")
+    replace_source (${source_c} source_list "c")
     get_filename_component (source_h "${SOURCE}.h" ABSOLUTE)
-    list (APPEND ${headers_list} "${source_h}")
+    replace_source (${source_h} headers_list "h")
 endmacro ()
 
 
@@ -60,7 +60,7 @@ list (PREPEND HEADERS ${GENERIC_HEADER})
 # Replace C sources defined by user
 if (DEFINED REPLACE_SOURCES)
     foreach (SOURCE ${REPLACE_SOURCES})
-        replace_source (${SOURCE} SOURCES)
+        replace_source (${SOURCE} SOURCES "c")
     endforeach (SOURCE)
 endif ()
 

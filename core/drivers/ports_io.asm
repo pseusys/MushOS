@@ -4,7 +4,7 @@ global port_byte_out ; Write byte from register.
 global port_word_in ; Read word into register.
 global port_word_out ; Write word from register.
 
-port_byte_in: ; Only parameter (word) lies in stack at [ESP + 8] - reading port number.
+port_byte_in: ; Only parameter (word): [ESP + 8] - reading port number.
     push ebp ; Saving register base.
     mov ebp, esp ; Setting register base to register top.
                  ; Function won't be able to interfere with previous stack entries.
@@ -18,8 +18,8 @@ port_byte_in: ; Only parameter (word) lies in stack at [ESP + 8] - reading port 
     pop ebp
     ret
 
-port_byte_out: ; Last parameter (word): [ESP + 8] - reading port number.
-               ; First parameter (byte): [ESP + 12] - new register value.
+port_byte_out: ; First parameter (word): [ESP + 8] - reading port number.
+               ; Last parameter (byte): [ESP + 12] - new register value.
     push ebp
     mov ebp, esp
 
@@ -48,8 +48,8 @@ port_word_in: ; Last parameter (word): [ESP + 8] - reading port number.
     pop ebp
     ret
 
-port_word_out: ; Last parameter (word): [ESP + 8] - reading port number.
-               ; First parameter (word): [ESP + 12] - new register value.
+port_word_out: ; First parameter (word): [ESP + 8] - reading port number.
+               ; Last parameter (word): [ESP + 12] - new register value.
     push ebp
     mov ebp, esp
 

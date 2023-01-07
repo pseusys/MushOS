@@ -34,5 +34,6 @@ typedef struct {
 
 typedef void (*interruption_handler)(registers* regs);
 void set_interrupt_handler(u_byte n, interruption_handler handler);
+void silence_interrupt(u_byte n);
 
 #endif //MUSHOS_INTERRUPTION_TABLES_H

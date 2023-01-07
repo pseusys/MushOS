@@ -132,6 +132,13 @@ void set_interrupt_handler(u_byte n, interruption_handler handler) {
     if (n != 32) info("Handler set for interruption: %d\n", n)
 }
 
+static void silent_interrupt_handler(registers* regs) {}
+
+void silence_interrupt(u_byte n) {
+    interruption_handlers[n] = silent_interrupt_handler;
+    if (n != 32) info("Interruption silenced: %d\n", n)
+}
+
 
 
 void isr_handler(registers* regs) {

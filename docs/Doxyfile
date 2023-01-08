@@ -5,7 +5,7 @@
 DOXYFILE_ENCODING = UTF-8
 PROJECT_NAME = "MushOS"
 PROJECT_NUMBER = 0.1
-PROJECT_BRIEF = "Only creating something you can understand completely how it should work"
+PROJECT_BRIEF = "A UNIX-like OS prototype, written from scratch"
 PROJECT_LOGO = "docs/assets/logo.svg"
 
 OUTPUT_DIRECTORY = "docs"
@@ -172,12 +172,6 @@ USE_MDFILE_AS_MAINPAGE = README.md
 # The default value is: NO.
 
 SOURCE_BROWSER = YES
-
-# Setting the INLINE_SOURCES tag to YES will include the body of functions,
-# classes and enums directly into the documentation.
-# The default value is: NO.
-
-INLINE_SOURCES = YES
 
 # Setting the STRIP_CODE_COMMENTS tag to YES will instruct doxygen to hide any
 # special comment blocks from generated source code fragments. Normal C, C++ and

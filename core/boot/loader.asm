@@ -58,10 +58,8 @@ gdt_descriptor: ; Special structure - GDT descriptor is used to transfer info ab
     dd gdt_start ; Position of table in memory.
 
 
-
 CODE_SEG equ gdt_code - gdt_start ; These are the values that CS and DS registers must contain in protected mode.
 DATA_SEG equ gdt_data - gdt_start ; They point to beginning of special segments in GDT.
-
 
 
 read_disk: ; Procedure for reading sectors from disc into memory.
@@ -112,7 +110,6 @@ write_string: ; Procedure for writing string into console.
     ret
 
 
-
 kernel_start: ; Start of booting code.
     mov [BOOT_DRIVE], dl ; BIOS puts number of booting device into DL. Saving it into variable.
 
@@ -153,7 +150,6 @@ kernel_start: ; Start of booting code.
     hlt ; Hanging CPU up.
 
 
-
 [bits 32] ; This segment is compiled in 32-bits mode to be executed in protected CPU mode.
 
 kernel_launch: ; Long jump sets CS to CODE_SEG automatically at this point.
@@ -169,8 +165,6 @@ kernel_launch: ; Long jump sets CS to CODE_SEG automatically at this point.
     mov esp, ebp
 
     call CODE_OFFSET ; Calling pre-loaded C kernel (kernel_gate).
-    ; jmp $
-
 
 
 variables:

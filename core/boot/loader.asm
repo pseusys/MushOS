@@ -150,7 +150,7 @@ kernel_start: ; Start of booting code.
     jmp CODE_SEG:kernel_launch ; Performing long jump to stop all parallel tasks (piping) and force CPU into protected mode.
 
 .loop:
-    jmp $ ; Hanging CPU up. TODO replace with hlt.
+    hlt ; Hanging CPU up.
 
 
 

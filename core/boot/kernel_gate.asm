@@ -4,4 +4,4 @@
 
 call _start ; Calling function.
 
-jmp $ ; Hanging CPU up. TODO replace with hlt.
+hlt ; Hanging CPU up.

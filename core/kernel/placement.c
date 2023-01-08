@@ -17,10 +17,10 @@ void* k_malloc_physical(u_dword sz, boolean align, u_dword *phys) {
     return (void*) tmp;
 }
 
-void* k_malloc(u_dword sz) {
-    return k_malloc_physical(sz, false, nullptr);
-}
-
 void* k_malloc_aligned(u_dword sz, boolean align) {
     return k_malloc_physical(sz, align, nullptr);
+}
+
+void* k_malloc(u_dword sz) {
+    return k_malloc_physical(sz, false, nullptr);
 }

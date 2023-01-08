@@ -1,3 +1,10 @@
+/**
+ * \page libbase MushLib - Base
+ * \section heap Heap
+ *
+ * Some writing you want to appear as a help page in the documentation here.
+ */
+
 #include "heap.h"
 
 #include "memory.h"

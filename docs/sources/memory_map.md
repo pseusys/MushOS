@@ -1,3 +1,5 @@
+# Memory Map
+
 /**
  *           MUSH MEMORY MAP:
  *  ┌────────────────────────────────┐ 0x0
@@ -82,3 +84,4 @@
  *  │        Unused by MushOS        │
  *  │                                │
  */
+

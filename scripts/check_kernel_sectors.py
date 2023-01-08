@@ -1,3 +1,10 @@
+"""
+\page scriptspage Build and Compilation Scripts
+\section checkkernelsectors Check Kernel Sectors
+
+Some writing you want to appear as a help page in the documentation here.
+"""
+
 from lief import parse
 
 from sys import exit
@@ -6,6 +13,9 @@ from argparse import ArgumentParser
 
 
 def error(message: str):
+    """
+    Error function
+    """
     exit(f"\u001b[1;31m{message}\u001b[0m")
 
 

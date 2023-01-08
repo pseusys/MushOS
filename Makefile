@@ -1,6 +1,6 @@
 .DEFAULT_GOAL=run
 
-VERSIONING_FILES = CMakeLists.txt Makefile
+VERSIONING_FILES = CMakeLists.txt Makefile Doxyfile
 CURRENT_VERSION = 0.1
 
 REPLACE_SOURCES = ""
@@ -33,6 +33,11 @@ build_img: prepare_build venv
 .PHONY: build_img
 
 
+doc:
+	doxygen docs/Doxyfile
+.PHONY: doc
+
+
 run: build_img
 	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/artifacts/MushOS.img
 .PHONY: run
@@ -43,6 +48,7 @@ rerun: clean run
 
 clean:
 	rm -rf build
+	rm -rf docs/html
 	rm -rf cmake-build-*
 .PHONY: clean
 

@@ -11,6 +11,7 @@
 #include "timer.h"
 #include "pages.h"
 #include "modules.h"
+#include "pages.h"
 
 
 /**
@@ -48,14 +49,11 @@ void _start() {
     good("Kernel started, build: %s - %s\n", __DATE__, __TIME__)
 
     init_keyboard();
-
     init_module_loading_driver();
-    byte* module = load_module(2, 14);
-    byte* sector = (byte*) 0x7c00;
-
-    for (u_byte i = 0; i <= 15; i++) {
-        info("Module byte %d (%h): %h == %h\n", i, module + i, module[i], sector[i])
-    }
 
     initialise_paging();
+
+    PANIC("Oh no! I'm in panic!!")
+    u_dword *ptr = (u_dword*) 0xA0000000;
+    u_dword do_page_fault = *ptr;
 }

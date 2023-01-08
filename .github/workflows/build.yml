@@ -30,7 +30,7 @@ jobs:
       - name: Build 🛠
         run: make build_img
 
-      - name: Assert artifacts generation ❗
+      - name: Assert system image generation ❗
         uses: andstor/file-existence-action@v2
         with:
           files: "./build/artifacts/MushOS.img"

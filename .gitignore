@@ -1,5 +1,13 @@
-**/.idea/
-**/.vscode/
-**/cmake-build-*/
-**/build/
-**/venv/
+# IDE config directories
+.idea/
+.vscode/
+
+# CMake build directories
+cmake-build-*/
+build/
+
+# Virtual environment directory
+venv/
+
+# Documentation build directory
+docs/html/

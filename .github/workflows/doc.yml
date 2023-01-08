@@ -1,0 +1,39 @@
+name: DOC
+
+on:
+  push:
+
+jobs:
+  codestyle:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Setup GCC 🐃
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          cc: 1
+
+      - name: Setup cmake 📐
+        uses: jwlawson/actions-setup-cmake@v1.13
+
+      - name: Setup Graphviz 📈
+        uses: ts-graphviz/setup-graphviz@v1
+
+      - name: Build docs with Doxygen 📄
+        uses: mattnotmitt/doxygen-action@v1.9.5
+        with:
+            doxyfile-path: docs/Doxyfile
+
+      - name: NoJekyll ❌
+        run: touch docs/html/.nojekyll
+
+      - name: Deploy website 🚀
+        if: ${{ github.ref == 'refs/heads/master' }}
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: docs/html/
+          single-commit: True

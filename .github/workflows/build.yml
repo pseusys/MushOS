@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  codestyle:
+  compile_and_build_system_image:
     runs-on: ubuntu-latest
 
     steps:

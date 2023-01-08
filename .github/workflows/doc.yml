@@ -4,7 +4,7 @@ on:
   push:
 
 jobs:
-  codestyle:
+  generate_and_publish_documentation:
     runs-on: ubuntu-latest
 
     steps:

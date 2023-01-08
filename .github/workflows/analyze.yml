@@ -1,4 +1,4 @@
-name: SonarCloud
+name: ANALYSIS
 
 on:
   push:
@@ -14,6 +14,22 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Setup NASM
+        uses: ilammy/setup-nasm@v1
+
+      - name: Setup GCC
+        uses: egor-tensin/setup-gcc@v1
+        with:
+          cc: 1
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.7
+
+      - name: Setup cmake
+        uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Install sonar-scanner and build-wrapper
         uses: SonarSource/sonarcloud-github-c-cpp@v1

@@ -5,6 +5,7 @@ on:
 
 jobs:
   compile_and_build_system_image:
+    name: Compile and Build System Image
     runs-on: ubuntu-latest
 
     steps:

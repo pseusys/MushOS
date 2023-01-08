@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   generate_and_publish_documentation:
+    name: Generate and Publish Documentation
     runs-on: ubuntu-latest
 
     steps:

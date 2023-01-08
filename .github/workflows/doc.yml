@@ -23,11 +23,11 @@ jobs:
       - name: Setup Graphviz 📈
         uses: ts-graphviz/setup-graphviz@v1
 
-      - name: Render .drawio files
-        uses: docker://ghcr.io/racklet/render-drawio-action:v1
+      - name: Render .drawio Files 🖼️
+        uses: rlespinasse/drawio-export-action@v2
         with:
-          formats: png
-          sub-dirs: docs/assets
+          format: png
+          path: docs/assets
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

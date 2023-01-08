@@ -156,7 +156,7 @@ RECURSIVE = YES
 # that contain images that are to be included in the documentation (see the
 # \image command).
 
-IMAGE_PATH = "docs/assetes"
+IMAGE_PATH = "docs/assets"
 
 USE_MDFILE_AS_MAINPAGE = README.md
 

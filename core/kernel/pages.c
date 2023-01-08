@@ -24,8 +24,6 @@ u_byte* page_pool;
 u_byte* page_tables_pool;
 u_dword page_dirs_pool;
 
-extern u_dword placement_address;
-
 
 
 /*static boolean get_bit(void* frame_address) {
@@ -114,7 +112,8 @@ page_table* allocate_page_table() {
     return nullptr;
 }
 
-/*void free_page_table(page_table* frame) {
+/*
+void free_page_table(page_table* frame) {
     for (int i = 0; i < 1024; ++i) {
         if (frame->pages[i].present) {
             free_page(get_page_pointer(frame->pages[i]));
@@ -212,7 +211,8 @@ page_directory* clone_page_directory(page_directory* dir) {
                 new->tablesPhysical[i] = clone_page_table(dir->tablesPhysical[i]);
         }
     return new;
-}*/
+}
+*/
 
 
 

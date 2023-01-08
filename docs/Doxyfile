@@ -6,7 +6,7 @@ DOXYFILE_ENCODING = UTF-8
 PROJECT_NAME = "MushOS"
 PROJECT_NUMBER = 0.1
 PROJECT_BRIEF = "A UNIX-like OS prototype, written from scratch"
-PROJECT_LOGO = "docs/assets/logo.svg"
+PROJECT_LOGO = "docs/assets/logo.png"
 
 OUTPUT_DIRECTORY = "docs"
 

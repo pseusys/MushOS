@@ -198,23 +198,6 @@ REFERENCED_BY_RELATION = YES
 
 REFERENCES_RELATION = YES
 
-# If the CLANG_ASSISTED_PARSING tag is set to YES then doxygen will use the
-# clang parser (see:
-# http://clang.llvm.org/) for more accurate parsing at the cost of reduced
-# performance. This can be particularly helpful with template rich C++ code for
-# which doxygen's built-in parser lacks the necessary type information.
-# Note: The availability of this option depends on whether or not doxygen was
-# generated with the -Duse_libclang=ON option for CMake.
-# The default value is: NO.
-
-CLANG_ASSISTED_PARSING = YES
-
-# If clang assisted parsing is enabled and the CLANG_ADD_INC_PATHS tag is set to
-# YES then doxygen will add the directory of each input to the include path.
-# The default value is: YES.
-
-CLANG_ADD_INC_PATHS = YES
-
 #---------------------------------------------------------------------------
 # Configuration options related to the alphabetical class index
 #---------------------------------------------------------------------------

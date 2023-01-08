@@ -11,33 +11,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3 🛎️
         with:
           fetch-depth: 0
 
-      - name: Setup NASM
+      - name: Setup NASM 🕸️
         uses: ilammy/setup-nasm@v1
 
-      - name: Setup GCC
+      - name: Setup GCC 🐃
         uses: egor-tensin/setup-gcc@v1
         with:
           cc: 1
 
-      - name: Setup Python
+      - name: Setup Python 🐍
         uses: actions/setup-python@v4
         with:
           python-version: 3.7
 
-      - name: Setup cmake
+      - name: Setup cmake 📐
         uses: jwlawson/actions-setup-cmake@v1.13
 
-      - name: Install sonar-scanner and build-wrapper
+      - name: Install sonar-scanner and build-wrapper 📡
         uses: SonarSource/sonarcloud-github-c-cpp@v1
 
-      - name: Run build-wrapper
+      - name: Run build-wrapper 🏗️
         run: build-wrapper-linux-x86-64 --out-dir analysis make build_img
 
-      - name: Run sonar-scanner
+      - name: Run sonar-scanner 🔎
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

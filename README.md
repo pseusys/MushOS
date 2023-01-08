@@ -1,5 +1,6 @@
 [![BUILD](https://github.com/pseusys/MushOS/actions/workflows/build.yml/badge.svg)](https://github.com/pseusys/MushOS/actions/workflows/build.yml)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4018/badge)](https://bestpractices.coreinfrastructure.org/projects/4018)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pseusys_MushOS&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pseusys_MushOS)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 # MushOS

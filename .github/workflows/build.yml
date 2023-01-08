@@ -25,7 +25,7 @@ jobs:
         with:
           python-version: 3.7
 
-      - name: Setup cmake 📐
+      - name: Setup CMake 📐
         uses: jwlawson/actions-setup-cmake@v1.13
 
       - name: Build 🛠

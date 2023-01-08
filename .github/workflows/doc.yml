@@ -20,7 +20,7 @@ jobs:
             doxyfile-path: docs/Doxyfile
 
       - name: NoJekyll ❌
-        run: touch docs/html/.nojekyll
+        run: sudo touch docs/html/.nojekyll
 
       - name: Deploy website 🚀
         if: ${{ github.ref == 'refs/heads/master' }}

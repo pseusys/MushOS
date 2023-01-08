@@ -11,3 +11,6 @@ venv/
 
 # Documentation build directory
 docs/html/
+
+# Generated images from .drawio sources
+docs/assets/*.png

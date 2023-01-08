@@ -33,9 +33,10 @@ build_img: prepare_build venv
 .PHONY: build_img
 
 
-doc:
+docs:
+	drawio -x -f png -o docs/assets/ docs/assets/
 	doxygen docs/Doxyfile
-.PHONY: doc
+.PHONY: docs
 
 
 run: build_img

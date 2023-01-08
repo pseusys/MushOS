@@ -28,6 +28,7 @@ jobs:
         with:
           format: png
           path: docs/assets
+          action-mode: recent
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
 
       - name: Setup Pages 📄
         uses: actions/configure-pages@v2
@@ -26,12 +24,15 @@ jobs:
         uses: ts-graphviz/setup-graphviz@v1
 
       - name: Render .drawio Files 🖼️
-        uses: rlespinasse/drawio-export-action@v2
+        uses: docker://ghcr.io/racklet/render-drawio-action:v1
         with:
-          format: png
-          path: docs/assets/
-          output: docs/assets/
-          action-mode: all
+          formats: png
+          sub-dirs: docs/assets
+          log-level: info
+        id: render
+
+      - name: List the rendered files
+        run: 'ls -l ${{ steps.render.outputs.rendered-files }}'
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

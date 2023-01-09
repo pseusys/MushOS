@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: Setup Pages 📄
         uses: actions/configure-pages@v2
@@ -28,7 +30,6 @@ jobs:
         with:
           format: png
           path: docs/assets
-          action-mode: recent
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

@@ -25,19 +25,6 @@ u_byte* page_tables_pool;
 u_dword page_dirs_pool;
 
 
-
-/*static boolean get_bit(void* frame_address) {
-    u_dword num = (u_dword) (frame_address - (memory_start / page_size));
-    return (page_pool)[num / 8] & (1u << (num % 8));
-}
-
-static void set_bit(void* frame_address) {
-    u_dword num = (u_dword) (frame_address - (memory_start / page_size));
-    (page_pool)[num / 8] |= (1u << (num % 8));
-}*/
-
-
-
 static page_table* get_page_table_pointer(page_table_pointer table) {
     return (page_table*) (table.frame * page_size);
 }
@@ -90,11 +77,6 @@ static void* allocate_page() {
     return nullptr;
 }
 
-/*static void free_page(void* frame) {
-    u_dword num = (u_dword) (frame - memory_start) / page_size;
-    (page_pool)[num / 8] &= (0xff - (1u << (num % 8)));
-}*/
-
 page_table* allocate_page_table() {
     u_dword number = (page_dirs - page_tables) / sizeof(page_table);
     for (u_dword i = 0; i < number; ++i) {
@@ -111,109 +93,6 @@ page_table* allocate_page_table() {
     }
     return nullptr;
 }
-
-/*
-void free_page_table(page_table* frame) {
-    for (int i = 0; i < 1024; ++i) {
-        if (frame->pages[i].present) {
-            free_page(get_page_pointer(frame->pages[i]));
-        }
-    }
-    u_dword num = (u_dword) ((void*) frame - page_tables) / sizeof(page_table);
-    (page_tables_pool)[num / 8] &= (0xff - (1u << (num % 8)));
-}
-
-page_directory* allocate_page_directory() {
-    if (page_dirs_pool == 0xffffffff) return nullptr;
-    else {
-        for (u_dword i = 0; i < 32; ++i) {
-            if (!(page_dirs_pool & (1u << i))) {
-                page_dirs_pool |= (1u << i);
-                void* address = page_dirs + (i * sizeof(page_directory));
-                memory_clear((byte*) address, sizeof(page_directory), 0);
-                return address;
-            }
-        }
-        return nullptr;
-    }
-}
-
-void free_page_directory(page_directory* frame) {
-    for (int i = 0; i < 1024; ++i) {
-        if (frame->tablesPhysical[i].present && (frame->tablesPhysical[i].frame != kernel_directory->tablesPhysical[i].frame)) {
-            free_page_table(get_page_table_pointer(frame->tablesPhysical[i]));
-        }
-    }
-    u_dword position = ((void*) frame - page_dirs) / sizeof(page_directory);
-    page_dirs_pool &= (0xffffffff - (1u << position));
-}
-
-
-
-page_pointer clone_page(page_pointer page) {
-    byte* new = allocate_page();
-    byte* old = get_page_pointer(page);
-    memory_copy(old, new, page_size);
-    u_dword old_tail = 0u;
-    old_tail |= (u_dword) (page.global << 8u);
-    old_tail |= (u_dword) (page.dirty << 6u);
-    old_tail |= (u_dword) (page.accessed << 5u);
-    old_tail |= (u_dword) (page.cache << 4u);
-    old_tail |= (u_dword) (page.write << 3u);
-    old_tail |= (u_dword) (page.user << 2u);
-    old_tail |= (u_dword) (page.rw << 1u);
-    old_tail |= page.present;
-    page_pointer new_pointer = create_page_entry(new, old_tail);
-    return new_pointer;
-}
-
-page_table_pointer clone_page_table(page_table_pointer table) {
-    page_table* new = allocate_page_table();
-    page_table* old = get_page_table_pointer(table);
-    for (int i = 0; i < 1024; ++i) {
-        if (old->pages[i].present) {
-            new->pages[i] = clone_page(old->pages[i]);
-        }
-    }
-    u_dword old_tail = 0u;
-    old_tail |= (u_dword) (table.size << 7u);
-    old_tail |= (u_dword) (table.accessed << 5u);
-    old_tail |= (u_dword) (table.cache << 4u);
-    old_tail |= (u_dword) (table.write << 3u);
-    old_tail |= (u_dword) (table.user << 2u);
-    old_tail |= (u_dword) (table.rw << 1u);
-    old_tail |= table.present;
-    page_table_pointer new_pointer = create_page_table_entry(new, old_tail);
-    return new_pointer;
-}
-
-page_table_pointer link_page_table(page_table_pointer table) {
-    page_table* old = get_page_table_pointer(table);
-    u_dword old_tail = 0u;
-    old_tail |= (u_dword) (table.size << 7u);
-    old_tail |= (u_dword) (table.accessed << 5u);
-    old_tail |= (u_dword) (table.cache << 4u);
-    old_tail |= (u_dword) (table.write << 3u);
-    old_tail |= (u_dword) (table.user << 2u);
-    old_tail |= (u_dword) (table.rw << 1u);
-    old_tail |= table.present;
-    page_table_pointer new_pointer = create_page_table_entry(old, old_tail);
-    return new_pointer;
-}
-
-page_directory* clone_page_directory(page_directory* dir) {
-    page_directory* new = allocate_page_directory();
-    for (int i = 0; i < 1024; ++i)
-        if (dir->tablesPhysical[i].present) {
-            if (kernel_directory->tablesPhysical[i].frame == dir->tablesPhysical[i].frame)
-                new->tablesPhysical[i] = link_page_table(dir->tablesPhysical[i]);
-            else
-                new->tablesPhysical[i] = clone_page_table(dir->tablesPhysical[i]);
-        }
-    return new;
-}
-*/
-
 
 
 static page_pointer* get_page(u_dword address, u_dword make_tail, page_directory *dir) {

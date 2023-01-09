@@ -24,20 +24,15 @@ jobs:
         uses: ts-graphviz/setup-graphviz@v1
 
       - name: Render .drawio Files 🖼️
-        uses: docker://ghcr.io/racklet/render-drawio-action:v1
-        with:
-          args: '"--sub-dirs=docs/assets" "--formats=png"'
-
-      - name: Render .drawio Files
         uses: rlespinasse/drawio-export-action@v2
         with:
             format: png
             path: docs/assets
-            output: docs/output
+            output: .
             action-mode: all
 
-      - name: Search for output
-        run: cd docs/output && ls
+      - name: Rename Files 📛
+        run: for f in docs/assets/*.png; do mv "$f" "$(echo "$f" | sed 's/-Page-[0-9]\+//g')"; done
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

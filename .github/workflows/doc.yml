@@ -26,7 +26,7 @@ jobs:
       - name: Render .drawio Files 🖼️
         uses: docker://ghcr.io/racklet/render-drawio-action:v1
         with:
-          args: "--sub-dirs=docs/assets" "--formats=png"
+          args: '"--sub-dirs=docs/assets" "--formats=png"'
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

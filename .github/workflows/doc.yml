@@ -29,8 +29,9 @@ jobs:
         uses: rlespinasse/drawio-export-action@v2
         with:
           format: png
-          path: docs/assets
-          output: docs/assets
+          path: docs/assets/
+          output: docs/assets/
+          action-mode: all
 
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5

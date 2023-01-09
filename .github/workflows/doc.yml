@@ -28,6 +28,17 @@ jobs:
         with:
           args: '"--sub-dirs=docs/assets" "--formats=png"'
 
+      - name: Render .drawio Files
+        uses: rlespinasse/drawio-export-action@v2
+        with:
+            format: png
+            path: docs/assets
+            output: docs/output
+            action-mode: all
+
+      - name: Search for output
+        run: cd docs/output && ls
+
       - name: Build docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5
         with:

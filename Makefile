@@ -6,6 +6,8 @@ CURRENT_VERSION = 0.1
 REPLACE_SOURCES = ""
 ADD_SOURCES = ""
 
+VERSION_INCREMENT = "patch"
+
 PATH := venv/bin:$(PATH)
 
 
@@ -34,6 +36,7 @@ build_img: prepare_build venv
 
 
 docs:
+	rm -rf docs/assets/*.png
 	drawio -x -f png -o docs/assets/ docs/assets/
 	doxygen docs/Doxyfile
 .PHONY: docs
@@ -47,9 +50,15 @@ rerun: clean run
 .PHONY: rerun
 
 
+version: venv
+	bump2version --current-version $(CURRENT_VERSION) $(VERSION_INCREMENT) $(VERSIONING_FILES)
+.PHONY: version
+
+
 clean:
 	rm -rf build
 	rm -rf docs/html
+	rm -rf docs/assets/*.png
 	rm -rf cmake-build-*
 .PHONY: clean
 

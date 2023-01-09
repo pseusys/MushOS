@@ -1,3 +1,3 @@
 # Memory Map
 
-![MushOS Memory Map](../assets/memory_map.png)
+![MushOS Memory Map](memory_map.png)

@@ -130,7 +130,7 @@ typedef enum {
 
 static void screen_callback(registers* regs) {
     u_dword call_type, ret_value = 0;
-    orbital_get_arg(regs->ebp, 0, call_type)
+    system_get_arg(regs->ebp, 0, call_type)
     switch (call_type) {
         case GET_CHAR: {
             ret_value = get_char((screen_coords) {0, 0});
@@ -138,18 +138,18 @@ static void screen_callback(registers* regs) {
         }
         case SET_CHAR: {
             u_dword character, front_color, back_color;
-            orbital_get_arg(regs->ebp, 1, character)
-            orbital_get_arg(regs->ebp, 2, front_color)
-            orbital_get_arg(regs->ebp, 3, back_color)
+            system_get_arg(regs->ebp, 1, character)
+            system_get_arg(regs->ebp, 2, front_color)
+            system_get_arg(regs->ebp, 3, back_color)
             print_char_color(character, front_color, back_color);
             break;
         }
         case SET_CHARS: {
             u_dword str, front_color, back_color, length;
-            orbital_get_arg(regs->ebp, 1, str)
-            orbital_get_arg(regs->ebp, 2, front_color)
-            orbital_get_arg(regs->ebp, 3, back_color)
-            orbital_get_arg(regs->ebp, 4, length)
+            system_get_arg(regs->ebp, 1, str)
+            system_get_arg(regs->ebp, 2, front_color)
+            system_get_arg(regs->ebp, 3, back_color)
+            system_get_arg(regs->ebp, 4, length)
             print_string_color((mod_string) str, front_color, back_color, length);
         }
         case GET_CURSOR: {
@@ -158,7 +158,7 @@ static void screen_callback(registers* regs) {
         }
         case SET_CURSOR: {
             u_dword offset;
-            orbital_get_arg(regs->ebp, 1, offset)
+            system_get_arg(regs->ebp, 1, offset)
             set_cursor_offset(offset);
             break;
         }
@@ -168,7 +168,7 @@ static void screen_callback(registers* regs) {
         default:
             break;
     }
-    orbital_push(regs->ebp, ret_value)
+    system_push(regs->ebp, ret_value)
 }
 
 

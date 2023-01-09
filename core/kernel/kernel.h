@@ -5,7 +5,7 @@
 
 
 #define PANIC(message) {\
-    call_orbit(48, 5, 2, message, HIGH_RED, BLACK, 0)\
+    call_system(48, 5, 2, message, HIGH_RED, BLACK, 0)\
     asm("jmp .");\
 }
 

@@ -5,11 +5,11 @@
 #include "vararg.h"
 
 
-#define call_orbit(interruption, args_num, arguments...) {\
+#define call_system(interruption, args_num, arguments...) {\
     asm volatile ("pusha");\
-    u_dword* args_orbital = get_args(args_num, ## arguments);\
-    for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args_orbital[i]));\
-    free(args_orbital);\
+    u_dword* args = get_args(args_num, ## arguments);\
+    for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
+    free(args);\
     asm volatile (\
         "push %%ebp\n"\
         "mov %%esp, %%ebp\n"\
@@ -21,11 +21,11 @@
     asm volatile ("popa");\
 }
 
-#define call_orbit_ret(interruption, ret_value, args_num, arguments...) {\
+#define call_system_ret(interruption, ret_value, args_num, arguments...) {\
     asm volatile ("pusha");\
-    u_dword* args_orbital = get_args(args_num, ## arguments);\
-    for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args_orbital[i]));\
-    free(args_orbital);\
+    u_dword* args = get_args(args_num, ## arguments);\
+    for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
+    free(args);\
     asm volatile (\
         "push %%ebp\n"\
         "mov %%esp, %%ebp\n"\
@@ -39,10 +39,10 @@
 
 
 
-#define orbital_get_arg(stack_base, arg_num, ret_val)\
+#define system_get_arg(stack_base, arg_num, ret_val)\
     asm volatile ("mov (%1), %0" : "=r" (ret_val) : "r" (stack_base + 4 + arg_num * sizeof(u_dword)));
 
-#define orbital_push(stack_base, value) {\
+#define system_push(stack_base, value) {\
     u_dword position = stack_base + 4;\
     asm volatile ("mov %1, (%0)" :: "r" (position), "r" (value));\
 }

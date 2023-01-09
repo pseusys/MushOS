@@ -18,15 +18,15 @@ typedef enum {
 
 
 void print_char (char c, console_color front, console_color back) {
-    call_orbit(48, 4, 1, c, front, back)
+    call_system(48, 4, 1, c, front, back)
 }
 
 void print_text (string str, byte text_color, byte back_color) {
-    call_orbit(48, 5, 2, str, text_color, back_color, 0)
+    call_system(48, 5, 2, str, text_color, back_color, 0)
 }
 
 void print_n_text (string str, byte text_color, byte back_color, u_dword length) {
-    if (length > 0) call_orbit(48, 5, 2, str, text_color, back_color, length)
+    if (length > 0) call_system(48, 5, 2, str, text_color, back_color, length)
 }
 
 static void print_atom(u_byte b, u_dword front, u_dword back, system sys) {

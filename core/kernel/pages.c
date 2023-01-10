@@ -3,161 +3,103 @@
 #include "../../lib/base/generic.h"
 #include "../../lib/base/stdio.h"
 #include "../../lib/base/memory.h"
+#include "../../lib/base/heap.h"
 
 #include "../drivers/screen.h"
 
-#include "placement.h"
 
+#define paging_pool_start 0x100000
+#define paging_pool_end 0xf00000
+
+#define user_space_start 0x1000000
+#define user_space_end 0x10000000
 
 #define page_size 0x1000
-
-page_directory* kernel_directory, * current_directory;
-u_dword orbit_start = 0x100000;
-u_dword memory_start = 0x200000;
-u_dword memory_end = 0xf00000;
-u_dword memory_edge = 0x1000000;
-
-void* page_dirs = (void*) 0x60000;
-void* page_tables = (void*) 0x20000;
-
-u_byte* page_pool;
-u_byte* page_tables_pool;
-u_dword page_dirs_pool;
+#define full_byte 0xff
 
 
-static page_table* get_page_table_pointer(page_table_pointer table) {
-    return (page_table*) (table.frame * page_size);
+page_folder* kernel_directory, * current_directory;
+void* page_dirs, * page_tables;
+byte* paging_pool, * user_space_pool;
+
+
+static u_dword get_free_bit(u_byte search) {
+    if (search == full_byte) return search;
+    for (u_dword i = 0; i < 8; ++i) if (!(search & (1u << i))) return i;
 }
 
-static page_table_pointer create_page_table_entry(page_table* pointer, u_dword tail) {
-    page_table_pointer page_table;
-    page_table.frame = (u_dword) pointer / page_size;
-    page_table.size = ((tail & 0x00000080u) == 0) ? 0 : 1;
-    page_table.accessed = ((tail & 0x00000020u) == 0) ? 0 : 1;
-    page_table.cache = ((tail & 0x00000010u) == 0) ? 0 : 1;
-    page_table.write = ((tail & 0x00000008u) == 0) ? 0 : 1;
-    page_table.user = ((tail & 0x00000004u) == 0) ? 0 : 1;
-    page_table.rw = ((tail & 0x00000002u) == 0) ? 0 : 1;
-    page_table.present = ((tail & 0x00000001u) == 0) ? 0 : 1;
-    return page_table;
-}
-
-static void* get_page_pointer(page_pointer page) {
+static void* get_contents_as_page(page_pointer page) {
     return (void*) (page.frame * page_size);
 }
 
-static page_pointer create_page_entry(const byte* pointer, u_dword tail) {
+static page_pointer* get_contents_as_table(page_pointer page) {
+    return (page_pointer*) (page.frame * page_size);
+}
+
+
+static void* allocate_frame() {
+    for (u_dword i = 0; i < size_of(user_space_pool); ++i) {
+        u_dword free_bit = get_free_bit(user_space_pool[i]);
+        if (free_bit != full_byte) {
+            user_space_pool[i] |= (1u << free_bit);
+            return (void *) (user_space_start + (i * 8 + free_bit) * page_size);
+        }
+    }
+    return nullptr; // TODO: raise out of RAM exception!
+}
+
+static page_folder* allocate_page_folder() {
+    for (u_dword i = 0; i < size_of(paging_pool); ++i) {
+        u_dword free_bit = get_free_bit(paging_pool[i]);
+        if (free_bit != full_byte) {
+            paging_pool[i] |= (1u << free_bit);
+            void* address = (void *) (paging_pool_start + (i * 8 + free_bit) * page_size);
+            memory_clear((byte*) address, page_size, 0);
+            return address;
+        }
+    }
+    return nullptr; // TODO: raise out of RAM exception!
+}
+
+static void free_frame(void* address) {
+    u_dword index = (u_dword) address - user_space_start;
+    user_space_pool[index / 8] &= ~(0x1 << (index % 8));
+}
+
+static void free_page_table(page_folder* table, boolean top_level) {
+    u_dword index = (u_dword) table - paging_pool_start;
+    paging_pool[index / 8] &= ~(0x1 << (index % 8));
+    for (u_dword i = 0; i < pages_in_table; i++) {
+        void* contents = get_contents_as_page(table->contents[i]);
+        if (top_level) free_page_table((page_folder*) contents, false);
+        else free_frame(contents);
+    }
+}
+
+
+static page_pointer create_page_entry(const void* address, boolean is_kernel, boolean is_writeable) {
     page_pointer page_table;
-    page_table.frame = (u_dword) pointer / page_size;
-    page_table.global = ((tail & 0x00000100u) == 0) ? 0 : 1;
-    page_table.dirty = ((tail & 0x00000040u) == 0) ? 0 : 1;
-    page_table.accessed = ((tail & 0x00000020u) == 0) ? 0 : 1;
-    page_table.cache = ((tail & 0x00000010u) == 0) ? 0 : 1;
-    page_table.write = ((tail & 0x00000008u) == 0) ? 0 : 1;
-    page_table.user = ((tail & 0x00000004u) == 0) ? 0 : 1;
-    page_table.rw = ((tail & 0x00000002u) == 0) ? 0 : 1;
-    page_table.present = ((tail & 0x00000001u) == 0) ? 0 : 1;
+    page_table.frame = (u_dword) address / page_size;
+    page_table.user = is_kernel ? 0 : 1;
+    page_table.rw = is_writeable ? 1 : 0;
+    page_table.present = 1;
     return page_table;
 }
 
-
-
-static void* allocate_page() {
-    u_dword num = (memory_end - orbit_start) / page_size;
-    for (u_dword i = 0; i < num; ++i) {
-        if (page_pool[i] != 0xff) {
-            for (u_dword j = 0; j < 8; ++j) {
-                if (!(page_pool[i] & (1u << j))) {
-                    page_pool[i] |= (1u << j);
-                    return (void *) (orbit_start + (i * 8 * page_size) + (j * page_size));
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
-page_table* allocate_page_table() {
-    u_dword number = (page_dirs - page_tables) / sizeof(page_table);
-    for (u_dword i = 0; i < number; ++i) {
-        if (page_tables_pool[i] != 0xff) {
-            for (u_dword j = 0; j < 8; ++j) {
-                if (!(page_tables_pool[i] & (1u << j))) {
-                    page_tables_pool[i] |= (1u << j);
-                    page_table* address = (page_table *) (page_tables + (i * 8 * sizeof(page_table)) + (j * sizeof(page_table)));
-                    memory_clear((byte*) address, sizeof(page_table), 0);
-                    return address;
-                }
-            }
-        }
-    }
-    return nullptr;
-}
-
-
-static page_pointer* get_page(u_dword address, u_dword make_tail, page_directory *dir) {
-    if (address > memory_end) return nullptr;
+static page_pointer* get_page(u_dword address, boolean make, page_folder *dir) {
+    if (address > user_space_end) return nullptr; // 
     // Turn the address into an index.
     address /= page_size;
     // Find the page table containing this address.
-    u_dword table_idx = address / 1024;
-    if (get_page_table_pointer(dir->tablesPhysical[table_idx])) { // If this table is already assigned
-        return &get_page_table_pointer(dir->tablesPhysical[table_idx])->pages[address % 1024];
-    } else if (make_tail) {
-        page_table* page_table_pointer = nullptr;
-        if ((address < orbit_start) || (address >= memory_end))
-            page_table_pointer = (page_table*) k_malloc_aligned(sizeof(page_table), true);
-        else page_table_pointer = allocate_page_table();
-        dir->tablesPhysical[table_idx] = create_page_table_entry(page_table_pointer, make_tail);
-        memory_clear((byte*) page_table_pointer, sizeof(page_table), 0);
-        return &get_page_table_pointer(dir->tablesPhysical[table_idx])->pages[address % 1024];
-    } else return nullptr;
+    u_dword table_idx = address / pages_in_table;
+
+    u_dword entry = (u_dword) get_contents_as_page(dir->contents[table_idx]);
+    if (!entry) { // If this table is already assigned
+        if (!make) return nullptr; // TODO: throw page doesn't exist exception.
+        else dir->contents[table_idx] = create_page_entry((void*) allocate_page_folder(), true, true);
+    }
+    return &get_contents_as_table(dir->contents[table_idx])[address % pages_in_table];
 }
-
-void* get_page_address(u_dword address) {
-    page_pointer* ptr = get_page((u_dword) address, 0x00000003, current_directory);
-    if (ptr) {
-        *ptr = create_page_entry((const byte*) address, 0x00000003);
-        return (u_dword*) get_page_pointer(*ptr);
-    } else return nullptr;
-}
-
-
-
-void initialise_paging() {
-    // The size of physical memory. For the moment we
-    // assume it is 16MB big.
-    u_dword page_pool_size = (memory_end - orbit_start) / page_size / 8;
-    page_pool = k_malloc_aligned(page_pool_size, false);
-    memory_clear((byte*) page_pool, page_pool_size, 0);
-
-    u_dword page_table_pool_size = (page_dirs - page_tables) / sizeof(page_table) / 8;
-    page_pool = k_malloc_aligned(page_table_pool_size, false);
-    memory_clear((byte*) page_pool, page_table_pool_size, 0);
-
-    // Let's make a page directory.
-    kernel_directory = (page_directory*) k_malloc_aligned(sizeof(page_directory), true);
-    memory_clear((byte*) kernel_directory, sizeof(page_directory), 0);
-
-    for (u_dword j = 0; j < orbit_start; j += page_size)
-        *get_page(j, 0x00000003, kernel_directory) = create_page_entry((const byte*) j, 0x00000003);
-    for (u_dword j = memory_end; j < memory_edge; j += page_size)
-        *get_page(j, 0x00000003, kernel_directory) = create_page_entry((const byte*) j, 0x00000003);
-
-    // Before we enable paging, we must register our page fault handler.
-    set_interrupt_handler(14, page_fault);
-
-    current_directory = kernel_directory;
-
-    // Now, enable paging!
-    asm volatile("mov %0, %%cr3":: "r"(&current_directory->tablesPhysical));
-    u_dword cr0, cr3;
-    asm volatile("mov %%cr3, %0": "=r"(cr3));
-    asm volatile("mov %%cr0, %0": "=r"(cr0));
-    cr0 |= 0x80000001; // Enable paging!
-    asm volatile("mov %0, %%cr0":: "r"(cr0));
-}
-
 
 
 void page_fault(registers* regs) {
@@ -181,4 +123,40 @@ void page_fault(registers* regs) {
     if (reserved) bad("reserved ")
     bad(") at %h (EIP: %h)\n", faulting_address, regs->eip)
     asm("jmp .");
+}
+
+
+void switch_page_directory(page_folder *dir) {
+    u_dword cr0;
+    current_directory = dir;
+    asm volatile("mov %0, %%cr3":: "r"(&dir->contents));
+    asm volatile("mov %%cr0, %0": "=r"(cr0));
+    cr0 |= 0x80000000; // Enable paging!
+    asm volatile("mov %0, %%cr0":: "r"(cr0));
+}
+
+void initialise_paging() {
+    // The size of physical memory. For the moment we
+    // assume it is 256MB big.
+    u_dword paging_pool_size = (paging_pool_end - paging_pool_start) / page_size / 8;
+    paging_pool = malloc(paging_pool_size);
+    memory_clear((byte*) paging_pool, paging_pool_size, 0);
+
+    u_dword user_space_pool_size = (user_space_end - user_space_start) / page_size / 8;
+    user_space_pool = malloc(user_space_pool_size);
+    memory_clear((byte*) user_space_pool, user_space_pool_size, 0);
+
+    // Let's make a page directory.
+    kernel_directory = (page_folder*) allocate_page_folder();
+    memory_clear((byte*) kernel_directory, page_size, 0);
+    current_directory = kernel_directory;
+
+    for (u_dword j = 0; j < user_space_start; j += page_size)
+        *get_page(j, true, kernel_directory) = create_page_entry((const byte*) j, true, false);
+
+    // Before we enable paging, we must register our page fault handler.
+    set_interrupt_handler(14, page_fault);
+
+    // Now, enable paging!
+    switch_page_directory(kernel_directory);
 }

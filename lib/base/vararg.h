@@ -3,7 +3,7 @@
 
 #include "heap.h"
 
-
+// TODO: check stack base with error!
 #define args_init_from(args, skip) {\
     u_dword stack_offset = 8 + skip;\
     for (int i = 0; i < size_of(args); ++i) {\

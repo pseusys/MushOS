@@ -31,6 +31,7 @@ jobs:
             output: .
             action-mode: all
 
+        # WARNING! This step implies all of the .drawio sources are ONE PAGE diagrams only!
       - name: Rename Files 📛
         run: for f in docs/assets/*.png; do mv "$f" "$(echo "$f" | sed 's/-.\+-[0-9]\+//g')"; done
 

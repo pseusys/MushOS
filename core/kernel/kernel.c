@@ -14,6 +14,11 @@
 #include "pages.h"
 
 
+#define kernel_heap_start 0x50000
+#define kernel_heap_size 0x80000
+
+#define kernel_timer_step 100
+
 /**
  * Make kernel constants:
  *
@@ -39,10 +44,10 @@
  */
 
 void _start() {
-    initialize_heap((void*) 0x500, 0x6000);
+    initialize_heap((void*) kernel_heap_start, kernel_heap_size);
 
     init_interruptions();
-    init_timer(100);
+    init_timer(kernel_timer_step);
     init_screen_io();
 
     init_debug_handler();

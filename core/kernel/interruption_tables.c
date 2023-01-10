@@ -7,7 +7,9 @@
 #include "../drivers/ports_io.h"
 
 #include "interruptions.h"
-#include "placement.h"
+
+
+#define interruptions_placement 0x500
 
 
 IDT* idt_table;
@@ -35,7 +37,7 @@ static void create_idt_entry (u_dword pos, u_dword base, u_word selector, u_byte
 }
 
 void init_interruptions() {
-    idt_table = k_malloc_aligned(sizeof(IDT), false);
+    idt_table = (IDT*) interruptions_placement;
     memory_clear((byte *) idt_table->entries, 256 * sizeof(IDT_entry), 0);
 
     u_word CS = 0x08;

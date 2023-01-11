@@ -58,7 +58,7 @@ static void print_float(float b, u_dword front, u_dword back, system sys, u_dwor
             print_float(b / (float) sys, front, back, sys, after_comma - 1);
             print_atom(symbol, front, back, sys);
         }
-    }
+    } else print_int((u_dword) b, front, back, sys);
 }
 
 static void print_boolean(boolean b, u_dword front, u_dword back) {

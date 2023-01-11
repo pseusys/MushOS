@@ -1,1 +1,100 @@
-<mxfile host="app.diagrams.net" modified="2023-01-10T00:39:42.878Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Safari/537.36" etag="ixqGqaLm8v_vnBAn2Z8-" version="20.8.3" type="device"><diagram id="odtlT9COsLVvr1XrGEwN" name="Страница 1">7Ztbd6I6FMc/jY+dxUVRH720jmuO06m2c+p5y4EIWQViY1A8n34SCAqCo7VKHA8vLdm5QPb/l52QSE3veeGAgLkzwhZ0a5pihTW9X9O0Vkthf7lhHRvqDTU22ARZsSllmKD/oDCKenaALLjIFKQYuxTNs0YT+z40acYGCMGrbLEZdrN3nQMb5gwTE7h569/Ioo7oltbc2r9CZDvJnVWjHed4ICkserJwgIVXKZN+X9N7BGMaX3lhD7rcd4lf4noPe3I3D0agT4+p8PBC3sd0ZL44r2P7xW6HT+PHO7UVN7MEbiB6LJ6WrhMXEBz4FuStKDW9u3IQhZM5MHnuimnObA71XJZS2aUFFk5Ulidm2KcPwEMuF/8nJBbwgTALpVWDpReU4DfYwy4mzORjn+V0890TPV5CQmGYMonuDiD2ICVrVkTkGsLzAj2tESdXWx31hijipDQ0WqIgEOzYm5a37mUXwsMf8LZe4GzDpcIlHM/Yrcz6HnAuuonTNoaMNImR175bRB7tsAKqMQ+jottKhs3/d4ePE/6MPoWEBHOKsL9InoB1KH6IuOjnKMgIPwAksHZ017XzSNzKStxWchJr9QKJE9nPrnDjkMIHxdPqe8QbBQuHxxXo4cgDHnd651j5mD9pVqPCUTdDrrtjAi6yfZY0IceGGbg6iEXIjsjwkGXx2xRCkcUmw8UDgXACCZpl0dDqF0GjfiQa+qXQMCQP/mH/mWXf+7GTnsG/rJ2Lj/2/AhOxsa8pPRZqcETJ5aOAeqzWFwsDTdmBnq8qNGXCVkRsKLMO+hb7O+AE3KTiR4/uiyletI4qU/FvkPjRyrvfeWYFWSeU7mQSX0BqfrlV4aXP+O1rEb7HXr1uVGVd+vBOXkfly/wVMn1uU+a6fJlVyTKLN7QxXECyhHzSHon1/m0qLj18q5pkxX8AG/n2rQvdkD+0ZW++DCePKZWVwc2G8Yb8QZ3fhnlhAZW/EUV+u87NkVO2Ts+vniF/pBbtlOwoBn2rw3f3t0pkvJdS8jcbUPvdCkNEX0UVfj0VjfHrfpjK6K9FYq8QCxwQEVd+Dyu0MicReb1SghRtWyc2Al1A0RJmnqJIJHGHHxhF4U/goO/g0N6ROe6PqLRVOtfOPqySdiggNqS5diJiNp3+BERFWzAlQ8S32l4TcnhimpDDE1uOotQ6RdVrCrcy0Iu1+IMYPRekurbT0G5QuzSlB3cPDq83tNx6I7+S6TF/oGgC/A5X+aWJEirlnSO4cEb/yIlyl7pmfqJsFjC/G/jONk9qB1e0JcHTUCp8Po6Pqsnmp34l/DTNCqATANKkA/T50+7zANRSKoBOAUj6DHbwTLwkgEAF0CkA6dIj0MGD9vKWQBVBJxBUl07QwYP7EuewiqATCJI+iV3LO7yqVAidhFBDdhBKnkc6QrMKoRMRkh2F9IO/XCg1ClUMfZwho8QwNFw+dd77s7YDHp+n5nr9RL47d7J//DL0ER2zesoIW4ELS/g0Qc6v2co8Hy8UWruSWKFXkeK09+6m9iX/MdOlYoXpfvNWb7Tfmq7X4egn+Gc5nkqPFZvfQ04oMN+uKFLkVC3Q/ugPGcqMFIUyX0ukUP83Z0yf4id3xnS5ZSlLbr9djc/Dtx8A6/e/AA==</diagram></mxfile>
+<mxfile host="65bd71144e">
+    <diagram id="odtlT9COsLVvr1XrGEwN" name="Страница 1">
+        <mxGraphModel dx="564" dy="455" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-18" value="" style="rounded=0;whiteSpace=wrap;html=1;dashed=1;fontFamily=Verdana;fontSize=16;strokeColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="60" y="25" width="350" height="685" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-3" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;BIOS interruptions&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Garuda;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="90" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-5" value="&lt;font style=&quot;font-size: 22px;&quot;&gt;Mush memory map:&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontFamily=FreeSerif;fontSize=22;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="40" width="240" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-6" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;IDT Entry Table&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="140" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-7" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Boot Sector and GDT&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="240" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-8" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Kernel DATA, BSS, etc.&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="290" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-9" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Kernel Code&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="340" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-10" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Kernel Heap&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="440" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-11" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;BIOS Reserved Memory&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="490" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-12" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Paging Memory&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="540" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-13" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;ISO Memory Gap&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="590" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-15" value="User Space" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="640" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-16" value="" style="endArrow=none;dashed=1;html=1;rounded=0;fontFamily=Verdana;fontSize=16;exitX=0;exitY=1;exitDx=0;exitDy=0;" parent="1" source="FUrqRtMcUhXRgUg9xQRO-15" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="30" y="690" as="sourcePoint"/>
+                        <mxPoint x="80" y="640" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-17" value="" style="endArrow=none;dashed=1;html=1;rounded=0;fontFamily=Verdana;fontSize=16;entryX=1;entryY=0;entryDx=0;entryDy=0;exitX=1;exitY=1;exitDx=0;exitDy=0;" parent="1" source="FUrqRtMcUhXRgUg9xQRO-15" target="FUrqRtMcUhXRgUg9xQRO-15" edge="1">
+                    <mxGeometry width="50" height="50" relative="1" as="geometry">
+                        <mxPoint x="330" y="690" as="sourcePoint"/>
+                        <mxPoint x="320" y="650" as="targetPoint"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-19" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x0&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="70" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-23" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x500&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="120" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-24" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x7c00&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="220" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-25" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x8000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="270" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-26" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0xa000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="320" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-27" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x50000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="420" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-28" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x80000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="470" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-29" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x100000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="520" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-30" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0xf00000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="570" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="FUrqRtMcUhXRgUg9xQRO-31" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x1000000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="620" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="IvQAqDf9haOTYcyyQrNh-1" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;InitRD Modules&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="390" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="IvQAqDf9haOTYcyyQrNh-2" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x30000&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="372.5" width="70" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="clKmwktD8YyyxMVaZvRY-1" value="&lt;font face=&quot;Verdana&quot; style=&quot;font-size: 16px;&quot;&gt;Kernel Stack&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontSize=32;" parent="1" vertex="1">
+                    <mxGeometry x="80" y="190" width="240" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="clKmwktD8YyyxMVaZvRY-2" value="&lt;font style=&quot;font-size: 12px;&quot; face=&quot;Courier New&quot;&gt;0x1500&lt;/font&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;dashed=1;fontFamily=Verdana;fontSize=16;" parent="1" vertex="1">
+                    <mxGeometry x="330" y="170" width="70" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

@@ -1,15 +1,15 @@
 # Define maximum sizes for all sections present in kernel ELF file
 set (KERNEL_MAX_GOT_PLT 100)
 set (KERNEL_MAX_DATA 400)
-set (KERNEL_MAX_BSS 500)
-set (KERNEL_MAX_RODATA 500)
+set (KERNEL_MAX_BSS 1000)
+set (KERNEL_MAX_RODATA B00)
 set (KERNEL_MAX_TEXT 26000)
 
 # Define virtual addresses for all sections present in kernel ELF file
 set (KERNEL_START_GOT_PLT 8000)
 set (KERNEL_START_DATA 8100)
 set (KERNEL_START_BSS 8500)
-set (KERNEL_START_RODATA 8A00)
+set (KERNEL_START_RODATA 9500)
 set (KERNEL_START_TEXT A000)
 
 

@@ -7,6 +7,8 @@
 
 #include "../drivers/screen.h"
 
+#include "kernel.h"
+
 
 #define paging_pool_start 0x100000
 #define paging_pool_end 0xf00000
@@ -122,7 +124,7 @@ void page_fault(registers* regs) {
     if (us) bad("user-mode ")
     if (reserved) bad("reserved ")
     bad(") at %h (EIP: %h)\n", faulting_address, regs->eip)
-    asm("jmp .");
+    PANIC("Page fault!")
 }
 
 

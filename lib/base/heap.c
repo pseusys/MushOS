@@ -8,6 +8,11 @@
 #include "heap.h"
 
 #include "memory.h"
+#include "exceptions.h"
+
+
+#define heap_exception_id 0x10
+#define heap_exception_type "Heap Exception"
 
 
 /**
@@ -37,7 +42,7 @@ static heap_block_header* get_header(void* structure) {
  */
 u_dword size(void* structure) {
     if (structure > header->heap_start && structure < header->heap_end) return get_header(structure)->size;
-    else ; // TODO: throw exception: requested structure is outside of the heap!
+    else throw_verbose(heap_exception_id, heap_exception_type, "Requested structure is located outside of the heap!")
 }
 
 
@@ -63,6 +68,14 @@ static void* allocate_space(void* free_pointer, u_dword size, heap_block_header*
 }
 
 
+/**
+ * Heap exception can't be handled regularily: handling requires heap.
+ * So, heap exception terminate app without any on-screen explanation.
+ */
+void handle_heap_exception() {
+    terminate(heap_exception_id);
+}
+
 
 /**
  * Function for heap initialization, sets up singleton heap header.
@@ -77,6 +90,7 @@ void initialize_heap(void* start_address, u_dword size) {
     header->heap_start = start_address + sizeof(heap_header);
     header->heap_end = start_address + size;
     header->first_address = nullptr;
+    handle_exceptions(heap_exception_id, handle_heap_exception);
 }
 
 /**
@@ -124,7 +138,7 @@ void* malloc(u_dword size) {
         void* final_address = nullptr;
         if (best_address != nullptr) final_address = allocate_space(best_address, size, best_previous, best_next);
         if (best_address == header->heap_start) header->first_address = final_address;
-        if (final_address == nullptr) ; // TODO: Throw allocation exception, exception handling in kernel -> panic.
+        if (final_address == nullptr) throw_verbose(heap_exception_id, heap_exception_type, "No space left in heap available for allocation!")
         return final_address;
 
     } else {

@@ -33,8 +33,6 @@ void print_colored(console_color font, console_color back, string format, ...);
 #define info(temp, args...) print_colored(HIGH_BLUE, BLACK, temp, ## args);
 #define plain(temp, args...) print_colored(LIGHT_GRAY, BLACK, temp, ## args);
 
-#define locate(text, back) print_colored(text, back, "%s - %d: ", __FILE__, __LINE__);
-
 #define error(temp, args...) {locate(HIGH_RED, BLACK) bad(temp, ## args)}
 #define warning(temp, args...) {locate(YELLOW, BLACK) warn(temp, ## args)}
 

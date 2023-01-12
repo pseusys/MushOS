@@ -28,7 +28,8 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 11. Video mode 👎
 12. Sample apps 👎
 13. Create cross-compilers instead of using standard with flags 👎
-14. etc...
+14. MushTest with asserts, etc. 👎
+15. etc...
 
 
 ### Build and run
@@ -56,3 +57,7 @@ To replace a source files pair use the following command:
 `make ADD_SOURCES="path/to/your/file_pair;" build_lib`
 
 > **_NB!_** Files listed in this command **shouldn't have any extension** as they represent a *.c*/*.h* file pair.
+
+### Requirements
+
+`gcc-multilib`

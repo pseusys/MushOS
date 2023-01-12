@@ -16,7 +16,7 @@ typedef struct {
 
 #define size_of(structure) (size(structure) / sizeof(typeof(*structure)))
 
-
+// TODO: add taken size check
 
 void initialize_heap(void* start_address, u_dword size);
 

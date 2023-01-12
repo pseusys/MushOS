@@ -35,6 +35,11 @@ build_img: prepare_build venv
 .PHONY: build_img
 
 
+test: prepare_build venv
+	cmake --build build --target MushTest --
+	cd build/tests && ctest --verbose && cd ../..
+.PHONY: test
+
 docs:
 	rm -rf docs/assets/*.png
 	drawio -x -f png -o docs/assets/ docs/assets/

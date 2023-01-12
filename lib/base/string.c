@@ -1,20 +1,12 @@
 #include "string.h"
 
+#include "heap.h"
+
 
 int len(string str) {
     int string_iterator = 0;
     while (str[string_iterator] != 0) string_iterator++;
     return string_iterator;
-}
-
-void copy_part(string str, mod_string storage, int size) {
-    boolean source_end_reached = false;
-    for (int i = 0; i < size; ++i) {
-        source_end_reached |= str[i] == 0;
-        if (source_end_reached) storage[i] = 0;
-        else storage[i] = str[i];
-    }
-    storage[size] = 0;
 }
 
 
@@ -51,28 +43,22 @@ boolean equals(string str1, string str2) {
 
 
 
-void substring_beg(string str, mod_string substr, int begin) {
-    substring_mid(str, substr, begin, len(str));
+mod_string substring_beg(string str, int begin) {
+    return substring_mid(str, begin, len(str));
 }
 
-void substring_mid(string str, mod_string substr, int begin, int end) {
-    for (int i = begin; i < end; ++i) substr[i - begin] = str[i];
-    substr[end - begin] = 0;
+mod_string substring_mid(string str, int begin, int end) {
+    mod_string result = malloc(end - begin + 1);
+    for (int i = begin; i < end; ++i) result[i - begin] = str[i];
+    result[end - begin] = 0;
+    return result;
 }
 
-void substring_end(string str, mod_string substr, int end) {
-    substring_mid(str, substr, 0, end);
+mod_string substring_end(string str, int end) {
+    return substring_mid(str, 0, end);
 }
 
 
-
-void copy_mod(string str, mod_string m_str) {
-    int i = -1;
-    do {
-        i++;
-        m_str[i] = str[i];
-    } while (str[i] != 0);
-}
 
 void move_string_by(mod_string str, int step) {
     int i = step - 1;
@@ -80,12 +66,14 @@ void move_string_by(mod_string str, int step) {
         i++;
         str[i - step] = str[i];
     } while (str[i] != 0);
+    str[i - step + 1] = 0;
 }
 
-
-
-void concatenate(string str1, string str2, mod_string result) {
+mod_string concatenate(string str1, string str2) {
     int str1_length = len(str1), str2_length = len(str2);
+    mod_string result = malloc(str1_length + str2_length + 1);
     for (int i = 0; i < str1_length; ++i) result[i] = str1[i];
-    for (int i = 0; i <= str2_length; ++i) result[i + str1_length] = str2[i];
+    for (int i = 0; i < str2_length; ++i) result[i + str1_length] = str2[i];
+    result[str1_length + str2_length] = 0;
+    return result;
 }

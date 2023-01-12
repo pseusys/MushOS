@@ -3,6 +3,8 @@
 #include "../../lib/base/generic.h"
 #include "../../lib/base/heap.h"
 #include "../../lib/base/stdio.h"
+#include "../../lib/base/exceptions.h"
+#include "../../lib/base/string.h"
 
 #include "../drivers/screen.h"
 #include "../drivers/keyboard.h"
@@ -58,7 +60,8 @@ void _start() {
 
     initialise_paging();
 
-    PANIC("Oh no! I'm in panic!!")
+    good("Size of u_xword: %d\n", sizeof(float))
+
     u_dword *ptr = (u_dword*) 0xA0000000;
     u_dword do_page_fault = *ptr;
 }

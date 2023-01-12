@@ -49,7 +49,7 @@ static void print_float(float b, u_dword front, u_dword back, system sys, u_dwor
     if (after_comma) {
         if (b > 1) {
             byte symbol = (u_dword) b % sys;
-            print_float(b / (float) sys, front, back, sys, 4);
+            print_float(b / (float) sys, front, back, sys, after_comma);
             print_atom(symbol, front, back, sys);
             if (b / (float) sys < 1) print_char('.', front, back);
         } else if (b) {

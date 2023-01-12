@@ -32,6 +32,7 @@ set (CMAKE_ASM_NASM_COMPILE_OBJECT "<CMAKE_ASM_NASM_COMPILER> <INCLUDES> <FLAGS>
 set (CMAKE_ASM_NASM_LINK_EXECUTABLE "${OBJECT_LINKER} <FLAGS> <CMAKE_ASM_NASM_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 
 # Configure ASM build process: linking is done using standard linker
+set (DEFAULT_C_LINK_EXECUTABLE ${CMAKE_C_LINK_EXECUTABLE})
 set (CMAKE_C_LINK_EXECUTABLE "${OBJECT_LINKER} <FLAGS> <CMAKE_C_LINK_FLAGS> <LINK_FLAGS> <OBJECTS> -o <TARGET> <LINK_LIBRARIES>")
 
 # Add compile options: cross-compile for C files and setting output format for ASM files
@@ -51,6 +52,9 @@ include_directories (${MUSHLIB_DIRECTORY})
 find_library (MUSHLIB mushlib PATHS ${MUSHLIB_DIRECTORY})
 
 
-# Include directories forming MushOS image, one of them will set 'MushOS' variable
+# Include directories forming MushOS image
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/core/)
 
+
+# Include test directories, one of them will set 'MushOS' variable
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/tests/)

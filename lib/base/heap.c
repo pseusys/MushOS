@@ -25,13 +25,23 @@ heap_header* header;
 
 
 /**
+ * Internal function for determining whether the structure is inside the heap or outside.
+ * @return true is structure is in heap, false otherwise.
+ */
+static boolean is_in_heap(void* structure) {
+    return structure > header->heap_start && structure < header->heap_end;
+}
+
+/**
  * Internal function for getting heap header of any structure located in heap.
  * It just substracts heap block header size from pointer and casts it to heap block header.
+ * Throws heap exception if the given pointer is outside of the current heap. TODO: custom command for throw.
  * @param structure a pointer to the structure.
  * @return heap_block_header pointer.
  */
 static heap_block_header* get_header(void* structure) {
-    return (heap_block_header*) (structure - sizeof(heap_block_header));
+    if (is_in_heap(structure)) return (heap_block_header*) (structure - sizeof(heap_block_header));
+    else throw_verbose(heap_exception_id, heap_exception_type, "Requested structure is located outside of the heap!")
 }
 
 /**
@@ -41,8 +51,7 @@ static heap_block_header* get_header(void* structure) {
  * @return structure size (in bytes).
  */
 u_dword size(void* structure) {
-    if (structure > header->heap_start && structure < header->heap_end) return get_header(structure)->size;
-    else throw_verbose(heap_exception_id, heap_exception_type, "Requested structure is located outside of the heap!")
+    return get_header(structure)->size;
 }
 
 
@@ -150,6 +159,7 @@ void* malloc(u_dword size) {
 /**
  * Function for heap block size alteration.
  * Attempts to alter size in-place and copys the block only if in-place growth is not available.
+ * Throws heap exception if the structure is located outside of the heap.
  * @param structure pointer to the structure for reallocation.
  * @param new_size new requested size of the structure.
  * @return pointer to the new structure.
@@ -172,6 +182,7 @@ void* realloc(void* structure, u_dword new_size) {
 
 /**
  * Function for heap block freeing.
+ * Throws heap exception if the structure is located outside of the heap.
  * @param structure pointer to the structure for freeing.
  */
 void free(void* structure) {

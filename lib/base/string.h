@@ -5,19 +5,18 @@
 
 
 int len(string str);
-void copy_part(string str, mod_string storage, int size);
 int first_pos(string str, char ch);
 int last_pos(string str, char ch);
 
 boolean equals(string str1, string str2);
 
-void substring_beg(string str, mod_string substr, int begin);
-void substring_mid(string str, mod_string substr, int begin, int end);
-void substring_end(string str, mod_string substr, int end);
+mod_string substring_beg(string str, int begin);
+mod_string substring_mid(string str, int begin, int end);
+mod_string substring_end(string str, int end);
 
-void copy_mod(string str, mod_string m_str);
 void move_string_by(mod_string str, int step);
+mod_string concatenate(string str1, string str2);
 
-void concatenate(string str1, string str2, mod_string result);
+mod_string format(string template, ...);
 
 #endif // MUSHLIB_STRING_UTILS_H

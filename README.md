@@ -45,18 +45,12 @@ Run MushOS using following command (cmake and qemu packages required!):
 
 MushLib is considered to be a modular entity - there are no limitations on *how* heap or filesystem is implemented as long as the implementation has the functions matching standard signatures (from `lib/base`).
 
-For every build of MushLib it's possible to add and replace its sources.
-For example, if you'd like to build MushLib with custom heap implementation, you just have to create a *.c* file that has the functions defined in `lib/base/heap.h` - and then just embed it into MushLib using the following command:  
-`make REPLACE_SOURCES="path/to/your/heap.c;" build_lib`
+For every build of MushLib it's possible to replace its sources with custom ones.
+For example, if you'd like to build MushLib with custom heap implementation, you just have to create a *.c* file that has the functions defined in `lib/base/heap.h` - and then just embed it into MushLib using the following command (the same works with *.h* and *.asm* sources):  
+`make C_SOURCES="path/to/your/heap.c;" build_lib`
 
 > **_NB!_** Your file has to have the same name as base MushLib file for successful replacement.
 > If two different files need to be replaced, just use a semicolon (one semicolon in the end is always required!).
-
-MushLib source adding works just the same - it allows not only replacement of *.c* file, but also of associated *.h* file. Please, keep in mind that new *.h* file still should contain all the functions from `lib/base/*.h` file - otherwise some other standard MushOS apps might not build successfully!
-To replace a source files pair use the following command:  
-`make ADD_SOURCES="path/to/your/file_pair;" build_lib`
-
-> **_NB!_** Files listed in this command **shouldn't have any extension** as they represent a *.c*/*.h* file pair.
 
 ### Requirements
 

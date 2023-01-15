@@ -3,8 +3,9 @@
 VERSIONING_FILES = CMakeLists.txt Makefile Doxyfile
 CURRENT_VERSION = 0.1
 
-REPLACE_SOURCES = ""
-ADD_SOURCES = ""
+ASM_SOURCES = ""
+C_SOURCES = ""
+H_SOURCES = ""
 
 VERSION_INCREMENT = "patch"
 
@@ -23,7 +24,7 @@ venv:
 
 
 prepare_build:
-	cmake -S ./ -B build -D REPLACE_SOURCES=$(REPLACE_SOURCES) -D ADD_SOURCES=$(ADD_SOURCES)
+	cmake -S ./ -B build -D ASM_SOURCES=$(ASM_SOURCES) -D C_SOURCES=$(C_SOURCES) -D H_SOURCES=$(H_SOURCES)
 .PHONY: prepare_build
 
 build_lib: prepare_build

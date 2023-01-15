@@ -22,7 +22,7 @@ function (dump_headers IN_FILE pattern result)
     set (${result} "${header_lines}" PARENT_SCOPE)
 endfunction ()
 
-# Macro for replacing a C source from `base` MushLib with some external source
+# Macro for replacing a source from `base` MushLib with some external source
 macro (replace_source SOURCE source_list file_extension)
     get_filename_component (source_we ${SOURCE} NAME_WE)
     get_filename_component (source_abs ${SOURCE} ABSOLUTE)
@@ -30,21 +30,12 @@ macro (replace_source SOURCE source_list file_extension)
     list (TRANSFORM ${source_list} REPLACE "${replacing}$" "${source_abs}")
 endmacro ()
 
-# Macro for adding some external C and H sources to MushLib
-macro (add_source SOURCE source_list headers_list)
-    get_filename_component (source_c "${SOURCE}.c" ABSOLUTE)
-    replace_source (${source_c} source_list "c")
-    get_filename_component (source_h "${SOURCE}.h" ABSOLUTE)
-    replace_source (${source_h} headers_list "h")
-endmacro ()
 
-
-# Enable C compiler, it should support cross-compiling
-enable_language (C)
+# Setup MushLib header file name
 set (MUSHLIB_HEADER_FILE_NAME "mushlib.h")
 
-# Find C source sets
-file (GLOB_RECURSE SOURCES base/*.c)
+# Find C and ASM source sets
+file (GLOB_RECURSE SOURCES base/*.c base/*.asm)
 
 # Create headers list, 'generic.h' header should always come first to be first in library header
 file (GLOB GENERIC_HEADER base/generic.h)
@@ -52,17 +43,24 @@ file (GLOB_RECURSE HEADERS base/*.h)
 list (FILTER HEADERS EXCLUDE REGEX "base/generic\\.h$")
 list (PREPEND HEADERS ${GENERIC_HEADER})
 
+# Replace ASM sources defined by user
+if (DEFINED ASM_SOURCES)
+    foreach (SOURCE ${ASM_SOURCES})
+        replace_source (${SOURCE} SOURCES "asm")
+    endforeach (SOURCE)
+endif ()
+
 # Replace C sources defined by user
-if (DEFINED REPLACE_SOURCES)
-    foreach (SOURCE ${REPLACE_SOURCES})
+if (DEFINED C_SOURCES)
+    foreach (SOURCE ${C_SOURCES})
         replace_source (${SOURCE} SOURCES "c")
     endforeach (SOURCE)
 endif ()
 
-# Add C and H sources defined by user
-if (DEFINED ADD_SOURCES)
-    foreach (SOURCE ${ADD_SOURCES})
-        add_source (${SOURCE} SOURCES HEADERS)
+# Replace H sources defined by user
+if (DEFINED H_SOURCES)
+    foreach (SOURCE ${H_SOURCES})
+        replace_source (${SOURCE} HEADERS "h")
     endforeach (SOURCE)
 endif ()
 

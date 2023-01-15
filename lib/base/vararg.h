@@ -2,6 +2,18 @@
 #define MUSHLIB_VARARG_H
 
 #include "heap.h"
+#include "math.h"
+
+
+#define init_vararg(skip) ({\
+    skip;\
+})
+
+#define get_vararg(offset, type) ({\
+    type result = get_arg(offset, type);\
+    offset += max(sizeof(type), 4);\
+    result;\
+})
 
 
 // TODO: check stack base with error!
@@ -19,8 +31,6 @@
     for (u_dword i = 0; i < size(args); ++i)\
         *(args + i) = get_arg(skip + sizeof(u_byte) * i, u_byte);\
 }
-
-#define args_init(args) args_init_from(args, 0)
 
 void* get_args(u_dword num, ...);
 

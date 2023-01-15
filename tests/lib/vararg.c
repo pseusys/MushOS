@@ -9,24 +9,46 @@
 void vararg_integers_printing_function(u_dword arg_number, ...) {
     u_byte* args = (u_byte*) malloc(arg_number * sizeof(u_dword));
     args_init_from(args, sizeof(u_dword));
-    printf("Function call with %d integers:\n", arg_number);
-    for (u_dword i = 0; i < arg_number; i++) printf("    argument #%d: %x.\n", i, ((u_dword*) args)[i]);
-}
 
-void vararg_3_different_long_printing_function(u_dword _, ...) {
-    u_byte* args = (u_byte*) malloc(sizeof(u_word) + sizeof(u_dword) + sizeof(u_qword));
-    args_init_from(args, sizeof(u_dword));
-    printf("Function call with 3 different longs:\n");
-    printf("    u_word argument: %x.\n", *((u_word*) args));
-    printf("    u_dword argument: %x.\n", *((u_dword*) (args + sizeof(u_word))));
-    printf("    u_qword argument: %x.\n", *((u_qword*) (args + sizeof(u_word) + sizeof(u_dword))));
+    printf("Function call with %d integers:\n", arg_number);
+    for (u_dword i = 0; i < arg_number; i++) {
+        u_dword arg = ((u_dword*) args)[i];
+        printf("    argument #%d: %x.\n", i, arg);
+        assert(arg == i + 1);
+    }
 }
 
 void vararg_int_str_float_by_one_function(u_dword _, ...) {
     printf("Function call with 3 divverent values:\n");
-    printf("    u_qword argument: %x.\n", get_arg(sizeof(u_dword), u_qword));
-    printf("    string argument: '%s'.\n", get_arg(sizeof(u_dword) + sizeof(u_dword), string));
-    printf("    precise argument: %f.\n", get_arg(sizeof(u_dword) + sizeof(u_qword) + sizeof(string), precise));
+
+    u_dword arg1 = get_arg(sizeof(u_dword), u_qword);
+    printf("    u_qword argument: %x.\n", arg1);
+    assert(arg1 == 1);
+
+    string arg2 = get_arg(sizeof(u_dword) + sizeof(u_qword), string);
+    printf("    string argument: '%s'.\n", arg2);
+    assert(arg2 == "Some string");
+
+    precise arg3 = get_arg(sizeof(u_dword) + sizeof(u_qword) + sizeof(string), precise);
+    printf("    precise argument: %f.\n", arg3);
+    assert(arg3 == 3.1415);
+}
+
+void vararg_3_different_long_printing_function(u_dword _, ...) {
+    u_dword vararg_offset = init_vararg(sizeof(u_dword));
+    printf("Function call with 3 different longs (offset %d):\n", vararg_offset);
+
+    u_word arg1 = get_vararg(vararg_offset, u_word);
+    printf("    u_word argument (offset %d): %x.\n", vararg_offset, arg1);
+    assert(arg1 == 1);
+
+    u_dword arg2 = get_vararg(vararg_offset, u_dword);
+    printf("    u_dword argument (offset %d): %x.\n", vararg_offset, arg2);
+    assert(arg2 == 2);
+
+    u_qword arg3 = get_vararg(vararg_offset, u_qword);
+    printf("    u_qword argument (offset %d): %x.\n", vararg_offset, arg3);
+    assert(arg3 == 3);
 }
 
 
@@ -38,9 +60,9 @@ int main() {
     vararg_integers_printing_function(2, (u_dword) 1, (u_dword) 2);
     vararg_integers_printing_function(3, (u_dword) 1, (u_dword) 2, (u_dword) 3);
 
-    vararg_3_different_long_printing_function(3, (u_word) 1, (u_dword) 2, (u_qword) 3);
-
     vararg_int_str_float_by_one_function(3, (u_qword) 1, "Some string", (precise) 3.1415);
+
+    vararg_3_different_long_printing_function(3, (u_word) 1, (u_dword) 2, (u_qword) 3);
 
     return 0;
 }

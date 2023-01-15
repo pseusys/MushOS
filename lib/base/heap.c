@@ -4,10 +4,25 @@
 #include "exceptions.h"
 
 
-#define allocation_exception_id 0x1
-#define allocation_exception_type "Allocation Exception"
-#define heap_exception_id 0x2
-#define heap_exception_type "Heap Exception"
+/**
+ * Header of the heap.
+ * Defines current heap: its start and end addresses and address of the first allocated block.
+ * Located in the very beginning of the heap.
+ */
+typedef struct {
+    void* first_address;
+    void* heap_start, * heap_end;
+} heap_header;
+
+/**
+ * Header of an allocated heap block.
+ * Defines current block, contain its size.
+ * Also acts as a linked list, contains addresses of the previous and next allocated blocks.
+ */
+typedef struct {
+    u_dword size;
+    void* previous, * next;
+} heap_block_header;
 
 
 /**
@@ -17,6 +32,24 @@
  */
 heap_header* header;
 
+
+/**
+ * Function for heap occupation calculation.
+ * @return percent of allocated space in this heap.
+ */
+precise occupation() {
+    if (!header->first_address) return 0;
+    u_dword sum = 0;
+
+    void* current_address = header->first_address;
+    while (current_address) {
+        heap_block_header* current_block = get_header(current_address);
+        sum += current_block->size;
+        current_address = current_block->next;
+    }
+
+    return (precise) (header->heap_end - header->heap_start) / sum;
+}
 
 
 /**
@@ -48,7 +81,6 @@ static heap_block_header* get_header(void* structure) {
 u_dword size(void* structure) {
     return get_header(structure)->size;
 }
-
 
 
 /**
@@ -105,50 +137,49 @@ void initialize_heap(void* start_address, u_dword size) {
  * @return pointer to the neewly allocated block.
  */
 void* malloc(u_dword size) {
-    if (header->first_address) {
-        void* best_address = nullptr, * best_previous = nullptr, * best_next = nullptr;
-        u_dword best_size = header->heap_end - header->heap_start;
-
-        void* current_address = header->heap_start;
-        void* next_address = header->first_address;
-
-        u_dword free_space_size = next_address - current_address - sizeof(heap_block_header);
-        if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
-            best_size = free_space_size;
-            best_address = current_address; best_previous = nullptr; best_next = next_address;
-        }
-
-        current_address = next_address;
-        heap_block_header* current_block = get_header(current_address);
-        next_address = current_block->next;
-
-        while (next_address) {
-            free_space_size = next_address - current_address - current_block->size - sizeof(heap_block_header);
-            if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
-                best_size = free_space_size;
-                best_address = current_address + current_block->size; best_previous = current_address; best_next = next_address;
-            }
-
-            current_address = next_address;
-            current_block = get_header(current_address);
-            next_address = current_block->next;
-        }
-
-        free_space_size = header->heap_end - current_address - current_block->size - sizeof(heap_block_header);
-        if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
-            best_address = current_address + current_block->size; best_previous = current_address; best_next = nullptr;
-        }
-
-        void* final_address = nullptr;
-        if (best_address != nullptr) final_address = allocate_space(best_address, size, best_previous, best_next);
-        if (best_address == header->heap_start) header->first_address = final_address;
-        if (final_address == nullptr) throw_verbose(allocation_exception_id, allocation_exception_type, "No space left in heap available for allocation!")
-        return final_address;
-
-    } else {
+    if (!header->first_address) {
         header->first_address = allocate_space(header->heap_start, size, nullptr, nullptr);
         return header->first_address;
     }
+    
+    void* best_address = nullptr, * best_previous = nullptr, * best_next = nullptr;
+    u_dword best_size = header->heap_end - header->heap_start;
+
+    void* current_address = header->heap_start;
+    void* next_address = header->first_address;
+
+    u_dword free_space_size = next_address - current_address - sizeof(heap_block_header);
+    if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
+        best_size = free_space_size;
+        best_address = current_address; best_previous = nullptr; best_next = next_address;
+    }
+
+    current_address = next_address;
+    heap_block_header* current_block = get_header(current_address);
+    next_address = current_block->next;
+
+    while (next_address) {
+        free_space_size = next_address - current_address - current_block->size - sizeof(heap_block_header);
+        if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
+            best_size = free_space_size;
+            best_address = current_address + current_block->size; best_previous = current_address; best_next = next_address;
+        }
+
+        current_address = next_address;
+        current_block = get_header(current_address);
+        next_address = current_block->next;
+    }
+
+    free_space_size = header->heap_end - current_address - current_block->size - sizeof(heap_block_header);
+    if ((free_space_size >= (size + sizeof(heap_block_header))) && (free_space_size < best_size)) {
+        best_address = current_address + current_block->size; best_previous = current_address; best_next = nullptr;
+    }
+
+    void* final_address = nullptr;
+    if (best_address != nullptr) final_address = allocate_space(best_address, size, best_previous, best_next);
+    if (best_address == header->heap_start) header->first_address = final_address;
+    if (final_address == nullptr) throw_verbose(allocation_exception_id, allocation_exception_type, "No space left in heap available for allocation!")
+    return final_address;
 }
 
 /**

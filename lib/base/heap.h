@@ -4,19 +4,16 @@
 #include "generic.h"
 
 
-typedef struct {
-    u_dword size;
-    void* previous, * next;
-} heap_block_header;
+#define allocation_exception_id 0x1
+#define allocation_exception_type "Allocation Exception"
 
-typedef struct {
-    void* first_address;
-    void* heap_start, * heap_end;
-} heap_header;
+#define heap_exception_id 0x2
+#define heap_exception_type "Heap Exception"
+
 
 #define size_of(structure) (size(structure) / sizeof(typeof(*structure)))
 
-// TODO: add taken size check
+precise occupation();
 
 void initialize_heap(void* start_address, u_dword size);
 

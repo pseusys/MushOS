@@ -12,6 +12,9 @@ jobs:
       - name: Checkout 🛎️
         uses: actions/checkout@v3
 
+      - name: Setup NASM 🕸️
+        uses: ilammy/setup-nasm@v1
+
       - name: Setup GCC 🐃
         uses: egor-tensin/setup-gcc@v1
         with:

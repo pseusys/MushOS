@@ -40,8 +40,8 @@ add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-nostartfiles;-nodefaultlib
 add_compile_options ("$<$<COMPILE_LANGUAGE:ASM_NASM>:-f $<IF:$<BOOL:$<TARGET_PROPERTY:NASM_OBJ_FORMAT>>,$<TARGET_PROPERTY:NASM_OBJ_FORMAT>,${CMAKE_ASM_NASM_OBJECT_FORMAT}>>")
 
 # Define integer and floating point types size for MushLib as it requires constant length types.
-add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DCHAR_TYPE_SIZE=8;-DSHORT_TYPE_SIZE=16;-DINT_TYPE_SIZE=32;-DLONG_TYPE_SIZE=64;-DLONG_LONG_TYPE_SIZE=128>")
-add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DFLOAT_TYPE_SIZE=64;-DDOUBLE_TYPE_SIZE=128;-DLONG_DOUBLE_TYPE_SIZE=256>")
+add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DCHAR_TYPE_SIZE=8;-DSHORT_TYPE_SIZE=16;-DINT_TYPE_SIZE=32;-DLONG_LONG_TYPE_SIZE=64>")
+add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DFLOAT_TYPE_SIZE=32;-DDOUBLE_TYPE_SIZE=64;-DLONG_DOUBLE_TYPE_SIZE=96>")
 
 # Setup spectial artifacts directory name and path
 set (ARTIFACTS_DIR "${CMAKE_BINARY_DIR}/artifacts")

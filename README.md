@@ -1,4 +1,5 @@
 [![BUILD](https://github.com/pseusys/MushOS/actions/workflows/build.yml/badge.svg)](https://github.com/pseusys/MushOS/actions/workflows/build.yml)
+[![TEST](https://github.com/pseusys/MushOS/actions/workflows/test.yml/badge.svg)](https://github.com/pseusys/MushOS/actions/workflows/test.yml)
 [![CII Best Practices](https://bestpractices.coreinfrastructure.org/projects/4018/badge)](https://bestpractices.coreinfrastructure.org/projects/4018)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=pseusys_MushOS&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=pseusys_MushOS)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -54,4 +55,5 @@ For example, if you'd like to build MushLib with custom heap implementation, you
 
 ### Requirements
 
-`gcc-multilib`
+#### Test:
+1. `gcc-multilib`

@@ -20,6 +20,9 @@ jobs:
         with:
           cc: 1
 
+      - name: Setup GCC Multilib 🗂️
+        run: apt-get install -y gcc-multilib
+
       - name: Setup Python 🐍
         uses: actions/setup-python@v4
         with:

@@ -25,7 +25,7 @@ void* load_module(u_word offset, u_word length) {
     if (length == 0) ; // TODO: throw error: module shouldn't be empty
     if (length % 2 != 0) ; // TODO: throw error: module should be 2 bytes aligned
     if (offset % 2 != 0) ; // TODO: throw error: module should be 2 bytes aligned
-    void* place = malloc(length);
+    void* place = ralloc(length);
     info("Loading module at offset %d, length %d to memory address: %h\n", offset, length, place)
     boolean res = read_disk((void*) (offset / 512), false, length, offset, (u_word*) place);
     info("Reading result: %d\n", res)

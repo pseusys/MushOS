@@ -14,7 +14,8 @@ int main() {
     str = concatenate("String1", "String2");
     printf("Testing concatenate: %s.\n", str);
     assert(equals(str, "String1String2"));
-    free(str);
+    unalloc(str);
 
+    check_heap_for_leaks();
     return 0;
 }

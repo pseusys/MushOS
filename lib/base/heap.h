@@ -17,12 +17,14 @@ precise occupation();
 
 void initialize_heap(void* start_address, u_dword size);
 
-void* malloc(u_dword size);
+void* ralloc(u_dword size);
+
+void* zalloc(u_dword size);
 
 u_dword size(void* structure);
 
-void* realloc(void* structure, u_dword new_size);
+void* challoc(void* structure, u_dword new_size);
 
-void free(void* structure);
+void unalloc(void* structure);
 
 #endif // MUSHLIB_HEAP_H

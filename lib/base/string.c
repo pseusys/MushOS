@@ -48,7 +48,7 @@ mod_string substring_beg(string str, int begin) {
 }
 
 mod_string substring_mid(string str, int begin, int end) {
-    mod_string result = malloc(end - begin + 1);
+    mod_string result = ralloc(end - begin + 1);
     for (int i = begin; i < end; ++i) result[i - begin] = str[i];
     result[end - begin] = 0;
     return result;
@@ -71,7 +71,7 @@ void move_string_by(mod_string str, int step) {
 
 mod_string concatenate(string str1, string str2) {
     int str1_length = len(str1), str2_length = len(str2);
-    mod_string result = malloc(str1_length + str2_length + 1);
+    mod_string result = ralloc(str1_length + str2_length + 1);
     for (int i = 0; i < str1_length; ++i) result[i] = str1[i];
     for (int i = 0; i < str2_length; ++i) result[i + str1_length] = str2[i];
     result[str1_length + str2_length] = 0;

@@ -141,11 +141,11 @@ void initialise_paging() {
     // The size of physical memory. For the moment we
     // assume it is 256MB big.
     u_dword paging_pool_size = (paging_pool_end - paging_pool_start) / page_size / 8;
-    paging_pool = malloc(paging_pool_size);
+    paging_pool = ralloc(paging_pool_size);
     memory_clear((byte*) paging_pool, paging_pool_size, 0);
 
     u_dword user_space_pool_size = (user_space_end - user_space_start) / page_size / 8;
-    user_space_pool = malloc(user_space_pool_size);
+    user_space_pool = ralloc(user_space_pool_size);
     memory_clear((byte*) user_space_pool, user_space_pool_size, 0);
 
     // Let's make a page directory.

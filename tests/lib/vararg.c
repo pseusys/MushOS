@@ -7,7 +7,7 @@
 
 
 void vararg_integers_printing_function(u_dword arg_number, ...) {
-    u_byte* args = (u_byte*) malloc(arg_number * sizeof(u_dword));
+    u_byte* args = (u_byte*) ralloc(arg_number * sizeof(u_dword));
     args_init_from(args, sizeof(u_dword));
 
     printf("Function call with %d integers:\n", arg_number);
@@ -16,6 +16,8 @@ void vararg_integers_printing_function(u_dword arg_number, ...) {
         printf("    argument #%d: %x.\n", i, arg);
         assert(arg == i + 1);
     }
+
+    unalloc(args);
 }
 
 void vararg_int_str_float_by_one_function(u_dword _, ...) {
@@ -64,5 +66,6 @@ int main() {
 
     vararg_3_different_long_printing_function(3, (u_word) 1, (u_dword) 2, (u_qword) 3);
 
+    check_heap_for_leaks();
     return 0;
 }

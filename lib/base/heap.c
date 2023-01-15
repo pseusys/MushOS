@@ -68,17 +68,19 @@ u_dword size(void* structure) {
  * @return percent of allocated space in this heap.
  */
 precise occupation() {
-    if (!header->first_address) return 0;
+    if (!header->first_address) return 0.0;
     u_dword sum = 0;
+    u_dword num = 0;
 
     void* current_address = header->first_address;
     while (current_address) {
         heap_block_header* current_block = get_header(current_address);
         sum += current_block->size;
+        num++;
         current_address = current_block->next;
     }
 
-    return (precise) (header->heap_end - header->heap_start) / sum;
+    return (precise) num;
 }
 
 
@@ -129,13 +131,13 @@ void initialize_heap(void* start_address, u_dword size) {
 }
 
 /**
- * Function for allocation of a heap block.
+ * Function for allocation of a raw heap block.
  * Searches for a place of suitable size to fit a structure of requested size in.
  * Throws allocation exception if no free space is available.
  * @param size requested block size.
  * @return pointer to the neewly allocated block.
  */
-void* malloc(u_dword size) {
+void* ralloc(u_dword size) {
     if (!header->first_address) {
         header->first_address = allocate_space(header->heap_start, size, nullptr, nullptr);
         return header->first_address;
@@ -182,23 +184,36 @@ void* malloc(u_dword size) {
 }
 
 /**
+ * Function for allocation of a heap block and clearing it.
+ * Does the same as `ralloc`, but sets every allocated byte to zero.
+ * Throws allocation exception if no free space is available.
+ * @param size requested block size.
+ * @return pointer to the neewly allocated block.
+ */
+void* zalloc(u_dword size) {
+    void* result = ralloc(size);
+    memory_clear((byte*) result, size, 0);
+    return result;
+}
+
+/**
  * Function for heap block size alteration.
  * Attempts to alter size in-place and copys the block only if in-place growth is not available.
  * Throws heap exception if the structure is located outside of the heap.
- * @param structure pointer to the structure for reallocation.
+ * @param structure pointer to the structure for allocation size changing.
  * @param new_size new requested size of the structure.
  * @return pointer to the new structure.
  */
-void* realloc(void* structure, u_dword new_size) {
+void* challoc(void* structure, u_dword new_size) {
     heap_block_header* block = get_header(structure);
     if (new_size < block->size) {
         block->size = new_size;
     } else if (new_size > block->size) {
         if (new_size < block->next - structure) block->size = new_size;
         else {
-            void* new_structure = malloc(new_size);
+            void* new_structure = ralloc(new_size);
             memory_copy(structure, new_structure, block->size);
-            free(structure);
+            unalloc(structure);
             structure = new_structure;
         }
     }
@@ -206,11 +221,11 @@ void* realloc(void* structure, u_dword new_size) {
 }
 
 /**
- * Function for heap block freeing.
+ * Function for heap block unallocation.
  * Throws heap exception if the structure is located outside of the heap.
- * @param structure pointer to the structure for freeing.
+ * @param structure pointer to the structure for unallocation.
  */
-void free(void* structure) {
+void unalloc(void* structure) {
     heap_block_header* block = get_header(structure);
     if (structure == header->first_address) header->first_address = block->next;
     if (block->next) get_header(block->next)->previous = block->previous;

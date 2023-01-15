@@ -9,7 +9,7 @@
     asm volatile ("pusha");\
     u_dword* args = get_args(args_num, ## arguments);\
     for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
-    free(args);\
+    unalloc(args);\
     asm volatile (\
         "push %%ebp\n"\
         "mov %%esp, %%ebp\n"\
@@ -25,7 +25,7 @@
     asm volatile ("pusha");\
     u_dword* args = get_args(args_num, ## arguments);\
     for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
-    free(args);\
+    unalloc(args);\
     asm volatile (\
         "push %%ebp\n"\
         "mov %%esp, %%ebp\n"\

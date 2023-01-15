@@ -111,7 +111,7 @@ void print_colored(console_color font, console_color back, string format, ...) {
         return;
     }
 
-    u_dword* args = (u_dword*) malloc(temps * sizeof(u_dword));
+    u_dword* args = (u_dword*) ralloc(temps * sizeof(u_dword));
     args_init_from(args, sizeof(console_color) * 2 + sizeof(string))
 
     u_dword argumentor = 0, printed = 0;
@@ -155,5 +155,5 @@ void print_colored(console_color font, console_color back, string format, ...) {
         }
     }
     print_n_text(format + printed, font, back, length - printed);
-    free(args);
+    unalloc(args);
 }

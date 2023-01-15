@@ -64,18 +64,18 @@ static string boolean_to_string(boolean b) {
     else return "false";
 }
 
-static mod_string float_to_string(float b, u_dword after_comma) {
-    return const_to_string(boolean_to_string(b - 3.1415 < 0));
+static mod_string float_to_string(precise b, u_dword after_comma) {
     if (after_comma) {
-        mod_string result = int_to_string((u_dword) b, DECIMAL);
-        //string result = concatenate(integer, ".");
-        //free(integer);
+        mod_string integer = int_to_string((u_dword) b, DECIMAL);
+        mod_string full = concatenate(integer, ".");
+        free(integer);
 
-        //for (u_dword i = 0; i < after_comma; i++) b *= sys;
-        //string part = int_to_string((u_dword) b - (u_dword) b, sys);
-        //string result = concatenate(full, part);
-        //free(part);
-        //free(full);
+        precise floating = b - (u_dword) b;
+        for (u_dword i = 0; i < after_comma; i++) floating *= DECIMAL;
+        mod_string part = int_to_string(floating, DECIMAL);
+        mod_string result = concatenate(full, part);
+        free(part);
+        free(full);
 
         if (b < 0) {
             mod_string signum = concatenate("-", result);
@@ -86,10 +86,10 @@ static mod_string float_to_string(float b, u_dword after_comma) {
     } else return int_to_string((u_dword) b, DECIMAL);
 }
 
-static mod_string pointer_to_string(u_dword b) {
-    if (b == nullptr) return const_to_string(".null");
+static mod_string pointer_to_string(void* ptr) {
+    if (ptr == nullptr) return const_to_string(".null");
     else {
-        mod_string integer = int_to_string(b, HEXADECIMAL);
+        mod_string integer = int_to_string((u_dword) ptr, HEXADECIMAL);
         mod_string result = concatenate(".", integer);
         free(integer);
         return result;
@@ -133,20 +133,11 @@ static mod_string number_to_string(dword num, system sys) {
 }
 
 
-
+// TODO: floating point numbers precision setup.
 mod_string format(string template, ...) {
-    u_dword temps = 0, length = 0;
-    while (template[length]) {
-        if (template[length] == '%') temps++;
-        length++;
-    }
-
-    u_dword* args = (u_dword*) malloc(temps * sizeof(u_dword));
-    args_init_from(args, sizeof(string));
-
     mod_string result = "";
-    u_dword argumentor = 0, printed = 0, result_len = 0;
-    for (int j = 0; j < length; ++j) {
+    u_dword argumentor = sizeof(string), printed = 0;
+    for (int j = 0; j < len(template); ++j) {
         if (template[j] == '%') {
             mod_string unmod = substring_mid(template, printed, j);
             result = concatenate(result, unmod);
@@ -158,40 +149,48 @@ mod_string format(string template, ...) {
             mod_string prefix = result;
             switch (template[j]) {
                 case 'l':
-                    result = concatenate(prefix, boolean_to_string(args[argumentor]));
+                    result = concatenate(prefix, boolean_to_string(get_arg(argumentor, boolean)));
+                    argumentor += sizeof(boolean);
                     break;
                 case 'p':
-                    mod_string pointer = pointer_to_string(args[argumentor]);
+                    mod_string pointer = pointer_to_string(get_arg(argumentor, void*));
                     result = concatenate(prefix, pointer);
                     free(pointer);
+                    argumentor += sizeof(void*);
                     break;
                 case 'd':
-                    mod_string dec_number = number_to_string(args[argumentor], DECIMAL);
+                    mod_string dec_number = number_to_string(get_arg(argumentor, u_dword), DECIMAL);
                     result = concatenate(prefix, dec_number);
                     free(dec_number);
+                    argumentor += sizeof(u_dword);
                     break;
                 case 'h':
-                    mod_string hex_number = number_to_string(args[argumentor], HEXADECIMAL);
+                    mod_string hex_number = number_to_string(get_arg(argumentor, u_dword), HEXADECIMAL);
                     result = concatenate(prefix, hex_number);
                     free(hex_number);
+                    argumentor += sizeof(u_dword);
                     break;
                 case 'b':
-                    mod_string bin_number = number_to_string(args[argumentor], BINARY);
+                    mod_string bin_number = number_to_string(get_arg(argumentor, u_dword), BINARY);
                     result = concatenate(prefix, bin_number);
                     free(bin_number);
+                    argumentor += sizeof(u_dword);
                     break;
                 case 'f':
-                    mod_string flo_number = float_to_string((float) args[argumentor], 4);
+                    mod_string flo_number = float_to_string(get_arg(argumentor, precise), 4);
                     result = concatenate(prefix, flo_number);
                     free(flo_number);
+                    argumentor += sizeof(precise);
                     break;
                 case 'c':
-                    mod_string character = char_to_string(args[argumentor]);
+                    mod_string character = char_to_string(get_arg(argumentor, char));
                     result = concatenate(prefix, character);
                     free(character);
+                    argumentor += sizeof(char);
                     break;
                 case 's':
-                    result = concatenate(prefix, (string) args[argumentor]);
+                    result = concatenate(prefix, (get_arg(argumentor, string)));
+                    argumentor += sizeof(string);
                     break;
                 default:
                     argumentor--;
@@ -209,6 +208,5 @@ mod_string format(string template, ...) {
     result = concatenate(result, unmod);
     free(unmod);
 
-    free(args);
     return result;
 }

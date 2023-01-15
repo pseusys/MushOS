@@ -34,25 +34,6 @@ heap_header* header;
 
 
 /**
- * Function for heap occupation calculation.
- * @return percent of allocated space in this heap.
- */
-precise occupation() {
-    if (!header->first_address) return 0;
-    u_dword sum = 0;
-
-    void* current_address = header->first_address;
-    while (current_address) {
-        heap_block_header* current_block = get_header(current_address);
-        sum += current_block->size;
-        current_address = current_block->next;
-    }
-
-    return (precise) (header->heap_end - header->heap_start) / sum;
-}
-
-
-/**
  * Internal function for determining whether the structure is inside the heap or outside.
  * @return true is structure is in heap, false otherwise.
  */
@@ -80,6 +61,24 @@ static heap_block_header* get_header(void* structure) {
  */
 u_dword size(void* structure) {
     return get_header(structure)->size;
+}
+
+/**
+ * Function for heap occupation calculation.
+ * @return percent of allocated space in this heap.
+ */
+precise occupation() {
+    if (!header->first_address) return 0;
+    u_dword sum = 0;
+
+    void* current_address = header->first_address;
+    while (current_address) {
+        heap_block_header* current_block = get_header(current_address);
+        sum += current_block->size;
+        current_address = current_block->next;
+    }
+
+    return (precise) (header->heap_end - header->heap_start) / sum;
 }
 
 

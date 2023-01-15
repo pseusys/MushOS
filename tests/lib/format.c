@@ -44,8 +44,7 @@ int main() {
 
     str = format("Float value: %f.\n", 3.1415);
     printf(str);
-    printf("Float value: %d.\n", 3.1415);
-    //assert(equals(str, "Float value: 0b10111.\n")); // TODO: setup floating point number coprocessor.
+    assert(equals(str, "Float value: 3.1415.\n"));
     free(str);
 
     str = format("Character value: %c.\n", 'g');
@@ -53,9 +52,9 @@ int main() {
     assert(equals(str, "Character value: g.\n"));
     free(str);
 
-    str = format("String value: %s.\n", "Sum string");
+    str = format("String value: %s.\n", "Some string");
     printf(str);
-    assert(equals(str, "String value: Sum string.\n"));
+    assert(equals(str, "String value: Some string.\n"));
     free(str);
 
     return 0;

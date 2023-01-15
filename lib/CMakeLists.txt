@@ -43,11 +43,6 @@ endmacro ()
 enable_language (C)
 set (MUSHLIB_HEADER_FILE_NAME "mushlib.h")
 
-# Define integer and floating point types size for MushLib as it requires constant length types.
-add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DCHAR_TYPE_SIZE=8;-DSHORT_TYPE_SIZE=16;-DINT_TYPE_SIZE=32;-DLONG_TYPE_SIZE=64;-DLONG_LONG_TYPE_SIZE=128>")
-add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DFLOAT_TYPE_SIZE=64;-DDOUBLE_TYPE_SIZE=128;-DLONG_DOUBLE_TYPE_SIZE=256>")
-
-
 # Find C source sets
 file (GLOB_RECURSE SOURCES base/*.c)
 

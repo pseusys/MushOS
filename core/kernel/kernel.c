@@ -13,7 +13,8 @@
 #include "timer.h"
 #include "pages.h"
 #include "modules.h"
-#include "pages.h"
+
+extern void initialize_kernel_heap_handler();
 
 
 #define kernel_heap_start 0x50000
@@ -47,6 +48,7 @@
 
 void _start() {
     initialize_heap((void*) kernel_heap_start, kernel_heap_size);
+    initialize_kernel_heap_handler();
 
     init_interruptions();
     init_timer(kernel_timer_step);
@@ -59,8 +61,6 @@ void _start() {
     init_module_loading_driver();
 
     initialise_paging();
-
-    good("Size of u_xword: %d\n", sizeof(float))
 
     u_dword *ptr = (u_dword*) 0xA0000000;
     u_dword do_page_fault = *ptr;

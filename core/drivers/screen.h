@@ -1,6 +1,9 @@
 #ifndef MUSHOS_SCREEN_H
 #define MUSHOS_SCREEN_H
 
+#include "../../lib/base/generic.h"
+
+
 void clear_screen();
 void init_screen_io();
 

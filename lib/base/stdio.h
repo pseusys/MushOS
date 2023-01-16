@@ -2,6 +2,8 @@
 #define MUSHLIB_STDIO_H
 
 #include "generic.h"
+#include "string.h"
+#include "syscall.h"
 
 
 typedef enum {
@@ -23,17 +25,16 @@ typedef enum {
     WHITE        = 15u
 } console_color;
 
-void print_colored(console_color font, console_color back, string format, ...);
+#define print_formatted(font, back, temp, args...) {\
+    mod_string formatted = format(temp, ## args);\
+    call_system(48, 5, 2, formatted, font, back, 0);\
+    unalloc(formatted);\
+}
 
-
-
-#define bad(temp, args...) print_colored(HIGH_RED, BLACK, temp, ## args);
-#define warn(temp, args...) print_colored(YELLOW, BLACK, temp, ## args);
-#define good(temp, args...) print_colored(HIGH_GREEN, BLACK, temp, ## args);
-#define info(temp, args...) print_colored(HIGH_BLUE, BLACK, temp, ## args);
-#define plain(temp, args...) print_colored(LIGHT_GRAY, BLACK, temp, ## args);
-
-#define error(temp, args...) {locate(HIGH_RED, BLACK) bad(temp, ## args)}
-#define warning(temp, args...) {locate(YELLOW, BLACK) warn(temp, ## args)}
+#define bad(temp, args...) print_formatted(HIGH_RED, BLACK, temp, ## args)
+#define warn(temp, args...) print_formatted(YELLOW, BLACK, temp, ## args)
+#define good(temp, args...) print_formatted(HIGH_GREEN, BLACK, temp, ## args)
+#define info(temp, args...) print_formatted(HIGH_BLUE, BLACK, temp, ## args)
+#define plain(temp, args...) print_formatted(LIGHT_GRAY, BLACK, temp, ## args)
 
 #endif // MUSHLIB_STDIO_H

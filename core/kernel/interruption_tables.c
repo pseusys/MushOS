@@ -6,6 +6,7 @@
 
 #include "../drivers/ports_io.h"
 
+#include "kernel.h"
 #include "interruptions.h"
 
 
@@ -149,13 +150,8 @@ void isr_handler(registers* regs) {
     if (interruption_handlers[regs->int_no] != nullptr) {
         interruption_handler handler = interruption_handlers[regs->int_no];
         handler(regs);
-    } else if (regs->int_no < 48) {
-        bad("Received undefined interrupt: %h\n", regs->int_no)
-        asm volatile ("jmp .");
-    } else {
-        bad("Received some interrupt: %h\n", regs->int_no)
-        asm volatile ("jmp .");
-    }
+    } else if (regs->int_no < 48) PANIC("Received undefined interrupt: %h\n", regs->int_no)
+    else PANIC("Received some interrupt: %h\n", regs->int_no)
 }
 
 void irq_handler(registers* regs) {

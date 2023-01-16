@@ -4,4 +4,4 @@
 
 call _start ; Calling function.
 
-hlt ; Hanging CPU up.
+jmp $ ; Replace with hlt? Hanging CPU up.

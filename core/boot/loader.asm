@@ -147,7 +147,7 @@ kernel_start: ; Start of booting code.
     jmp CODE_SEG:kernel_launch ; Performing long jump to stop all parallel tasks (piping) and force CPU into protected mode.
 
 .loop:
-    hlt ; Hanging CPU up.
+    jmp $ ; Replace with hlt? Hanging CPU up.
 
 
 [bits 32] ; This segment is compiled in 32-bits mode to be executed in protected CPU mode.

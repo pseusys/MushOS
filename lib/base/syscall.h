@@ -7,7 +7,7 @@
 
 #define call_system(interruption, args_num, arguments...) {\
     asm volatile ("pusha");\
-    u_dword* args = get_args(args_num, ## arguments);\
+    u_dword* args = extract_dword_args(args_num, ## arguments);\
     for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
     unalloc(args);\
     asm volatile (\
@@ -23,7 +23,7 @@
 
 #define call_system_ret(interruption, ret_value, args_num, arguments...) {\
     asm volatile ("pusha");\
-    u_dword* args = get_args(args_num, ## arguments);\
+    u_dword* args = extract_dword_args(args_num, ## arguments);\
     for (int i = args_num - 1; i >= 0; i--) asm volatile ("push %0" :: "r"(args[i]));\
     unalloc(args);\
     asm volatile (\

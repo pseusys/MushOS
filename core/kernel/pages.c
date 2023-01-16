@@ -111,20 +111,14 @@ void page_fault(registers* regs) {
     asm ("mov %%cr2, %0" : "=r" (faulting_address));
 
     // The error code gives us details of what happened.
-    int present = regs->err_code & 0x1;      // Page not present
-    int rw = regs->err_code & 0x2;           // Write operation?
-    int us = regs->err_code & 0x4;           // Processor was in user-mode?
-    int reserved = regs->err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?
-    int id = regs->err_code & 0x10;          // Caused by an instruction fetch?
+    boolean present = regs->err_code & 0x1;      // Page not present
+    boolean rw = regs->err_code & 0x2;           // Write operation?
+    boolean us = regs->err_code & 0x4;           // Processor was in user-mode?
+    boolean reserved = regs->err_code & 0x8;     // Overwritten CPU-reserved bits of page entry?
+    boolean id = regs->err_code & 0x10;          // Caused by an instruction fetch?
 
     // Output an error message.
-    bad("Page fault! ( ")
-    if (present) bad("present ")
-    if (!rw) bad("read-only ")
-    if (us) bad("user-mode ")
-    if (reserved) bad("reserved ")
-    bad(") at %h (EIP: %h)\n", faulting_address, regs->eip)
-    PANIC("Page fault!")
+    PANIC("Page fault! (p: %l, w: %l, u: %l, r: %l) at %h (EIP: %h)", present, rw, us, reserved, faulting_address, regs->eip)
 }
 
 

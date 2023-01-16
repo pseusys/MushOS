@@ -6,7 +6,9 @@
 
 
 #define init_vararg(skip) ({\
-    skip;\
+    u_dword offset = skip & 0xfffffffc;\
+    if (skip % 4 != 0) offset += 4;\
+    offset;\
 })
 
 #define get_vararg(offset, type) ({\
@@ -27,11 +29,6 @@
     *arg;\
 })
 
-#define args_init_from(args, skip) {\
-    for (u_dword i = 0; i < size(args); ++i)\
-        *(args + i) = get_arg(skip + sizeof(u_byte) * i, u_byte);\
-}
-
-void* get_args(u_dword num, ...);
+void* extract_dword_args(u_dword args_num, ...);
 
 #endif // MUSHLIB_VARARG_H

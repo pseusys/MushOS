@@ -11,6 +11,11 @@ int main() {
     initialize_heap(heap, heap_size);
     mod_string str;
 
+    str = format("String with no placeholders.\n");
+    printf(str);
+    assert(equals(str, "String with no placeholders.\n"));
+    unalloc(str);
+
     str = format("Logical value: %l.\n", true);
     printf(str);
     assert(equals(str, "Logical value: true.\n"));
@@ -55,6 +60,11 @@ int main() {
     str = format("String value: %s.\n", "Some string");
     printf(str);
     assert(equals(str, "String value: Some string.\n"));
+    unalloc(str);
+
+    str = format("Two string values: %s, %s.\n", "First string", "Second string");
+    printf(str);
+    assert(equals(str, "Two string values: First string, Second string.\n"));
     unalloc(str);
 
     check_heap_for_leaks();

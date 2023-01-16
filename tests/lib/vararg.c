@@ -7,17 +7,12 @@
 
 
 void vararg_integers_printing_function(u_dword arg_number, ...) {
-    u_byte* args = (u_byte*) ralloc(arg_number * sizeof(u_dword));
-    args_init_from(args, sizeof(u_dword));
-
     printf("Function call with %d integers:\n", arg_number);
     for (u_dword i = 0; i < arg_number; i++) {
-        u_dword arg = ((u_dword*) args)[i];
+        u_dword arg = get_arg(sizeof(u_dword) * (i + 1), u_dword);
         printf("    argument #%d: %x.\n", i, arg);
         assert(arg == i + 1);
     }
-
-    unalloc(args);
 }
 
 void vararg_int_str_float_by_one_function(u_dword _, ...) {

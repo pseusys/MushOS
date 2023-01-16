@@ -109,7 +109,7 @@ char get_char(screen_coords coords) {
 
 
 
-void print_string_color(string str, byte text_color, byte back_color, u_dword length) {
+extern void print_string_color(string str, byte text_color, byte back_color, u_dword length) {
     if (length == 0) for (int i = 0; str[i] != 0; ++i) print_char_color(str[i], text_color, back_color);
     else for (int i = 0; i < length; ++i) print_char_color(str[i], text_color, back_color);
 }

@@ -133,14 +133,13 @@ static mod_string number_to_string(dword num, system sys) {
 }
 
 
-mod_string free_concat(mod_string string1, mod_string string2) {
+static mod_string free_concat(mod_string string1, mod_string string2) {
     mod_string result = concatenate(string1, string2);
     unalloc(string1);
     unalloc(string2);
     return result;
 };
 
-// TODO: floating point numbers precision setup.
 mod_string format(string template, ...) {
     mod_string result = (mod_string) zalloc(1);
     u_dword argumentor = sizeof(string), printed = 0;
@@ -184,13 +183,10 @@ mod_string format(string template, ...) {
                     argumentor += sizeof(string);
                     break;
                 default:
-                    argumentor--;
                     j--;
                     printed -= 2;
                     break;
             }
-
-            argumentor++;
         }
     }
 

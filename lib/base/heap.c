@@ -44,7 +44,7 @@ static boolean is_in_heap(void* structure) {
 /**
  * Internal function for getting heap header of any structure located in heap.
  * It just substracts heap block header size from pointer and casts it to heap block header.
- * Throws heap exception if the given pointer is outside of the current heap. TODO: custom command for throw.
+ * Throws heap exception if the given pointer is outside of the current heap.
  * @param structure a pointer to the structure.
  * @return heap_block_header pointer.
  */
@@ -109,7 +109,7 @@ static void* allocate_space(void* free_pointer, u_dword size, heap_block_header*
  * Allocation exception can't be handled regularily: handling requires heap.
  * So, heap exception terminate app without any on-screen explanation.
  */
-void handle_allocation_exception() {
+static void handle_allocation_exception() {
     terminate(heap_exception_id);
 }
 

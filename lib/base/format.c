@@ -40,21 +40,21 @@ static char atom_to_char(u_byte b, system sys) {
 }
 
 static mod_string int_to_string(u_dword b, system sys) {
-    u_dword mult = sys, power = 1;
+    u_qword mult = sys;
+    u_dword power = 1;
     while (mult <= b) {
         mult *= sys;
         power++;
     }
 
-    mod_string result = ralloc(power);
+    mod_string result = ralloc(power + 1);
     result[power] = 0;
 
     u_dword integer = b;
     while (integer) {
         power--;
-        byte symbol = integer % sys;
+        result[power] = atom_to_char(integer % sys, sys);
         integer /= sys;
-        result[power] = atom_to_char(symbol, sys);
     }
     return result;
 }
@@ -159,16 +159,16 @@ mod_string format(string template, ...) {
                     argumentor += sizeof(void*);
                     break;
                 case 'd':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, u_dword), DECIMAL));
-                    argumentor += sizeof(u_dword);
+                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), DECIMAL));
+                    argumentor += sizeof(dword);
                     break;
                 case 'h':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, u_dword), HEXADECIMAL));
-                    argumentor += sizeof(u_dword);
+                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), HEXADECIMAL));
+                    argumentor += sizeof(dword);
                     break;
                 case 'b':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, u_dword), BINARY));
-                    argumentor += sizeof(u_dword);
+                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), BINARY));
+                    argumentor += sizeof(dword);
                     break;
                 case 'f':
                     result = free_concat(result, float_to_string(get_arg(argumentor, precise), 4));

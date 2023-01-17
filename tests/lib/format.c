@@ -37,6 +37,11 @@ int main() {
     assert(equals(str, "Decimal value: 1024.\n"));
     unalloc(str);
 
+    str = format("Negative decimal value: %d.\n", -1024);
+    printf(str);
+    assert(equals(str, "Negative decimal value: -1024.\n"));
+    unalloc(str);
+
     str = format("Hexadecimal value: %h.\n", 0x8000);
     printf(str);
     assert(equals(str, "Hexadecimal value: 0x8000.\n"));

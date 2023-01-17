@@ -118,7 +118,7 @@ void page_fault(registers* regs) {
     boolean id = regs->err_code & 0x10;          // Caused by an instruction fetch?
 
     // Output an error message.
-    PANIC("Page fault! (p: %l, w: %l, u: %l, r: %l) at %h (EIP: %h)", present, rw, us, reserved, faulting_address, regs->eip)
+    PANIC("Page fault! (p: %d, w: %d, u: %d, r: %d) at %h (EIP: %h)", present, rw, us, reserved, faulting_address, regs->eip)
 }
 
 

@@ -1,27 +1,3 @@
-# Function for adding 'IN_FILE' contents to 'result', while dropping 'pattern'-matching lines
-function (dump_headers IN_FILE pattern result)
-    set (header_lines "")
-    file (STRINGS ${IN_FILE} LINES)
-    foreach (LINE IN LISTS LINES)
-        # Set BLANK if source file line was blank
-        if ("${LINE}" STREQUAL "")
-            set (BLANK true)
-        else ()
-            set (BLANK false)
-        endif ()
-        # Replace 'pattern'-matching lines
-        string (REGEX REPLACE ${pattern} "" STRIPPED "${LINE}")
-        # Add new line only if line is not replaced with blank
-        if (BLANK OR (NOT "${STRIPPED}" STREQUAL ""))
-            string (APPEND STRIPPED "\n")
-        endif ()
-        # Write result to 'header_lines'
-        set (header_lines "${header_lines}${STRIPPED}")
-    endforeach ()
-    # Write result to 'result'
-    set (${result} "${header_lines}" PARENT_SCOPE)
-endfunction ()
-
 # Macro for replacing a source from `base` MushLib with some external source
 macro (replace_source SOURCE source_list file_extension)
     get_filename_component (source_we ${SOURCE} NAME_WE)
@@ -66,18 +42,13 @@ endif ()
 
 
 # Generate common library header, that includes all library headers, smartly merged
-set (header_result "#ifndef MUSHLIB\n#define MUSHLIB\n")
-foreach (SOURCE ${HEADERS})
-    set (header_merge "")
-    dump_headers (${SOURCE} "^(#include.*|#ifndef.*|#define\ MUSHLIB.*|#endif.*)" header_merge)
-    set (header_result "${header_result}${header_merge}")
-endforeach (SOURCE)
-set (header_result "${header_result}\n#endif // MUSHLIB\n")
-file (GENERATE OUTPUT ${MUSHLIB_HEADER_FILE_NAME} CONTENT "${header_result}")
+add_custom_command (OUTPUT ${MUSHLIB_HEADER_FILE_NAME} COMMAND ${PYTHON} ${CMAKE_SOURCE_DIR}/scripts/build_mushlib_header.py -l ${HEADERS} > ${MUSHLIB_HEADER_FILE_NAME} DEPENDS ${HEADERS})
+add_custom_target (MushLibHeader DEPENDS ${MUSHLIB_HEADER_FILE_NAME})
 
 
 # Add 'MushLib' library, it should be linked as C, it is also marked header only
 add_library (MushLib STATIC ${SOURCES} ${LIBRARY_HEADER})
+add_dependencies (MushLib MushLibHeader)
 set_target_properties (MushLib PROPERTIES LINKER_LANGUAGE C HEADER_FILE_ONLY ON)
 
 # Set 'MUSHLIB_HEAD' and 'MUSHLIB_BIN' variables

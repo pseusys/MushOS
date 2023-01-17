@@ -1,4 +1,4 @@
-#include <../../lib/base/vararg.h>
+#include <mushlib.h>
 
 #include <assert.h>
 #include <stdio.h>

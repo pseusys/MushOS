@@ -14,3 +14,6 @@ docs/html/
 
 # Generated images from .drawio sources
 docs/assets/*.png
+
+# Cache directories
+**/__pycache__/

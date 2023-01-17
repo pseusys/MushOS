@@ -66,6 +66,7 @@ clean:
 	rm -rf docs/html
 	rm -rf docs/assets/*.png
 	rm -rf cmake-build-*
+	rm -rf **/__pycache__
 .PHONY: clean
 
 clean_all: clean

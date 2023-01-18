@@ -17,10 +17,13 @@ for file in args["headers"]:
 
     with open(file, 'r') as header:
         for line in header.readlines():
+            header_result = match(r"#define\ MUSHLIB(.*)", line)
             if not line.strip():
                 print()
-            elif match(r"(#include.*|#ifndef.*|#define\ MUSHLIB.*|#endif.*)", line):
-                print("\n\n// HEADER: someheader //\n\n")
+            elif header_result:
+                print(f"\n\n// HEADER: {header_result.group(1).split('_')[1]} //")
+            elif match(r"#include.*|#ifndef.*|#endif.*", line):
+                continue
             else:
                 print(line, end="")
 

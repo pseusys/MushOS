@@ -3,16 +3,17 @@
   <navindex>
     <tab type="mainpage" visible="yes" title=""/>
     <tab type="usergroup" title="Mush Kernel">
-      <tab type="user" url="@ref kernel.c" title="Kernel"/>
+      <tab type="user" url="@ref core/kernel/kernel.c" title="Kernel"/>
       <tab type="user" url="@ref md_docs_sources_memory_map" title="Memory Map"/>
     </tab>
     <tab type="usergroup" title="MushLib Base">
-      <tab type="user" url="@ref heap.c" title="Heap"/>
+      <tab type="user" url="@ref lib/base/heap.h" title="Heap"/>
     </tab>
     <tab type="usergroup" title="MushLib Extra">
     </tab>
     <tab type="usergroup" title="Build and Compilation Scripts">
       <tab type="user" url="@ref check_kernel_sectors.py" title="Check Kernel Sectors"/>
+      <tab type="user" url="@ref build_mushlib_header.py" title="Build MushLib Header"/>
     </tab>
     <tab type="filelist" visible="no" title="" intro=""/>
   </navindex>

@@ -1,3 +1,9 @@
+/**
+ * @file
+ * 
+ * @brief Kernel entry point
+ */
+
 #include "kernel.h"
 
 #include "../../lib/base/generic.h"

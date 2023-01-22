@@ -1,3 +1,9 @@
+/**
+ * @file
+ * 
+ * @brief Kernel exception handler
+ */
+
 #include "../../lib/base/heap.h"
 #include "../../lib/base/stdio.h"
 #include "../../lib/base/exceptions.h"

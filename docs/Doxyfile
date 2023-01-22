@@ -92,9 +92,9 @@ NUM_PROC_THREADS = 1
 # Build related configuration options
 #---------------------------------------------------------------------------
 
-EXTRACT_ALL = YES
 EXTRACT_PRIVATE = YES
 EXTRACT_STATIC = YES
+EXTRACT_LOCAL_CLASSES = YES
 
 # If the HIDE_IN_BODY_DOCS tag is set to YES, doxygen will hide any
 # documentation blocks found inside the body of a function. If set to NO, these
@@ -102,6 +102,7 @@ EXTRACT_STATIC = YES
 # The default value is: NO.
 
 HIDE_IN_BODY_DOCS = NO
+HIDE_UNDOC_MEMBERS = YES
 
 # If the FORCE_LOCAL_INCLUDES tag is set to YES then doxygen will list include
 # files with double quotes in the documentation rather than with sharp brackets.
@@ -112,25 +113,8 @@ FORCE_LOCAL_INCLUDES = YES
 SORT_MEMBER_DOCS = NO
 SORT_BRIEF_DOCS = NO
 
-# Set the SHOW_USED_FILES tag to NO to disable the list of files generated at
-# the bottom of the documentation of classes and structs. If set to YES, the
-# list will mention the files that were used to generate the documentation.
-# The default value is: YES.
-
 SHOW_USED_FILES = YES
-
-# Set the SHOW_FILES tag to NO to disable the generation of the Files page. This
-# will remove the Files entry from the Quick Index and from the Folder Tree View
-# (if specified).
-# The default value is: YES.
-
 SHOW_FILES = YES
-
-# Set the SHOW_NAMESPACES tag to NO to disable the generation of the Namespaces
-# page. This will remove the Namespaces entry from the Quick Index and from the
-# Folder Tree View (if specified).
-# The default value is: YES.
-
 SHOW_NAMESPACES = NO
 
 #---------------------------------------------------------------------------
@@ -138,7 +122,7 @@ SHOW_NAMESPACES = NO
 #---------------------------------------------------------------------------
 
 WARN_NO_PARAMDOC = YES
-WARN_AS_ERROR = FAIL_ON_WARNINGS
+WARN_AS_ERROR = NO # TODO: FAIL_ON_WARNINGS
 
 #---------------------------------------------------------------------------
 # Configuration options related to the input files

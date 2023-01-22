@@ -1,3 +1,16 @@
+/**
+ * @file
+ * 
+ * @brief This is a standard implementation of heap for MushLib.
+ * 
+ * The heap doesn't use paging, so it has a limited size.
+ * This allows kernel to use it right after launch, but there's also a significant drawback:
+ *    when kernel heap gets overflown, no standard exception can be shown (because it requires heap space allocation).
+ * The drawback is handled with @link core/kernel/heap.c kernel allocation exception handler @endlink.
+ * Any non-kernel apps may set up their own kernel exception handler (using @ref allocation_exception_id)
+ *    or just do nothing - default allocation exception handler will allow kernel to terminate safely any app with overflown heap.
+ */
+
 #include "heap.h"
 
 #include "memory.h"
@@ -33,11 +46,7 @@ typedef struct {
 heap_header* header;
 
 
-/**
- * Internal function for determining whether the structure is inside the heap or outside.
- * @return true is structure is in heap, false otherwise.
- */
-static boolean is_in_heap(void* structure) {
+boolean is_in_heap(void* structure) {
     return structure > header->heap_start && structure < header->heap_end;
 }
 
@@ -53,20 +62,10 @@ static heap_block_header* get_header(void* structure) {
     else throw_verbose(heap_exception_id, heap_exception_type, "Requested structure is located outside of the heap!")
 }
 
-/**
- * Function for structure located in heap size calculation (in bytes).
- * Throws heap exception if the given pointer is outside of the current heap.
- * @param structure a pointer to the structure.
- * @return structure size (in bytes).
- */
 u_dword size(void* structure) {
     return get_header(structure)->size;
 }
 
-/**
- * Function for heap occupation calculation.
- * @return percent of allocated space in this heap.
- */
 precise occupation() {
     if (!header->first_address) return 0.0;
     u_dword sum = 0;
@@ -114,29 +113,15 @@ static void handle_allocation_exception() {
 }
 
 
-/**
- * Function for heap initialization, sets up singleton heap header.
- * This implementation of heap has fixed size, and so doesn't rely on paging.
- * That's enough for kernel and basic app needs, TODO: provide another heap implementation for extended MushLib.
- * @param start_address pointer to the start of the heap.
- * @param size size of the heap.
- */
-void initialize_heap(void* start_address, u_dword size) {
+void initialize_heap(void* start_address, u_dword initial_size) {
     header = start_address;
     memory_clear(start_address, sizeof(heap_header), 0);
     header->heap_start = start_address + sizeof(heap_header);
-    header->heap_end = start_address + size;
+    header->heap_end = start_address + initial_size;
     header->first_address = nullptr;
     handle_exceptions(allocation_exception_id, handle_allocation_exception);
 }
 
-/**
- * Function for allocation of a raw heap block.
- * Searches for a place of suitable size to fit a structure of requested size in.
- * Throws allocation exception if no free space is available.
- * @param size requested block size.
- * @return pointer to the neewly allocated block.
- */
 void* ralloc(u_dword size) {
     if (!header->first_address) {
         header->first_address = allocate_space(header->heap_start, size, nullptr, nullptr);
@@ -183,27 +168,12 @@ void* ralloc(u_dword size) {
     return final_address;
 }
 
-/**
- * Function for allocation of a heap block and clearing it.
- * Does the same as `ralloc`, but sets every allocated byte to zero.
- * Throws allocation exception if no free space is available.
- * @param size requested block size.
- * @return pointer to the neewly allocated block.
- */
 void* zalloc(u_dword size) {
     void* result = ralloc(size);
     memory_clear((byte*) result, size, 0);
     return result;
 }
 
-/**
- * Function for heap block size alteration.
- * Attempts to alter size in-place and copys the block only if in-place growth is not available.
- * Throws heap exception if the structure is located outside of the heap.
- * @param structure pointer to the structure for allocation size changing.
- * @param new_size new requested size of the structure.
- * @return pointer to the new structure.
- */
 void* challoc(void* structure, u_dword new_size) {
     heap_block_header* block = get_header(structure);
     if (new_size < block->size) {
@@ -220,11 +190,6 @@ void* challoc(void* structure, u_dword new_size) {
     return structure;
 }
 
-/**
- * Function for heap block unallocation.
- * Throws heap exception if the structure is located outside of the heap.
- * @param structure pointer to the structure for unallocation.
- */
 void unalloc(void* structure) {
     heap_block_header* block = get_header(structure);
     if (structure == header->first_address) header->first_address = block->next;

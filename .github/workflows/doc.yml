@@ -34,8 +34,8 @@ jobs:
 
       - name: Prepare Documentation Build 🏗️
         run: |
-          wget -O theme.zip $(curl -s 'https://api.github.com/repos/jothepro/doxygen-awesome-css/releases/latest' | grep zipball_url | cut -d '"' -f 4 -z)
-          unzip -j -d build/docs/theme theme.zip '*.js' '*.css'
+          sudo wget -O theme.zip $(curl -s 'https://api.github.com/repos/jothepro/doxygen-awesome-css/releases/latest' | grep zipball_url | cut -d '"' -f 4)
+          sudo unzip -j -d build/docs/theme theme.zip '*.js' '*.css'
 
       - name: Build Docs with Doxygen 📙
         uses: mattnotmitt/doxygen-action@v1.9.5
@@ -43,7 +43,7 @@ jobs:
             doxyfile-path: docs/Doxyfile
 
       - name: NoJekyll ❌
-        run: touch docs/html/.nojekyll
+        run: sudo touch docs/html/.nojekyll
 
       - name: Upload Artifact 🏺
         uses: actions/upload-pages-artifact@v1

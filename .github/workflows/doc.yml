@@ -43,7 +43,7 @@ jobs:
             doxyfile-path: docs/Doxyfile
 
       - name: NoJekyll ❌
-        run: touch docs/html/.nojekyll
+        run: sudo touch docs/html/.nojekyll
 
       - name: Upload Artifact 🏺
         uses: actions/upload-pages-artifact@v1

@@ -205,7 +205,12 @@ HTML_OUTPUT = "html"
 # files will be copied as-is; there are no commands or markers available.
 # This tag requires that the tag GENERATE_HTML is set to YES.
 
-HTML_EXTRA_FILES =
+HTML_HEADER = "docs/header.html"
+HTML_EXTRA_FILES = "build/docs/theme/doxygen-awesome-darkmode-toggle.js" \
+                   "build/docs/theme/doxygen-awesome-fragment-copy-button.js" \
+                   "build/docs/theme/doxygen-awesome-paragraph-link.js" \
+                   "build/docs/theme/doxygen-awesome-interactive-toc.js"
+HTML_EXTRA_STYLESHEET = "build/docs/theme/doxygen-awesome.css"
 
 HTML_TIMESTAMP = YES
 
@@ -290,3 +295,11 @@ GENERATE_LATEX = NO
 
 ENABLE_PREPROCESSING = YES
 SKIP_FUNCTION_MACROS = NO
+
+#---------------------------------------------------------------------------
+# Configuration options related to diagrams
+#---------------------------------------------------------------------------
+
+HAVE_DOT = YES
+DOT_IMAGE_FORMAT = svg
+DOT_TRANSPARENT = YES

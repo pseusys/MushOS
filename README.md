@@ -30,7 +30,8 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 12. Sample apps 👎
 13. Create cross-compilers instead of using standard with flags 👎
 14. MushTest with asserts, etc. 👎
-15. etc...
+15. CMakeLists: variable single case, single system of notifying of missing utilities. 👎
+16. etc...
 
 
 ### Build and run

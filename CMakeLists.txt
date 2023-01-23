@@ -12,19 +12,19 @@ endif ()
 # OBJECT_LINKER - should be path to `ld` linker
 if (NOT DEFINED OBJECT_LINKER)
     set (OBJECT_LINKER ld)
-endif()
+endif ()
 # CONCATENATE - should be path to `cat` utility
 if (NOT DEFINED CONCATENATE)
     set (CONCATENATE cat)
-endif()
+endif ()
 # TRUNCATE - should be path to `truncate` utility
 if (NOT DEFINED TRUNCATE)
     set (TRUNCATE truncate)
-endif()
+endif ()
 # PYTHON - should be path to `python3`, located in current project venv dir
 if (NOT DEFINED PYTHON)
     set (PYTHON ${CMAKE_SOURCE_DIR}/venv/bin/python3)
-endif()
+endif ()
 
 # Configure ASM build process: default output format, compilation and linking (using standard linker)
 set (CMAKE_ASM_NASM_OBJECT_FORMAT elf32)
@@ -60,5 +60,8 @@ find_library (MUSHLIB mushlib PATHS ${MUSHLIB_DIRECTORY})
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/core/)
 
 
-# Include test directories, one of them will set 'MushOS' variable
+# Include test directories
 add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/tests/)
+
+# Include documentation directories
+add_subdirectory (${CMAKE_CURRENT_SOURCE_DIR}/docs/)

@@ -41,19 +41,14 @@ test: prepare_build venv
 	cd build/tests && ctest --verbose && cd ../..
 .PHONY: test
 
-docs:
-	rm -rf docs/assets/*.png
-	drawio -x -f png -o docs/assets/ docs/assets/
-	doxygen docs/Doxyfile
+docs: prepare_build
+	cmake --build build --target MushDoc --
 .PHONY: docs
 
 
 run: build_img
 	qemu-system-x86_64 -d guest_errors -vga std -drive format=raw,file=build/artifacts/MushOS.img
 .PHONY: run
-
-rerun: clean run
-.PHONY: rerun
 
 
 version: venv
@@ -64,11 +59,9 @@ version: venv
 clean:
 	rm -rf build
 	rm -rf docs/html
+	rm -rf docs/theme
 	rm -rf docs/assets/*.png
 	rm -rf cmake-build-*
 	rm -rf **/__pycache__
-.PHONY: clean
-
-clean_all: clean
 	rm -rf venv
-.PHONY: clean_all
+.PHONY: clean

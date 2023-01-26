@@ -43,6 +43,9 @@ add_compile_options ("$<$<COMPILE_LANGUAGE:ASM_NASM>:-f $<IF:$<BOOL:$<TARGET_PRO
 add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DCHAR_TYPE_SIZE=8;-DSHORT_TYPE_SIZE=16;-DINT_TYPE_SIZE=32;-DLONG_LONG_TYPE_SIZE=64>")
 add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-DFLOAT_TYPE_SIZE=32;-DDOUBLE_TYPE_SIZE=64;-DLONG_DOUBLE_TYPE_SIZE=96>")
 
+# Setting up __FILE__ macro, so that it will contain relative path instead of the absolute.
+add_compile_options ("$<$<COMPILE_LANG_AND_ID:C,GNU>:-fmacro-prefix-map=${CMAKE_SOURCE_DIR}/=./>")
+
 # Setup spectial artifacts directory name and path
 set (ARTIFACTS_DIR "${CMAKE_BINARY_DIR}/artifacts")
 

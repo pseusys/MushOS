@@ -142,7 +142,7 @@ static mod_string free_concat(mod_string string1, mod_string string2) {
 
 mod_string format(string template, ...) {
     mod_string result = (mod_string) zalloc(1);
-    u_dword argumentor = sizeof(string), printed = 0;
+    u_dword argumentor = init_vararg(sizeof(string)), printed = 0;
     for (int j = 0; j < len(template); ++j) {
         if (template[j] == '%') {
             result = free_concat(result, substring_mid(template, printed, j));
@@ -151,36 +151,28 @@ mod_string format(string template, ...) {
 
             switch (template[j]) {
                 case 'l':
-                    result = free_concat(result, boolean_to_string(get_arg(argumentor, boolean)));
-                    argumentor += sizeof(boolean);
+                    result = free_concat(result, boolean_to_string(get_vararg(argumentor, boolean)));
                     break;
                 case 'p':
-                    result = free_concat(result, pointer_to_string(get_arg(argumentor, void*)));
-                    argumentor += sizeof(void*);
+                    result = free_concat(result, pointer_to_string(get_vararg(argumentor, void*)));
                     break;
                 case 'd':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), DECIMAL));
-                    argumentor += sizeof(dword);
+                    result = free_concat(result, number_to_string(get_vararg(argumentor, dword), DECIMAL));
                     break;
                 case 'h':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), HEXADECIMAL));
-                    argumentor += sizeof(dword);
+                    result = free_concat(result, number_to_string(get_vararg(argumentor, dword), HEXADECIMAL));
                     break;
                 case 'b':
-                    result = free_concat(result, number_to_string(get_arg(argumentor, dword), BINARY));
-                    argumentor += sizeof(dword);
+                    result = free_concat(result, number_to_string(get_vararg(argumentor, dword), BINARY));
                     break;
                 case 'f':
-                    result = free_concat(result, float_to_string(get_arg(argumentor, precise), 4));
-                    argumentor += sizeof(precise);
+                    result = free_concat(result, float_to_string(get_vararg(argumentor, precise), 4));
                     break;
                 case 'c':
-                    result = free_concat(result, char_to_string(get_arg(argumentor, char)));
-                    argumentor += sizeof(char);
+                    result = free_concat(result, char_to_string(get_vararg(argumentor, char)));
                     break;
                 case 's':
-                    result = free_concat(result, const_to_string(get_arg(argumentor, string)));
-                    argumentor += sizeof(string);
+                    result = free_concat(result, const_to_string(get_vararg(argumentor, string)));
                     break;
                 default:
                     j--;

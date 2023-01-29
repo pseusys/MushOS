@@ -21,7 +21,7 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 3. Keyboard + screen adapter 👍
 4. MushLib basics 👍
 5. Limitations, checks and exceptions 🤙
-6. Kernel memory map 👎
+6. Kernel memory map + receiving it in kernel main 👎
 7. File system (MushFS) + initrd 👎
 8. Shell + audio drivers 👎
 9. Multitasking 👎
@@ -32,7 +32,8 @@ Kernel code is stored in `core` directory, `lib` directory contains code for `mu
 14. MushTest with asserts, etc. 👎
 15. CMakeLists: variable single case, single system of notifying of missing utilities. 👎
 16. Docs: custom groups with custom layouts instead of the `usergroup`'s. 👎
-17. etc...
+17. Deprecate old vararg options; format two-letter specifiers (unsigned, precision, etc.). 👎
+18. etc...
 
 
 ### Build and run

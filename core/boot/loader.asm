@@ -11,6 +11,8 @@ KERNEL_OFFSET equ 0x8000 ; Offset in RAM, where kernel will be loaded, it is als
                          ; Should be enough since we have micro kernel here.
 CODE_OFFSET equ 0xA000   ;
 
+STACK_OFFSET equ 0x7000   ;
+
 
 gdt_start: ; Beginning of GDT-table. The table itself contains information about RAM segments.
            ; Each segment has a set of parameters (e.g. readable/writable, data/code, etc.)
@@ -161,7 +163,7 @@ kernel_launch: ; Long jump sets CS to CODE_SEG automatically at this point.
     mov fs, ax ; Even some strange-looking, protected mode registers.
     mov gs, ax
 
-    mov ebp, start ; Resetting stack back where it was.
+    mov ebp, STACK_OFFSET ; Resetting stack back where it was.
     mov esp, ebp
 
     call CODE_OFFSET ; Calling pre-loaded C kernel (kernel_gate).

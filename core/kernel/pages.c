@@ -16,19 +16,17 @@
 #define user_space_start 0x1000000
 #define user_space_end 0x10000000
 
-#define page_size 0x1000
-#define full_byte 0xff
+
+extern void* stack_pointer;
+extern u_dword stack_size;
+
+extern void copy_page_physical(u_dword source, u_dword destination);
 
 
 page_folder* kernel_directory, * current_directory;
 void* page_dirs, * page_tables;
 byte* paging_pool, * user_space_pool;
 
-
-static u_dword get_free_bit(u_byte search) {
-    if (search == full_byte) return search;
-    for (u_dword i = 0; i < 8; ++i) if (!(search & (1u << i))) return i;
-}
 
 static void* get_contents_as_page(page_pointer page) {
     return (void*) (page.frame * page_size);
@@ -38,6 +36,11 @@ static page_pointer* get_contents_as_table(page_pointer page) {
     return (page_pointer*) (page.frame * page_size);
 }
 
+
+static u_dword get_free_bit(u_byte search) {
+    if (search == full_byte) return search;
+    for (u_dword i = 0; i < 8; ++i) if (!(search & (1u << i))) return i;
+}
 
 static void* allocate_frame() {
     for (u_dword i = 0; i < size_of(user_space_pool); ++i) {
@@ -104,6 +107,71 @@ static page_pointer* get_page(u_dword address, boolean make, page_folder *dir) {
 }
 
 
+static page_pointer clone_page_pointer(page_pointer page) {
+    page_pointer copy;
+    copy.present = page.present;
+    copy.rw = page.rw;
+    copy.user = page.user;
+    copy.write = page.write;
+    copy.cache = page.cache;
+    copy.accessed = page.accessed;
+    copy.dirty = page.dirty;
+    copy.zero = page.zero;
+    copy.global = page.global;
+    copy.unused = page.unused;
+    copy.frame = page.frame;
+    return copy;
+}
+
+static boolean contains_user_pages(page_pointer folder) {
+    page_pointer* directory = get_contents_as_table(folder);
+    boolean contains = false;
+    for (u_dword i = 0; i < pages_in_table; i++) contains |= directory[i].user;
+    return contains;
+}
+
+static page_pointer clone_table(page_pointer src) {
+    // Make a new page table, which is page aligned.
+    page_folder* table = allocate_page_folder();
+    page_pointer* pages = get_contents_as_table(src);
+
+    // For every entry in the table...
+    for (int i = 0; i < pages_in_table; i++) {
+        if (pages[i].present == 0) continue;
+        if (src.user || pages[i].user) {
+            // Clone the flags from source to destination.
+            table->contents[i] = clone_page_pointer(pages[i]);
+            // Get a new frame.
+            table->contents[i].frame = (u_dword) allocate_frame() / page_size;
+            // Physically copy the data across. This function is in process.s.
+            copy_page_physical(pages[i].frame * page_size, table->contents[i].frame * page_size);
+        } else table->contents[i] = pages[i];
+    }
+
+    page_pointer table_pointer = clone_page_pointer(src);
+    table_pointer.frame = (u_dword) table / page_size;
+    return table_pointer;
+}
+
+page_folder* clone_directory(page_folder* src) {
+    // Make a new page directory and obtain its physical address.
+    page_folder* dir = (page_folder*) allocate_page_folder();
+
+    // We should clone user-mode pages and copy kernel-mode pages, ignoring non-existing ones.
+    for (int i = 0; i < pages_in_table; i++) {
+        if (src->contents[i].present == 0) continue;
+        else if (src->contents[i].user || contains_user_pages(src->contents[i])) {
+            // It contains user-mode pages (or is a user-mode table), we should clone it.
+            dir->contents[i] = clone_table(src->contents[i]);
+        } else {
+            // It's completely in the kernel, so just use the same pointer.
+            dir->contents[i] = src->contents[i];
+        }
+    }
+    return dir;
+}
+
+
 void page_fault(registers* regs) {
     // A page fault has occurred.
     // The faulting address is stored in the CR2 register.
@@ -122,15 +190,6 @@ void page_fault(registers* regs) {
 }
 
 
-void switch_page_directory(page_folder *dir) {
-    u_dword cr0;
-    current_directory = dir;
-    asm volatile("mov %0, %%cr3":: "r"(&dir->contents));
-    asm volatile("mov %%cr0, %0": "=r"(cr0));
-    cr0 |= 0x80000000; // Enable paging!
-    asm volatile("mov %0, %%cr0":: "r"(cr0));
-}
-
 void initialise_paging() {
     // The size of physical memory. For the moment we
     // assume it is 256MB big.
@@ -144,15 +203,22 @@ void initialise_paging() {
 
     // Let's make a page directory.
     kernel_directory = (page_folder*) allocate_page_folder();
-    memory_clear((byte*) kernel_directory, page_size, 0);
-    current_directory = kernel_directory;
 
-    for (u_dword j = 0; j < user_space_start; j += page_size)
-        *get_page(j, true, kernel_directory) = create_page_entry((const byte*) j, true, false);
+    for (u_dword i = 0; i < user_space_start; i += page_size) {
+        boolean in_stack = i >= (u_dword) stack_pointer - stack_size && i < (u_dword) stack_pointer;
+        *get_page(i, true, kernel_directory) = create_page_entry((const byte*) i, !in_stack, in_stack);
+    }
 
     // Before we enable paging, we must register our page fault handler.
     set_interrupt_handler(14, page_fault);
 
     // Now, enable paging!
-    switch_page_directory(kernel_directory);
+    current_directory = kernel_directory;
+    asm volatile(
+        "mov %0, %%cr3;\n"
+        "mov %%cr0, %%eax;\n"
+        "or $0x80000000, %%eax;\n"
+        "mov %%eax, %%cr0;\n"
+        :: "r"(&current_directory->contents)
+    );
 }

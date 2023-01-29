@@ -4,15 +4,14 @@
 
 #include "interruption_tables.h"
 #include "interruptions.h"
+#include "task.h"
 
 
 static u_dword tick = 0;
 
 static void timer_callback(registers* regs) {
     tick++;
-    /*print("Tick: ");
-    print_char(tick + 0x30);
-    print_char('\n');*/
+    switch_task();
 }
 
 void init_timer(u_dword frequency) {

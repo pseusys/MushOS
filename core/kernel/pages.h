@@ -8,6 +8,9 @@
 
 #define pages_in_table 1024
 
+#define page_size 0x1000
+#define full_byte 0xff
+
 
 typedef struct {
     u_dword present    : 1;   // Page present in memory
@@ -24,10 +27,9 @@ typedef struct {
 } page_pointer;
 
 
-typedef union {
+typedef struct {
     page_pointer contents[pages_in_table];
 } page_folder;
-
 
 
 /**
@@ -35,8 +37,6 @@ typedef union {
   enables paging.
 **/
 void initialise_paging();
-
-void switch_page_directory(page_folder *dir);
 
 /**
   Handler for page faults.

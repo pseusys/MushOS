@@ -18,6 +18,7 @@
 #include "interruption_tables.h"
 #include "timer.h"
 #include "pages.h"
+#include "task.h"
 #include "modules.h"
 
 extern void initialize_kernel_heap_handler();
@@ -27,6 +28,9 @@ extern void initialize_kernel_heap_handler();
 #define kernel_heap_size 0x80000
 
 #define kernel_timer_step 100
+
+void* stack_pointer = (void*) 0x7000;
+u_dword stack_size = 0x5000;
 
 /**
  * Make kernel constants:
@@ -68,6 +72,10 @@ void _start() {
 
     initialise_paging();
 
-    u_dword *ptr = (u_dword*) 0xA0000000;
-    u_dword do_page_fault = *ptr;
+    initialise_tasking();
+
+    // Create a new process in a new address space which is a clone of this.
+    int ret = fork();
+
+    info("fork() returned %d, and getpid() returned %d\n", ret, getpid())
 }
